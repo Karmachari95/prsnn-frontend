@@ -50,6 +50,10 @@ const VerifyEmailContent = () => {
             if (data.token) {
                 setMessage({ type: "success", title: "Email verified", message: "Taking you in…" });
                 await login(data.token, data.user);
+                const roleParam = searchParams.get("role");
+                if (data.user?.role === 'companion' || roleParam === 'companion') {
+                    router.push("/onboarding?role=companion");
+                }
             } else {
                 setMessage({ type: "success", title: "Email verified", message: "Redirecting to sign in…" });
                 router.push("/login");

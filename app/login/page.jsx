@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect, useMemo, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
@@ -147,8 +147,13 @@ const AuthInput = ({
   </div>
 );
 
-const Login = () => {
-  const [state, setState] = useState("Sign In");
+const LoginContent = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const roleParam = searchParams?.get('role');
+
+  const [state, setState] = useState(roleParam === 'companion' ? "Sign Up" : "Sign In");
+  const [accountType, setAccountType] = useState(roleParam === 'companion' ? "companion" : "user");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
@@ -162,10 +167,16 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [verificationImage, setVerificationImage] = useState(null);
 
-  const router = useRouter();
   const { login } = useAuth();
   const isSignIn = state === "Sign In";
   const strength = useMemo(() => getPasswordStrength(password), [password]);
+
+  useEffect(() => {
+    if (roleParam === 'companion') {
+      setState("Sign Up");
+      setAccountType("companion");
+    }
+  }, [roleParam]);
 
   useEffect(() => {
     setAlert(null);
@@ -292,6 +303,7 @@ const Login = () => {
         const formData = new FormData();
         formData.append("fullName", fullName.trim());
         formData.append("phoneNumber", phoneNumber.trim());
+        formData.append("role", accountType);
         formData.append("username", username);
         formData.append("email", email);
         formData.append("password", password);
@@ -300,7 +312,7 @@ const Login = () => {
         }
 
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`, formData);
-        router.push(`/verify-email?email=${encodeURIComponent(email)}`);
+        router.push(`/verify-email?email=${encodeURIComponent(email)}&role=${encodeURIComponent(accountType)}`);
       } else {
         const response = await axios.post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
@@ -449,6 +461,41 @@ const Login = () => {
               <form onSubmit={onSubmitHandler} className="mt-9 space-y-5 w-full max-w-none">
                 {!isSignIn && (
                   <>
+                    <div className="space-y-2">
+                      <label className="block text-sm font-semibold text-ink/70">
+                        I want to join as
+                      </label>
+                      <div className="grid grid-cols-2 gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setAccountType("user")}
+                          className={`p-3.5 rounded-2xl border text-sm font-bold flex items-center justify-center gap-2 transition-all ${
+                            accountType === "user"
+                              ? "bg-ink text-white border-ink shadow-sm"
+                              : "bg-paper text-ink/70 border-line hover:border-ink/20"
+                          }`}
+                        >
+                          <span className="text-base">👤</span> Member
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setAccountType("companion")}
+                          className={`p-3.5 rounded-2xl border text-sm font-bold flex items-center justify-center gap-2 transition-all ${
+                            accountType === "companion"
+                              ? "bg-moss text-signal border-moss shadow-sm"
+                              : "bg-paper text-ink/70 border-line hover:border-ink/20"
+                          }`}
+                        >
+                          <span className="text-base">⭐</span> Companion
+                        </button>
+                      </div>
+                      <p className="text-xs text-ink/45 font-medium">
+                        {accountType === "companion"
+                          ? "Earn by offering presence and companionship for public activities."
+                          : "Find and book companions for events, walks, cafes, and shared presence."}
+                      </p>
+                    </div>
+
                     <AuthInput
                       id="fullName"
                       label="Full Name"
@@ -685,5 +732,11 @@ const Login = () => {
     </div>
   );
 };
+
+const Login = () => (
+  <Suspense fallback={<div className="min-h-screen bg-mist" />}>
+    <LoginContent />
+  </Suspense>
+);
 
 export default Login;

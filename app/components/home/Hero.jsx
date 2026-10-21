@@ -90,7 +90,7 @@ const Hero = () => {
             </button>
             <button
               type="button"
-              onClick={() => router.push(userData ? '/onboarding' : token ? '/onboarding' : '/login')}
+              onClick={() => router.push(userData ? '/onboarding?role=companion' : token ? '/onboarding?role=companion' : '/login?role=companion')}
               className="inline-flex items-center justify-center px-8 py-4 rounded-full font-semibold text-base border border-white/25 text-white hover:bg-white/10 transition-all duration-300 hover:scale-[1.02]"
             >
               Become a Companion

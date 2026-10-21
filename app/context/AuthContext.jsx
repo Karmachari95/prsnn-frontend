@@ -84,6 +84,8 @@ export const AuthProvider = ({ children }) => {
             } else {
                 router.push('/admin/onboarding');
             }
+        } else if (user?.role === 'companion' && !user?.is_verified) {
+            router.push('/onboarding?role=companion');
         } else {
             router.push('/');
         }

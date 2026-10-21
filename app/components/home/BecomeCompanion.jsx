@@ -60,7 +60,7 @@ export default function BecomeCompanion() {
               <button
                 type="button"
                 onClick={() =>
-                  router.push(userData ? '/onboarding' : token ? '/onboarding' : '/login')
+                  router.push(userData ? '/onboarding?role=companion' : token ? '/onboarding?role=companion' : '/login?role=companion')
                 }
                 className="btn-primary text-base px-8 py-4 hover:scale-[1.02] active:scale-[0.98]"
               >

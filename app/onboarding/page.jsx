@@ -1,13 +1,15 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import Loading from "../components/common/Loading";
 import { useNotification } from "../context/NotificationContext";
 
-const OnboardingPage = () => {
+const OnboardingContent = () => {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const roleParam = searchParams?.get('role');
     const { token, userData, fetchProfile } = useAuth();
     const { showNotification } = useNotification();
     const [loading, setLoading] = useState(false);
@@ -111,9 +113,23 @@ const OnboardingPage = () => {
             return;
         }
 
+        if (roleParam === 'companion' || userData?.role === 'companion') {
+            setUserChoice('companion');
+        }
+
         checkOnboardingStatus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [token, userData, router]);
+    }, [token, userData, router, roleParam]);
+
+    useEffect(() => {
+        if (userData) {
+            setFormData(prev => ({
+                ...prev,
+                fullName: prev.fullName || userData.fullName || '',
+                phoneNumber: prev.phoneNumber || userData.phoneNumber || ''
+            }));
+        }
+    }, [userData]);
 
     const checkOnboardingStatus = async () => {
         try {
@@ -1145,5 +1161,11 @@ const OnboardingPage = () => {
     
     return null;
 };
+
+const OnboardingPage = () => (
+    <Suspense fallback={<Loading message="Loading..." />}>
+        <OnboardingContent />
+    </Suspense>
+);
 
 export default OnboardingPage;
