@@ -209,10 +209,14 @@ const UsersList = () => {
                                             <td className="px-8 py-5">
                                                 <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                                                     user.verification_status === 'verified'
-                                                    ? 'bg-green-50 text-green-700' 
-                                                    : 'bg-yellow-50 text-yellow-700'
+                                                    ? 'bg-green-50 text-green-700 border border-green-200' 
+                                                    : user.verification_status === 'pending'
+                                                    ? 'bg-yellow-50 text-yellow-700 border border-yellow-200'
+                                                    : user.verification_status === 'rejected'
+                                                    ? 'bg-red-50 text-red-700 border border-red-200'
+                                                    : 'bg-gray-100 text-gray-600 border border-gray-200'
                                                 }`}>
-                                                    {user.verification_status.toUpperCase()}
+                                                    {(user.verification_status || 'not_submitted').toUpperCase()}
                                                 </span>
                                             </td>
                                             <td className="px-8 py-5 font-medium text-gray-500">

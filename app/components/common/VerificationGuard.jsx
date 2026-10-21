@@ -24,16 +24,19 @@ const VerificationGuard = () => {
     if (!token || !userData) return null;
 
     const isSuperAdmin = userData?.role === 'superadmin';
+    const isRegularUser = userData?.role === 'user';
     const status = userData?.verificationStatus || userData?.verification_status || 'not_submitted';
     const isVerified = userData?.is_verified || status === 'verified';
     
     // LOGIC:
     // 1. SuperAdmin -> Allow Everything.
-    // 2. Verified -> Allow Everything.
-    // 3. Pending -> Allow Everything (But Booking will be blocked locally).
-    // 4. Not Submitted / Rejected -> Block Everything (Redirect to Onboarding).
+    // 2. Regular Users -> Allow Everything (standard members don't need manual verification).
+    // 3. Verified -> Allow Everything.
+    // 4. Pending -> Allow Everything.
+    // 5. Not Submitted / Rejected for companions/admins -> Block (Redirect to Onboarding).
 
     if (isSuperAdmin) return null;
+    if (isRegularUser) return null;
     if (isVerified) return null;
     if (status === 'pending') return null;
 

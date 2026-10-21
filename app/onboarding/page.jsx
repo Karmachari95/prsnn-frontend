@@ -38,6 +38,8 @@ const OnboardingPage = () => {
         profilePhoto: null,
         // Companion-specific fields
         backupPhoto: null,
+        idProofFront: null,
+        idProofBack: null,
         description: '',
         monday_availability: false,
         tuesday_availability: false,
@@ -55,7 +57,9 @@ const OnboardingPage = () => {
 
     const [previews, setPreviews] = useState({
         profilePhoto: null,
-        backupPhoto: null
+        backupPhoto: null,
+        idProofFront: null,
+        idProofBack: null
     });
 
     const [extraConsents, setExtraConsents] = useState({
@@ -305,6 +309,8 @@ const OnboardingPage = () => {
             
             if (formData.profilePhoto) data.append('profilePhoto', formData.profilePhoto);
             if (formData.backupPhoto) data.append('backupPhoto', formData.backupPhoto);
+            if (formData.idProofFront) data.append('idProofFront', formData.idProofFront);
+            if (formData.idProofBack) data.append('idProofBack', formData.idProofBack);
 
             await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/profile/onboard-companion`, data, {
                 headers: { 
@@ -893,6 +899,76 @@ const OnboardingPage = () => {
                                                     />
                                                 </label>
                                             )}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Government ID Proofs */}
+                                <div className="mt-6 pt-6 border-t-2 border-black/10">
+                                    <h3 className="text-sm font-black uppercase tracking-wider text-black mb-2">Government ID Proof (Aadhaar / ID Card)</h3>
+                                    <p className="text-xs text-gray-500 mb-4">Required for identity verification before your companion profile is activated.</p>
+                                    
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wider">Front ID Proof *</label>
+                                            <div className="border-4 border-dashed border-black rounded-xl p-6 text-center">
+                                                {previews.idProofFront ? (
+                                                    <div className="relative">
+                                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                        <img src={previews.idProofFront} alt="Front ID Preview" className="max-h-48 mx-auto rounded-lg border-2 border-black object-contain" />
+                                                        <button 
+                                                            type="button"
+                                                            onClick={() => { setPreviews(prev => ({ ...prev, idProofFront: null })); setFormData(prev => ({ ...prev, idProofFront: null })); }}
+                                                            className="mt-4 px-4 py-2 bg-red-500 text-white font-bold rounded-lg border-2 border-black"
+                                                        >
+                                                            Remove
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    <label className="cursor-pointer">
+                                                        <div className="text-5xl mb-3">📄</div>
+                                                        <p className="font-bold text-gray-900 text-sm">Upload Front ID</p>
+                                                        <p className="text-[10px] text-gray-400 mt-1">Aadhaar / Driver License (Front)</p>
+                                                        <input 
+                                                            type="file" 
+                                                            accept="image/*"
+                                                            onChange={(e) => handleFileChange(e, 'idProofFront')}
+                                                            className="hidden"
+                                                        />
+                                                    </label>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wider">Back ID Proof</label>
+                                            <div className="border-4 border-dashed border-black rounded-xl p-6 text-center">
+                                                {previews.idProofBack ? (
+                                                    <div className="relative">
+                                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                        <img src={previews.idProofBack} alt="Back ID Preview" className="max-h-48 mx-auto rounded-lg border-2 border-black object-contain" />
+                                                        <button 
+                                                            type="button"
+                                                            onClick={() => { setPreviews(prev => ({ ...prev, idProofBack: null })); setFormData(prev => ({ ...prev, idProofBack: null })); }}
+                                                            className="mt-4 px-4 py-2 bg-red-500 text-white font-bold rounded-lg border-2 border-black"
+                                                        >
+                                                            Remove
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    <label className="cursor-pointer">
+                                                        <div className="text-5xl mb-3">📄</div>
+                                                        <p className="font-bold text-gray-900 text-sm">Upload Back ID</p>
+                                                        <p className="text-[10px] text-gray-400 mt-1">Aadhaar / Driver License (Back)</p>
+                                                        <input 
+                                                            type="file" 
+                                                            accept="image/*"
+                                                            onChange={(e) => handleFileChange(e, 'idProofBack')}
+                                                            className="hidden"
+                                                        />
+                                                    </label>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

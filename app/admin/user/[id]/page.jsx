@@ -84,6 +84,16 @@ const UserDetailsPage = ({ params }) => {
                 </div>
             </div>
 
+            {user.verification_status === 'not_submitted' && (
+                <div className="mx-8 md:mx-12 mt-6 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-sm flex items-center gap-3">
+                    <span className="text-xl">ℹ️</span>
+                    <div>
+                        <p className="font-bold">Onboarding Not Completed</p>
+                        <p className="text-xs text-amber-700 mt-0.5">This user created an account via sign-up but has not filled out or submitted the onboarding profile form yet.</p>
+                    </div>
+                </div>
+            )}
+
             <div className="p-8 md:p-12 grid grid-cols-1 lg:grid-cols-2 gap-12">
                 {/* Left: Verification Documents */}
                 <div>
@@ -96,14 +106,14 @@ const UserDetailsPage = ({ params }) => {
                         <div>
                             <label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 block">Front ID Proof</label>
                             <div className="bg-gray-50 rounded-2xl p-3 border border-gray-100 shadow-inner group">
-                                {user.profile?.idProofFrontUrl || user.profile?.front_aadhar_photo ? (
+                                {(user.idProofFrontUrl || user.profile?.idProofFrontUrl || user.profile?.frontAadharPhoto || user.profile?.front_aadhar_photo) ? (
                                     <div className="relative overflow-hidden rounded-xl">
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img 
-                                            src={user.profile.idProofFrontUrl || user.profile.front_aadhar_photo} 
+                                            src={user.idProofFrontUrl || user.profile?.idProofFrontUrl || user.profile?.frontAadharPhoto || user.profile?.front_aadhar_photo} 
                                             alt="Front ID" 
                                             className="w-full h-auto object-cover cursor-pointer hover:scale-105 transition-transform duration-500" 
-                                            onClick={() => setEnlargedImage(user.profile.idProofFrontUrl || user.profile.front_aadhar_photo)}
+                                            onClick={() => setEnlargedImage(user.idProofFrontUrl || user.profile?.idProofFrontUrl || user.profile?.frontAadharPhoto || user.profile?.front_aadhar_photo)}
                                         />
                                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 pointer-events-none transition-colors"></div>
                                     </div>
@@ -120,14 +130,14 @@ const UserDetailsPage = ({ params }) => {
                         <div>
                             <label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 block">Back ID Proof</label>
                             <div className="bg-gray-50 rounded-2xl p-3 border border-gray-100 shadow-inner group">
-                                {user.profile?.idProofBackUrl || user.profile?.back_aadhar_photo ? (
+                                {(user.idProofBackUrl || user.profile?.idProofBackUrl || user.profile?.backAadharPhoto || user.profile?.back_aadhar_photo) ? (
                                     <div className="relative overflow-hidden rounded-xl">
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img 
-                                            src={user.profile.idProofBackUrl || user.profile.back_aadhar_photo} 
+                                            src={user.idProofBackUrl || user.profile?.idProofBackUrl || user.profile?.backAadharPhoto || user.profile?.back_aadhar_photo} 
                                             alt="Back ID" 
                                             className="w-full h-auto object-cover cursor-pointer hover:scale-105 transition-transform duration-500" 
-                                            onClick={() => setEnlargedImage(user.profile.idProofBackUrl || user.profile.back_aadhar_photo)}
+                                            onClick={() => setEnlargedImage(user.idProofBackUrl || user.profile?.idProofBackUrl || user.profile?.backAadharPhoto || user.profile?.back_aadhar_photo)}
                                         />
                                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 pointer-events-none transition-colors"></div>
                                     </div>
@@ -222,7 +232,9 @@ const UserDetailsPage = ({ params }) => {
                             <div className="bg-green-50/50 p-5 rounded-2xl border border-green-100 text-green-800 text-sm flex items-center gap-3">
                                 <span className="text-xl">📅</span>
                                 <div>
-                                    <p className="text-[10px] font-bold uppercase tracking-widest opacity-60">Submission Date</p>
+                                    <p className="text-[10px] font-bold uppercase tracking-widest opacity-60">
+                                        {user.verification_status === 'not_submitted' ? 'Registered On' : 'Submission Date'}
+                                    </p>
                                     <p className="font-bold">{new Date(user.profile.createdAt || user.created_at).toLocaleDateString('en-US', { 
                                         year: 'numeric', 
                                         month: 'long', 

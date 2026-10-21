@@ -86,6 +86,18 @@ const IconEyeOff = ({ className = "w-5 h-5" }) => (
   </svg>
 );
 
+const IconPhone = ({ className = "w-5 h-5" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+    <path
+      d="M3 5.5C3 14.06 9.94 21 18.5 21c.83 0 1.5-.67 1.5-1.5v-3.28a1.5 1.5 0 00-1.12-1.45l-3.56-.89a1.5 1.5 0 00-1.57.54l-1.12 1.37a13.9 13.9 0 01-5.59-5.59l1.37-1.12a1.5 1.5 0 00.54-1.57l-.89-3.56A1.5 1.5 0 006.78 3H3.5C2.67 3 2 3.67 2 4.5"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 function getPasswordStrength(pwd) {
   if (!pwd) return { score: 0, label: "", color: "bg-line" };
   let score = 0;
@@ -140,6 +152,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -158,6 +172,8 @@ const Login = () => {
     setEmail("");
     setPassword("");
     setUsername("");
+    setFullName("");
+    setPhoneNumber("");
     setConfirmPassword("");
     setVerificationImage(null);
     setShowPassword(false);
@@ -223,6 +239,26 @@ const Login = () => {
     setLoading(true);
 
     if (state === "Sign Up") {
+      if (!fullName.trim()) {
+        setAlert({
+          type: "error",
+          title: "Full Name Required",
+          message: "Please enter your full name",
+        });
+        setLoading(false);
+        return;
+      }
+
+      if (phoneNumber.trim().length !== 10) {
+        setAlert({
+          type: "error",
+          title: "Invalid Phone Number",
+          message: "Please enter a valid 10-digit mobile number",
+        });
+        setLoading(false);
+        return;
+      }
+
       if (username.length < 5) {
         setAlert({
           type: "error",
@@ -254,6 +290,8 @@ const Login = () => {
     try {
       if (state === "Sign Up") {
         const formData = new FormData();
+        formData.append("fullName", fullName.trim());
+        formData.append("phoneNumber", phoneNumber.trim());
         formData.append("username", username);
         formData.append("email", email);
         formData.append("password", password);
@@ -410,16 +448,44 @@ const Login = () => {
 
               <form onSubmit={onSubmitHandler} className="mt-9 space-y-5 w-full max-w-none">
                 {!isSignIn && (
-                  <AuthInput
-                    id="username"
-                    label="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="At least 5 characters"
-                    icon={IconUser}
-                    required
-                    autoComplete="username"
-                  />
+                  <>
+                    <AuthInput
+                      id="fullName"
+                      label="Full Name"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      placeholder="e.g. Alex Sharma"
+                      icon={IconUser}
+                      required
+                      autoComplete="name"
+                    />
+
+                    <AuthInput
+                      id="phoneNumber"
+                      label="Phone Number"
+                      type="tel"
+                      value={phoneNumber}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                        setPhoneNumber(val);
+                      }}
+                      placeholder="10-digit mobile number"
+                      icon={IconPhone}
+                      required
+                      autoComplete="tel"
+                    />
+
+                    <AuthInput
+                      id="username"
+                      label="Username"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder="At least 5 characters"
+                      icon={IconUser}
+                      required
+                      autoComplete="username"
+                    />
+                  </>
                 )}
 
                 <AuthInput
