@@ -5,11 +5,12 @@ import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
 
 const marketingLinks = [
-  { name: "How it Works", path: "/#how-it-works" },
+  { name: "Find Companions", path: "/companions" },
+  { name: "How it Works", path: "/how-it-works" },
   { name: "Safety", path: "/safety" },
-  { name: "Our Story", path: "/our-story" },
-  { name: "Become Companion", path: "/#become" },
-  { name: "FAQ", path: "/#faq" },
+  { name: "Our Story", path: "/about" },
+  { name: "FAQ", path: "/faq" },
+  { name: "Become Companion", path: "/login?role=companion" },
 ];
 
 const NavBarInner = () => {

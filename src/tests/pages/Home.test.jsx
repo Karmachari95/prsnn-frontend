@@ -9,29 +9,11 @@ vi.mock('../../../app/components/home/Hero.jsx', () => ({
 vi.mock('../../../app/components/home/RealMoments.jsx', () => ({
   default: () => <div data-testid="real-moments-component">Real Moments</div>
 }));
-vi.mock('../../../app/components/home/Modes.jsx', () => ({
-  default: () => <div data-testid="modes-component">Modes</div>
+vi.mock('../../../app/components/home/FeaturedCompanions.jsx', () => ({
+  default: () => <div data-testid="featured-companions-component">Featured Companions</div>
 }));
-vi.mock('../../../app/components/home/HowItWorks.jsx', () => ({
-  default: () => <div data-testid="how-it-works-component">How It Works</div>
-}));
-vi.mock('../../../app/components/home/WhyPrsnn.jsx', () => ({
-  default: () => <div data-testid="why-prsnn-component">Why Prsnn</div>
-}));
-vi.mock('../../../app/components/home/Safety.jsx', () => ({
-  default: () => <div data-testid="safety-component">Safety</div>
-}));
-vi.mock('../../../app/components/home/WhatThisIsNot.jsx', () => ({
-  default: () => <div data-testid="what-this-is-not-component">What This Is Not</div>
-}));
-vi.mock('../../../app/components/home/Testimonials.jsx', () => ({
-  default: () => <div data-testid="testimonials-component">Testimonials</div>
-}));
-vi.mock('../../../app/components/home/BecomeCompanion.jsx', () => ({
-  default: () => <div data-testid="become-companion-component">Become Companion</div>
-}));
-vi.mock('../../../app/components/home/FAQ.jsx', () => ({
-  default: () => <div data-testid="faq-component">FAQ</div>
+vi.mock('../../../app/components/home/TrustAndSafetyBanner.jsx', () => ({
+  default: () => <div data-testid="trust-safety-component">Trust & Safety</div>
 }));
 vi.mock('../../../app/components/home/FinalCTA.jsx', () => ({
   default: () => <div data-testid="final-cta-component">Final CTA</div>
@@ -56,20 +38,16 @@ describe('Home Page', () => {
     });
   });
 
-  it('renders all sections correctly', () => {
+  it('renders all streamlined homepage sections correctly', () => {
     render(<Home />);
 
     expect(screen.getByTestId('hero-component')).toBeInTheDocument();
     expect(screen.getByTestId('real-moments-component')).toBeInTheDocument();
-    expect(screen.getByTestId('modes-component')).toBeInTheDocument();
-    expect(screen.getByTestId('how-it-works-component')).toBeInTheDocument();
-    expect(screen.getByTestId('why-prsnn-component')).toBeInTheDocument();
-    expect(screen.getByTestId('safety-component')).toBeInTheDocument();
-    expect(screen.getByTestId('what-this-is-not-component')).toBeInTheDocument();
-    expect(screen.getByTestId('testimonials-component')).toBeInTheDocument();
-    expect(screen.getByTestId('become-companion-component')).toBeInTheDocument();
-    expect(screen.getByTestId('faq-component')).toBeInTheDocument();
+    expect(screen.getByTestId('featured-companions-component')).toBeInTheDocument();
+    expect(screen.getByTestId('trust-safety-component')).toBeInTheDocument();
     expect(screen.getByTestId('final-cta-component')).toBeInTheDocument();
+    expect(screen.getByText(/About the Founder/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Mukarram Jah/i).length).toBeGreaterThan(0);
   });
 
   it('does not check profile status if no token is present', () => {
