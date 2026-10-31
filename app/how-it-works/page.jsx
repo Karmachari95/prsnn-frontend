@@ -1,129 +1,133 @@
-'use client';
 import React from 'react';
 import Link from 'next/link';
-import Reveal from '../components/common/Reveal';
+
+export const metadata = {
+  title: 'How It Works — prsnn.',
+  description: 'Learn how PRSNN works: book verified companions for platonic presence in daylight public spaces.',
+};
 
 const steps = [
   {
     n: '01',
     title: 'Choose your activity & vibe',
-    body: 'Whether you want a companion for casual café hopping, attending a cultural event, a quiet reading session, or walking through the city, pick the mode that suits your mood.',
+    body: 'Whether you want a companion for casual café hopping, attending an event, a quiet reading session, or walking through the city, pick the activity that suits your mood.',
     points: ['Clear expectations upfront', '100% Platonic only', 'No awkward small talk required'],
-    color: '#D97757',
-    badgeBg: 'bg-[#FDF1EC]',
-    badgeText: 'text-[#D97757]',
   },
   {
     n: '02',
     title: 'Find your verified companion',
     body: 'Browse companion profiles with verified IDs, comfort zones, real ratings, and transparent hourly rates. Every companion has completed government ID inspection and phone verification.',
     points: ['100% ID verified', 'Ratings & reviews', 'Direct upfront pricing (₹400–₹800/hr)'],
-    color: '#1E3A2F',
-    badgeBg: 'bg-[#E8EFE9]',
-    badgeText: 'text-[#1E3A2F]',
   },
   {
     n: '03',
     title: 'Meet in public — leave anytime',
     body: 'Sessions happen exclusively in daylight hours (7:00 AM – 10:00 PM) in open public spaces (cafés, parks, libraries, museums). No pressure, no obligations. End the session whenever you want.',
     points: ['Daylight hours (7 AM–10 PM)', 'Public venues only', 'Leave anytime with zero explanation'],
-    color: '#2A4F40',
-    badgeBg: 'bg-[#E8EFE9]',
-    badgeText: 'text-[#1E3A2F]',
   },
+];
+
+const safetyRules = [
+  { title: 'Public Spaces Only', desc: 'All sessions occur in open, public venues such as coffee shops, parks, and cultural centers. Private spaces and home visits are strictly prohibited.' },
+  { title: 'Strictly Platonic', desc: 'PRSNN is solely for non-romantic companionship and shared presence. Romantic, physical, or sexual requests are strictly prohibited and result in permanent ban.' },
+  { title: 'Daylight Hours', desc: 'Bookings only take place between 7:00 AM and 10:00 PM for the safety, comfort, and peace of mind of both companions and guests.' },
+  { title: 'Voluntary & Safe', desc: 'Either party can end the session at any moment. Zero pressure, zero explanation required. Full refund policy applies.' },
 ];
 
 export default function HowItWorksPage() {
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-[#181B18] pb-24">
-      {/* Hero */}
-      <section className="pt-28 md:pt-36 pb-16 px-6 md:px-8 relative overflow-hidden border-b border-[#EAE6DF]">
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#FDF1EC] rounded-full blur-3xl pointer-events-none opacity-70" />
-        <div className="absolute bottom-0 left-10 w-80 h-80 bg-[#E8EFE9] rounded-full blur-3xl pointer-events-none opacity-60" />
-
-        <div className="max-w-4xl mx-auto relative text-center">
-          <Reveal>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E8EFE9] text-[#1E3A2F] text-xs font-bold uppercase tracking-wider mb-5">
-              <span>●</span> Simple & Transparent
-            </div>
-            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.06] text-[#181B18]">
-              No awkwardness. <br className="hidden sm:inline" />
-              <span className="text-[#1E3A2F]">Just presence.</span>
-            </h1>
-            <p className="mt-5 text-base md:text-xl text-[#181B18]/70 font-medium max-w-xl mx-auto leading-relaxed">
-              PRSNN is the lightest, safest way to book platonic companionship — designed to feel voluntary, respectful, and safe from the first tap.
-            </p>
-          </Reveal>
+      {/* Header */}
+      <section className="pt-28 md:pt-36 pb-14 px-6 md:px-8 border-b border-[#EAE6DF] bg-white">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#E8EFE9] text-[#1E3A2F] text-xs font-bold uppercase tracking-wider mb-4">
+            Simple & Transparent
+          </div>
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#181B18] leading-tight">
+            How PRSNN Works
+          </h1>
+          <p className="mt-4 text-base sm:text-lg text-[#181B18]/70 font-medium max-w-xl mx-auto leading-relaxed">
+            The simplest, safest way to book platonic companionship for public activities. Presence without pressure.
+          </p>
         </div>
       </section>
 
-      {/* Steps List */}
-      <section className="py-16 md:py-24 px-6 md:px-8">
-        <div className="max-w-4xl mx-auto space-y-8">
-          {steps.map((step, i) => (
-            <Reveal key={step.n} delay={i + 1}>
-              <article className="p-8 md:p-12 rounded-[2rem] bg-white border border-[#EAE6DF] shadow-[0_12px_36px_-12px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300">
-                <div className="flex flex-col md:flex-row items-start gap-6 md:gap-10">
-                  {/* Step Number Circle */}
-                  <div
-                    className={`shrink-0 w-16 h-16 rounded-2xl ${step.badgeBg} ${step.badgeText} flex items-center justify-center font-display text-2xl font-black border border-[#EAE6DF]`}
-                  >
-                    {step.n}
-                  </div>
-
-                  {/* Step Body */}
-                  <div className="flex-1">
-                    <h2 className="font-display text-2xl md:text-3xl font-black text-[#181B18] tracking-tight mb-3">
-                      {step.title}
-                    </h2>
-                    <p className="text-[#181B18]/70 font-medium leading-relaxed text-base md:text-lg mb-6">
-                      {step.body}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2.5">
-                      {step.points.map((p) => (
-                        <span
-                          key={p}
-                          className="px-3.5 py-1.5 rounded-full bg-[#FAF8F5] border border-[#EAE6DF] text-xs font-semibold text-[#181B18]/75 flex items-center gap-1.5"
-                        >
-                          <span className="text-[#1E3A2F] font-bold">✓</span>
-                          <span>{p}</span>
-                        </span>
-                      ))}
-                    </div>
+      {/* 3 Simple Steps */}
+      <section className="py-14 md:py-20 px-6 md:px-8">
+        <div className="max-w-4xl mx-auto space-y-6">
+          {steps.map((step) => (
+            <div
+              key={step.n}
+              className="p-6 sm:p-8 md:p-10 rounded-2xl bg-white border border-[#EAE6DF]"
+            >
+              <div className="flex flex-col sm:flex-row sm:items-start gap-5 sm:gap-8">
+                <div className="w-14 h-14 rounded-xl bg-[#1E3A2F] text-white flex items-center justify-center font-display text-xl font-bold shrink-0">
+                  {step.n}
+                </div>
+                <div className="flex-1">
+                  <h2 className="font-display text-xl sm:text-2xl font-bold text-[#181B18] mb-2">
+                    {step.title}
+                  </h2>
+                  <p className="text-sm sm:text-base text-[#181B18]/75 font-medium leading-relaxed mb-4">
+                    {step.body}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {step.points.map((p) => (
+                      <span
+                        key={p}
+                        className="px-3 py-1 rounded-full bg-[#FAF8F5] border border-[#EAE6DF] text-xs font-semibold text-[#181B18]/80 flex items-center gap-1.5"
+                      >
+                        <span className="text-[#1E3A2F] font-bold">✓</span>
+                        <span>{p}</span>
+                      </span>
+                    ))}
                   </div>
                 </div>
-              </article>
-            </Reveal>
+              </div>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* Bottom CTA Card matching Figma */}
-      <section className="px-6 md:px-8 max-w-4xl mx-auto">
-        <div className="p-10 md:p-14 rounded-[2.5rem] bg-[#1E3A2F] text-white text-center relative overflow-hidden shadow-xl">
-          <div className="absolute top-0 right-0 w-72 h-72 bg-[#D97757]/20 rounded-full blur-3xl pointer-events-none" />
-          <div className="relative z-10 max-w-xl mx-auto">
-            <h2 className="font-display text-3xl md:text-5xl font-black tracking-tight mb-4">
-              Ready when you are.
-            </h2>
-            <p className="text-white/80 font-medium text-base md:text-lg mb-8 leading-relaxed">
-              Find a companion for today, or apply to join our verified community. Either way — presence without pressure.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/companions"
-                className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#D97757] hover:bg-[#C26243] text-white font-bold text-sm shadow-md transition-all hover:scale-105"
-              >
-                Find a Companion →
-              </Link>
-              <Link
-                href="/safety"
-                className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm transition-all"
-              >
-                Read Safety Charter
-              </Link>
-            </div>
+      {/* Safety & Ground Rules */}
+      <section className="px-6 md:px-8 max-w-4xl mx-auto mb-16">
+        <div className="p-8 sm:p-10 rounded-2xl bg-[#E8EFE9] border border-[#1E3A2F]/20">
+          <h2 className="font-display text-xl sm:text-2xl font-bold text-[#1E3A2F] mb-6 text-center">
+            Our Core Safety Rules
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {safetyRules.map((rule) => (
+              <div key={rule.title} className="p-4 rounded-xl bg-white border border-[#1E3A2F]/15">
+                <h3 className="font-bold text-sm text-[#1E3A2F] mb-1">{rule.title}</h3>
+                <p className="text-xs text-[#181B18]/75 leading-relaxed font-medium">{rule.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Bottom CTA */}
+      <section className="px-6 md:px-8 max-w-4xl mx-auto text-center">
+        <div className="p-8 sm:p-10 rounded-2xl bg-[#1E3A2F] text-white">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold mb-3">
+            Ready to book your companion?
+          </h2>
+          <p className="text-white/80 text-sm sm:text-base max-w-lg mx-auto mb-6">
+            Find trusted companions in your city for quiet company, events, or café visits.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Link
+              href="/companions"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-[#D97757] text-white font-bold text-sm"
+            >
+              Browse Companions
+            </Link>
+            <Link
+              href="/safety"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-white/10 border border-white/20 text-white font-bold text-sm"
+            >
+              Read Safety Charter
+            </Link>
           </div>
         </div>
       </section>

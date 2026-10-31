@@ -561,10 +561,10 @@ const LoginContent = () => {
                       </p>
                     </div>
 
-                    {/* Your Name field per Requirement 8 */}
+                    {/* Full Name field */}
                     <div className="space-y-1.5">
                       <label htmlFor="fullName" className="block text-sm font-semibold text-ink/75">
-                        Your name
+                        Full Name <span className="text-xs font-normal text-ink/50">(or Display Name)</span>
                       </label>
                       <div className="relative group/input">
                         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-ink/35 group-focus-within/input:text-moss transition-colors duration-300">
@@ -576,14 +576,11 @@ const LoginContent = () => {
                           required
                           value={fullName}
                           onChange={(e) => setFullName(e.target.value)}
-                          placeholder="Enter the name you would like to use on PRSNN."
+                          placeholder="e.g. Maya Sharma"
                           autoComplete="name"
                           className="w-full h-14 pl-12 pr-4 rounded-2xl bg-paper border border-line text-base font-medium text-ink placeholder:text-ink/30 focus:outline-none focus:border-moss focus:ring-4 focus:ring-moss/10 focus:bg-white transition-all duration-300"
                         />
                       </div>
-                      <p className="text-[11px] text-ink/50 leading-relaxed pl-1">
-                        For your privacy, you may use a display name or stage name on your public profile where permitted. If identity verification is required, your verification details must be accurate and will be handled according to our privacy policy.
-                      </p>
                     </div>
 
                     {/* International Phone Number per Requirement 7 */}
@@ -651,85 +648,76 @@ const LoginContent = () => {
                       </div>
                     </div>
 
-                    {/* Gender-Based Matching Preference per Requirement 4.1 & 4.2 */}
+                    {/* Matching Preference for Women */}
                     {gender === 'woman' && (
-                      <div className="p-4 rounded-2xl bg-[#F0EBE1] border border-[#E0D8CB] space-y-3">
-                        <div className="flex items-center gap-2">
-                          <span className="text-base">🛡️</span>
-                          <p className="text-xs font-bold text-[#1E3A2F] uppercase tracking-wider">
-                            Women's Safety & Matching Preference
-                          </p>
+                      <div className="p-4 rounded-2xl bg-[#F4EFEA] border border-line space-y-3">
+                        <div className="flex items-center justify-between">
+                          <label className="text-xs font-bold text-ink uppercase tracking-wider">
+                            Matching Preference
+                          </label>
+                          <span className="text-[11px] font-semibold text-moss">
+                            🔒 Women-only default
+                          </span>
                         </div>
-                        <p className="text-xs text-[#2C332E] font-medium">
-                          {accountType === 'companion'
-                            ? 'Who are you comfortable accepting bookings from?'
-                            : 'Who would you feel comfortable booking?'}
-                        </p>
-                        <div className="space-y-2">
-                          <label className="flex items-center gap-3 p-3 rounded-xl bg-white border border-[#E0D8CB] cursor-pointer">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          <label className={`flex items-center gap-2.5 p-3 rounded-xl border cursor-pointer transition-all ${
+                            genderPreference === 'women_only'
+                              ? 'bg-white border-moss shadow-xs'
+                              : 'bg-white/60 border-line hover:border-ink/20'
+                          }`}>
                             <input
                               type="radio"
                               name="matchingPref"
                               value="women_only"
                               checked={genderPreference === 'women_only'}
                               onChange={() => setGenderPreference('women_only')}
-                              className="text-[#1E3A2F] focus:ring-[#1E3A2F]"
+                              className="text-moss focus:ring-moss"
                             />
                             <div>
-                              <span className="text-xs font-bold text-[#1E3A2F] block">
-                                Women companions only
+                              <span className="text-xs font-bold text-ink block">
+                                Women only
                               </span>
-                              <span className="text-[11px] text-[#6B726A]">
-                                Recommended · Selected by default
+                              <span className="text-[10px] text-ink/50">
+                                Recommended
                               </span>
                             </div>
                           </label>
 
-                          <label className="flex items-center gap-3 p-3 rounded-xl bg-white border border-[#E0D8CB] cursor-pointer">
+                          <label className={`flex items-center gap-2.5 p-3 rounded-xl border cursor-pointer transition-all ${
+                            genderPreference === 'any_gender'
+                              ? 'bg-white border-moss shadow-xs'
+                              : 'bg-white/60 border-line hover:border-ink/20'
+                          }`}>
                             <input
                               type="radio"
                               name="matchingPref"
                               value="any_gender"
                               checked={genderPreference === 'any_gender'}
                               onChange={() => setGenderPreference('any_gender')}
-                              className="text-[#1E3A2F] focus:ring-[#1E3A2F]"
+                              className="text-moss focus:ring-moss"
                             />
                             <div>
-                              <span className="text-xs font-bold text-[#1E3A2F] block">
-                                Companions of any gender
+                              <span className="text-xs font-bold text-ink block">
+                                Any gender
                               </span>
-                              <span className="text-[11px] text-[#6B726A]">
-                                Optional · Requires affirmative consent
+                              <span className="text-[10px] text-ink/50">
+                                Optional
                               </span>
                             </div>
                           </label>
                         </div>
 
-                        {/* Women's Safety First Note */}
-                        <div className="p-3.5 rounded-2xl bg-[#E8EFE9] border border-[#1E3A2F]/15 space-y-1.5">
-                          <div className="flex items-center gap-1.5 font-bold text-xs text-[#1E3A2F]">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#D97757]" />
-                            <span>Women&apos;s Safety First</span>
-                          </div>
-                          <p className="text-[11px] leading-relaxed text-[#181B18]/80 font-medium">
-                            We put women&apos;s safety on top priority. By default, you will receive bookings from women companions only. You can optionally choose to accept bookings from people of any gender with your clear consent.
-                          </p>
-                          <p className="text-[11px] leading-relaxed text-[#1E3A2F] font-semibold bg-white/70 p-2 rounded-xl border border-[#1E3A2F]/10">
-                            ✨ You have a completely free hand to change or update your matching preferences anytime whenever you want from <span className="underline">Settings → Preferences → Change Gender</span>.
-                          </p>
-                        </div>
-
                         {genderPreference === 'any_gender' && (
-                          <div className="pt-2 border-t border-[#E0D8CB]">
+                          <div className="pt-2 border-t border-line/60">
                             <label className="flex items-start gap-2.5 cursor-pointer">
                               <input
                                 type="checkbox"
                                 checked={genderConsentAcknowledged}
                                 onChange={(e) => setGenderConsentAcknowledged(e.target.checked)}
-                                className="mt-0.5 rounded text-[#1E3A2F] focus:ring-[#1E3A2F]"
+                                className="mt-0.5 rounded text-moss focus:ring-moss"
                               />
-                              <span className="text-[11px] text-[#2C332E] leading-relaxed">
-                                I understand that selecting this option may allow me to be matched with eligible companions of different genders. I have reviewed PRSNN&apos;s safety guidelines and voluntarily choose this preference.
+                              <span className="text-[11px] text-ink/75 leading-relaxed">
+                                I voluntarily consent to match with companions of any gender.
                               </span>
                             </label>
                           </div>

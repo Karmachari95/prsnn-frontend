@@ -19,7 +19,7 @@ export default function FeaturedCompanions() {
     let cancelled = false;
     (async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
         const data = await cachedFetch(`${apiUrl}/api/companions`);
         const list = Array.isArray(data)
           ? data
