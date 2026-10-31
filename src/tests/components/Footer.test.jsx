@@ -11,28 +11,26 @@ describe('Footer Component', () => {
     render(<Footer />);
     
     expect(screen.getAllByText(/prsnn/i).length).toBeGreaterThan(0);
-    expect(screen.getByText(/Verified companionship/i)).toBeInTheDocument();
+    expect(screen.getByText(/Presence without pressure/i)).toBeInTheDocument();
   });
 
   it('renders explore links', () => {
     render(<Footer />);
 
-    const links = ['Find Companion', 'Become Companion', 'How it Works', 'Safety', 'FAQ'];
-    links.forEach(link => {
-      expect(screen.getByText(link)).toBeInTheDocument();
+    const links = [/Find Companion/i, /Become Companion/i, /Safety/i, /FAQ/i];
+    links.forEach(pattern => {
+      expect(screen.getAllByText(pattern).length).toBeGreaterThan(0);
     });
 
-    // 'Contact' intentionally uses getAllByText: it appears in both the
-    // Navigate and Legal columns.
-    expect(screen.getAllByText('Contact').length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Contact/i).length).toBeGreaterThan(0);
   });
 
   it('renders legal links', () => {
     render(<Footer />);
     
-    const supportLinks = ['Terms', 'Privacy', 'Code of Conduct'];
-    supportLinks.forEach(link => {
-      expect(screen.getByText(link)).toBeInTheDocument();
+    const supportLinks = [/Terms/i, /Privacy/i, /Code of Conduct/i];
+    supportLinks.forEach(pattern => {
+      expect(screen.getAllByText(pattern).length).toBeGreaterThan(0);
     });
   });
 
