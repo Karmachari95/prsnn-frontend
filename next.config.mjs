@@ -2,8 +2,10 @@ import { withSentryConfig } from '@sentry/nextjs';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  /* config options here */
+  output: 'export',
+  trailingSlash: true,
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -49,12 +51,11 @@ const nextConfig = {
 
 // In local development, export nextConfig directly to make compilation and page loading 3-5x faster.
 // In production builds (CI/Vercel), wrap with withSentryConfig for error tracking.
-export default process.env.NODE_ENV === 'production'
+export default process.env.NODE_ENV === 'production' && !process.env.NO_SENTRY
   ? withSentryConfig(nextConfig, {
       org: "awadh-z7",
       project: "rent-a-fellow-frontend",
       silent: !process.env.CI,
       widenClientFileUpload: false,
-      tunnelRoute: "/monitoring",
     })
   : nextConfig;
