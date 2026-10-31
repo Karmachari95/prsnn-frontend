@@ -5,79 +5,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import cachedFetch from '../../utils/cache';
 
-const cities = ['All', 'Mumbai', 'Bengaluru', 'Delhi', 'Hyderabad', 'Chennai'];
+import liveCompanions from '../../data/liveCompanions.json';
 
-const defaultCompanions = [
-  {
-    _id: 'c1',
-    fullName: 'Ayesha',
-    city: 'Chennai',
-    rating: 4.8,
-    reviewCount: 120,
-    pricePerHour: 500,
-    profilePhotoUrl: '/mode-sit-with-me.png',
-    tags: ['Coffee', 'Walks', 'Events', 'Study'],
-    description: 'Love exploring new cafés, meaningful conversations and learning new things. Open for casual meetups, events or study sessions.'
-  },
-  {
-    _id: 'c2',
-    fullName: 'Rohan',
-    city: 'Chennai',
-    rating: 4.7,
-    reviewCount: 98,
-    pricePerHour: 600,
-    profilePhotoUrl: '/hero-right.png',
-    tags: ['Events', 'City Walks', 'Foodie'],
-    description: 'Friendly companion for social gatherings, museum visits, walking tours and food exploring.'
-  },
-  {
-    _id: 'c3',
-    fullName: 'Fatima',
-    city: 'Chennai',
-    rating: 4.9,
-    reviewCount: 87,
-    pricePerHour: 550,
-    profilePhotoUrl: '/mode-dont-go-alone.png',
-    tags: ['Quiet Company', 'Books', 'Art'],
-    description: 'Calm presence for reading sessions, quiet library focus, gallery walks or peaceful conversations.'
-  },
-  {
-    _id: 'c4',
-    fullName: 'Sara',
-    city: 'Mumbai',
-    rating: 4.8,
-    reviewCount: 110,
-    pricePerHour: 500,
-    profilePhotoUrl: '/mode-explore-together.png',
-    tags: ['Cafe Hopping', 'Study Buddy', 'Walks'],
-    description: 'Great listener, positive energy, passionate about architecture, coffee spots and quiet coworking.'
-  },
-  {
-    _id: 'c5',
-    fullName: 'Arjun',
-    city: 'Bengaluru',
-    rating: 4.7,
-    reviewCount: 95,
-    pricePerHour: 600,
-    profilePhotoUrl: '/herobg.png',
-    tags: ['Tech Events', 'Walks', 'Coffee'],
-    description: 'Always up for a stroll around Cubbon park, weekend tech expos or quiet coffee shop coworking.'
-  },
-  {
-    _id: 'c6',
-    fullName: 'Ibrahim',
-    city: 'Hyderabad',
-    rating: 4.6,
-    reviewCount: 72,
-    pricePerHour: 700,
-    profilePhotoUrl: '/mode-sit-with-me.png',
-    tags: ['Foodie', 'Historical Walks', 'Events'],
-    description: 'Food enthusiast, heritage lover, here to accompany you for authentic local meals and city exploration.'
-  }
-];
+const cities = ['All', 'Bangalore', 'Hyderabad', 'Mumbai', 'Chennai', 'Vadodara', 'Coimbatore'];
 
 export default function FeaturedCompanions() {
-  const [companions, setCompanions] = useState(defaultCompanions);
+  const [companions, setCompanions] = useState(liveCompanions);
   const [loading, setLoading] = useState(false);
   const [selectedCity, setSelectedCity] = useState('All');
   const [savedIds, setSavedIds] = useState(new Set());
@@ -99,8 +32,7 @@ export default function FeaturedCompanions() {
           setCompanions(list);
         }
       } catch (err) {
-        // Fallback to rich default companions from Figma Screen 6 & 7
-        if (!cancelled) setCompanions(defaultCompanions);
+        if (!cancelled) setCompanions(liveCompanions);
       }
     })();
     return () => {

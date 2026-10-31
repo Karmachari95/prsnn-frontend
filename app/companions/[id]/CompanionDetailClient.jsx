@@ -8,92 +8,9 @@ import { useNotification } from '../../context/NotificationContext';
 import Loading from '../../components/common/Loading';
 import PaymentModal from '../../components/PaymentModal';
 
-const fallbackCompanions = [
-  {
-    _id: 'c1',
-    id: 'c1',
-    fullName: 'Ayesha',
-    displayName: 'Ayesha',
-    city: 'Chennai',
-    rating: 4.8,
-    pricePerHour: 500,
-    profilePhoto: '/mode-sit-with-me.png',
-    profilePhotoUrl: '/mode-sit-with-me.png',
-    tags: ['Cafe Hopping', 'Study Buddy', 'Walking', 'Plus One'],
-    description: 'Love exploring new cafés, meaningful conversations and learning new things. Open for casual meetups, events or study sessions.',
-    availability: { monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
-  },
-  {
-    _id: 'c2',
-    id: 'c2',
-    fullName: 'Rohan',
-    displayName: 'Rohan',
-    city: 'Chennai',
-    rating: 4.7,
-    pricePerHour: 600,
-    profilePhoto: '/hero-right.png',
-    profilePhotoUrl: '/hero-right.png',
-    tags: ['Event Companion', 'Walking', 'Foodie'],
-    description: 'Friendly companion for social gatherings, museum visits, walking tours and food exploring.',
-    availability: { monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
-  },
-  {
-    _id: 'c3',
-    id: 'c3',
-    fullName: 'Fatima',
-    displayName: 'Fatima',
-    city: 'Chennai',
-    rating: 4.9,
-    pricePerHour: 550,
-    profilePhoto: '/mode-dont-go-alone.png',
-    profilePhotoUrl: '/mode-dont-go-alone.png',
-    tags: ['Silence', 'Sitting', 'Reading', 'Plus One'],
-    description: 'Calm presence for reading sessions, quiet library focus, gallery walks or peaceful conversations.',
-    availability: { monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
-  },
-  {
-    _id: 'c4',
-    id: 'c4',
-    fullName: 'Sara',
-    displayName: 'Sara',
-    city: 'Mumbai',
-    rating: 4.8,
-    pricePerHour: 500,
-    profilePhoto: '/mode-explore-together.png',
-    profilePhotoUrl: '/mode-explore-together.png',
-    tags: ['Cafe Hopping', 'Study Buddy', 'Walking'],
-    description: 'Great listener, positive energy, passionate about architecture, coffee spots and quiet coworking.',
-    availability: { monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
-  },
-  {
-    _id: 'c5',
-    id: 'c5',
-    fullName: 'Arjun',
-    displayName: 'Arjun',
-    city: 'Bengaluru',
-    rating: 4.7,
-    pricePerHour: 600,
-    profilePhoto: '/herobg.png',
-    profilePhotoUrl: '/herobg.png',
-    tags: ['Event Companion', 'Walking', 'Sightseeing'],
-    description: 'Passionate about heritage walks, local art exhibits, independent bookstores and trying new food spots.',
-    availability: { monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
-  },
-  {
-    _id: 'c6',
-    id: 'c6',
-    fullName: 'Ibrahim',
-    displayName: 'Ibrahim',
-    city: 'Hyderabad',
-    rating: 4.9,
-    pricePerHour: 550,
-    profilePhoto: '/about_us_hero.png',
-    profilePhotoUrl: '/about_us_hero.png',
-    tags: ['Quiet Company', 'Books', 'Chess', 'Study Buddy'],
-    description: 'Tech enthusiast and quiet study companion. Available for library sessions, silent co-working and café presence.',
-    availability: { monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
-  }
-];
+import liveCompanions from '../../data/liveCompanions.json';
+
+const fallbackCompanions = liveCompanions;
 
 const FellowProfile = () => {
     const { id } = useParams();

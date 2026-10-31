@@ -55,7 +55,7 @@ export default function CompanionDashboardPage() {
     );
   }
 
-  const companionName = userData?.displayName || userData?.fullName || "Ayesha";
+  const companionName = userData?.displayName || userData?.fullName || "Companion";
   const profilePhoto = userData?.profilePhoto || userData?.profilePhotoUrl || "/mode-sit-with-me.png";
 
   return (
