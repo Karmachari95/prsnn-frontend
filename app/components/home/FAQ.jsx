@@ -6,6 +6,12 @@ import SectionHeader from '../common/SectionHeader';
 
 const faqs = [
   {
+    q: 'How does PRSNN help keep women safe?',
+    a: 'PRSNN is designed around clear boundaries, gender-based matching preferences and safety-conscious interactions. Women members are matched with women companions only by default, and women companions receive bookings from women members only by default. Users can choose to open matching to people of any gender only through an explicit preference and consent process. Companions must complete PRSNN\'s applicable identity-verification process before becoming eligible for bookings. The platform also establishes rules for respectful behavior, service boundaries and reporting inappropriate conduct. We encourage users to review profiles, meet in approved public locations, protect their personal information and report behavior that makes them uncomfortable. Users may end an interaction if they feel unsafe. Verification and safety procedures reduce certain risks but cannot guarantee that every interaction will be risk-free. For concerns, use the available reporting and support channels.',
+    link: '/safety',
+    linkText: 'Read our full Safety Standards →'
+  },
+  {
     q: 'Is prsnn a dating app?',
     a: 'No. prsnn is 100% platonic companionship for public meetups — events, cafés, study sessions, walks, and quiet company. No dating, no romance expectations.',
   },
@@ -80,9 +86,21 @@ export default function FAQ() {
                     }`}
                   >
                     <div className="overflow-hidden">
-                      <p className="px-5 md:px-6 pb-5 text-base md:text-lg text-ink/60 font-medium leading-relaxed">
-                        {item.a}
-                      </p>
+                      <div className="px-5 md:px-6 pb-5">
+                        <p className="text-base md:text-lg text-ink/75 font-normal leading-relaxed">
+                          {item.a}
+                        </p>
+                        {item.link && (
+                          <div className="mt-3">
+                            <a 
+                              href={item.link} 
+                              className="inline-flex items-center gap-1.5 text-sm font-bold text-[#1E3A2F] hover:text-[#D97757] underline transition-colors"
+                            >
+                              {item.linkText}
+                            </a>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

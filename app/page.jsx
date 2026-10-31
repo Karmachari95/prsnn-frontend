@@ -36,7 +36,7 @@ export default function Home() {
   }, [token, userData, checkProfileStatus]);
 
   return (
-    <main className="bg-mist min-h-screen">
+    <main className="bg-[#FAF8F5] min-h-screen">
       <Hero />
       <RealMoments />
       <Modes />

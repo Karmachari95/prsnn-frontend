@@ -50,8 +50,8 @@ export default function RealMoments() {
       <div className="max-w-7xl mx-auto px-5 md:px-8">
         <SectionHeader
           eyebrow="Real moments"
-          title="You're not alone in feeling this."
-          subtitle="Everyday situations that simply feel easier with someone nearby."
+          title="You're not alone in feeling this way."
+          subtitle="Sometimes, you don't need advice or a big conversation. You just need someone beside you. Everyday situations that simply feel lighter with trusted company."
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">

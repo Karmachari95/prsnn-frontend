@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import Reveal from '../common/Reveal';
 import SectionHeader from '../common/SectionHeader';
 
@@ -97,6 +98,21 @@ export default function Safety() {
               </div>
             </Reveal>
           ))}
+        </div>
+
+        <div className="mt-12 text-center flex flex-wrap justify-center gap-4">
+          <Link
+            href="/safety"
+            className="px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold uppercase tracking-wider border border-white/20 transition-all hover:scale-105"
+          >
+            Read Full Safety Standards & Hours (7 AM – 10 PM) →
+          </Link>
+          <Link
+            href="/agreement"
+            className="px-6 py-3 rounded-full bg-[#D97757] hover:bg-[#c66647] text-white text-xs font-bold uppercase tracking-wider transition-all hover:scale-105 shadow-sm"
+          >
+            Boundaries & Participation Agreement →
+          </Link>
         </div>
       </div>
     </section>

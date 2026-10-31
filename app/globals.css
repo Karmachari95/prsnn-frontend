@@ -6,20 +6,21 @@
   --font-body: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-syne), ui-sans-serif, system-ui, sans-serif;
 
-  /* 2026 Presence palette — mist, ink, moss, signal */
-  --color-ink: #0e110d;
-  --color-ink-soft: #1c2218;
-  --color-mist: #f3f1eb;
-  --color-mist-deep: #e8e5dc;
-  --color-paper: #faf9f6;
-  --color-moss: #2f4a34;
-  --color-moss-mid: #3d5f42;
-  --color-moss-soft: #d7e3d4;
-  --color-signal: #c8f03c;
-  --color-signal-deep: #a8cc20;
-  --color-clay: #c45c2a;
-  --color-line: rgba(14, 17, 13, 0.08);
-  --color-line-strong: rgba(14, 17, 13, 0.16);
+  /* 2026 Presence palette — warm cream, deep pine, soft sage, warm terracotta */
+  --color-ink: #181B18;
+  --color-ink-soft: #2A2E2A;
+  --color-mist: #FAF8F5;
+  --color-mist-deep: #F0EDE6;
+  --color-paper: #FFFFFF;
+  --color-moss: #1E3A2F;
+  --color-moss-mid: #2A4F40;
+  --color-moss-soft: #E8EFE9;
+  --color-signal: #D97757;
+  --color-signal-deep: #C26243;
+  --color-clay: #D97757;
+  --color-clay-soft: #FDF1EC;
+  --color-line: #EAE6DF;
+  --color-line-strong: #D8D2C5;
 
   /* Compat aliases for existing pages */
   --color-black: var(--color-ink);
@@ -171,9 +172,9 @@ html {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.95rem 1.75rem;
+  padding: 0.95rem 1.85rem;
   background: var(--color-signal);
-  color: var(--color-ink);
+  color: #ffffff;
   font-weight: 700;
   font-size: 0.95rem;
   border-radius: 999px;
@@ -183,7 +184,7 @@ html {
 .btn-signal:hover {
   background: var(--color-signal-deep);
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px -10px rgba(168, 204, 32, 0.45);
+  box-shadow: 0 12px 28px -10px rgba(30, 58, 47, 0.35);
 }
 
 .btn-ghost {

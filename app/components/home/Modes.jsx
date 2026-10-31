@@ -46,6 +46,14 @@ const modes = [
   },
 ];
 
+const categories = [
+  { label: 'Coffee & Cafés', tag: 'Cafe Hopping', icon: '☕' },
+  { label: 'Walks & City', tag: 'Walking', icon: '🚶' },
+  { label: 'Events & Culture', tag: 'Event Companion', icon: '🎟️' },
+  { label: 'Study & Silence', tag: 'Study Buddy', icon: '📖' },
+  { label: 'Food & Dining', tag: 'Foodie', icon: '🍽️' },
+];
+
 export default function Modes() {
   return (
     <section id="modes" className="py-24 md:py-[7.5rem] bg-paper">
@@ -55,6 +63,20 @@ export default function Modes() {
           title="Choose how you want company today."
           subtitle="Four clear ways to book presence — expectations set before you meet."
         />
+
+        {/* Quick category strip matching Screen 6 */}
+        <div className="mb-10 flex items-center justify-start sm:justify-center gap-3 overflow-x-auto pb-2 scrollbar-none">
+          {categories.map((c) => (
+            <Link
+              key={c.label}
+              href={`/companions?tag=${encodeURIComponent(c.tag)}`}
+              className="group shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-line bg-mist hover:bg-[#1E3A2F] hover:text-white hover:border-[#1E3A2F] transition-all duration-200 text-sm font-semibold text-ink shadow-sm"
+            >
+              <span className="text-base">{c.icon}</span>
+              <span>{c.label}</span>
+            </Link>
+          ))}
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
           {modes.map((mode, i) => (

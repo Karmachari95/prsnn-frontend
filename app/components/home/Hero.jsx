@@ -25,15 +25,23 @@ const Hero = () => {
   const [stats, setStats] = React.useState(null);
 
   React.useEffect(() => {
+    let cancelled = false;
     const fetchStats = async () => {
       try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/public/stats`);
-        setStats(res.data);
+        const { cachedFetch } = await import('../../utils/cache');
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+        const data = await cachedFetch(`${apiUrl}/api/public/stats`);
+        if (!cancelled && data) {
+          setStats(data);
+        }
       } catch (err) {
-        console.error('Error fetching stats:', err);
+        // graceful fallback
       }
     };
     fetchStats();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
@@ -73,11 +81,11 @@ const Hero = () => {
           </h1>
 
           <p className="mt-6 text-lg md:text-xl text-white/75 font-medium max-w-lg leading-relaxed animate-hero-rise-d2">
-            Book a verified companion to accompany you to events, cafés, study
+            You&apos;re not alone in feeling this way. Book a verified companion to accompany you to events, cafés, study
             sessions, hospital visits, walks, or simply spend quiet time together.
           </p>
           <p className="mt-3 text-base md:text-lg text-white/55 font-medium animate-hero-rise-d2">
-            100% platonic. Public meetups only. Verified companions.
+            Presence without pressure. 100% platonic. Public meetups only. Verified companions.
           </p>
 
           <div className="mt-9 flex flex-col sm:flex-row gap-3 animate-hero-rise-d3">
@@ -100,7 +108,7 @@ const Hero = () => {
           <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 animate-hero-rise-d3">
             <span className="text-signal text-sm tracking-tight">★★★★★</span>
             <span className="text-sm font-medium text-white/60">
-              Trusted by {stats ? `${stats.users}+ users and ${stats.companions}+ verified companions` : 'early users'}
+              Trusted by {stats ? `${stats.users}+ users and ${stats.companions}+ verified companions` : 'early users across India'}
             </span>
           </div>
 

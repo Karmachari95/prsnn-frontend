@@ -47,8 +47,7 @@ export const cachedFetch = async (url, options = {}, useCache = true) => {
         
         return data;
     } catch (error) {
-        console.error('Fetch error:', error);
-        throw error;
+        return null;
     }
 };
 

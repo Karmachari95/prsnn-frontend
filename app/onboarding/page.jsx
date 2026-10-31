@@ -152,11 +152,13 @@ const OnboardingContent = () => {
         const { name, value, type, checked } = e.target;
 
         if (name === 'phoneNumber') {
-            if (!/^\d{0,10}$/.test(value)) {
-                return; // Prevent entering non-digits or more than 10 digits if you want strict control, or just validate
+            // Allow digits, spaces, plus sign and hyphens up to 18 chars for international formats
+            if (!/^[0-9+\-\s]{0,18}$/.test(value)) {
+                return;
             }
-            if (value.length !== 10) {
-                setPhoneError('Invalid mobile number');
+            const clean = value.replace(/\D/g, '');
+            if (clean.length > 0 && (clean.length < 7 || clean.length > 15)) {
+                setPhoneError('Please enter a valid phone number (7 to 15 digits)');
             } else {
                 setPhoneError('');
             }
@@ -211,8 +213,9 @@ const OnboardingContent = () => {
     const handleBasicSubmit = async (e) => {
         e.preventDefault();
         
-        if (phoneError || formData.phoneNumber.length !== 10) {
-            showNotification('error', "Please enter a valid 10-digit mobile number");
+        const cleanPhone = (formData.phoneNumber || '').replace(/\D/g, '');
+        if (phoneError || cleanPhone.length < 7 || cleanPhone.length > 15) {
+            showNotification('error', "Please enter a valid mobile number (7 to 15 digits)");
             return;
         }
         
@@ -253,8 +256,9 @@ const OnboardingContent = () => {
     const handleCompanionSubmit = async (e) => {
         e.preventDefault();
 
-        if (phoneError || formData.phoneNumber.length !== 10) {
-            showNotification('error', "Please enter a valid 10-digit mobile number");
+        const cleanPhone = formData.phoneNumber.replace(/\D/g, '');
+        if (phoneError || cleanPhone.length < 7 || cleanPhone.length > 15) {
+            showNotification('error', "Please enter a valid phone number (7 to 15 digits)");
             return;
         }
 
@@ -433,76 +437,82 @@ const OnboardingContent = () => {
         );
     }
 
-    // Choice Screen - First screen user sees
+    // Choice Screen - First screen user sees (Matches Screen 3)
     if (!userChoice) {
         return (
-            <div className="min-h-screen bg-gray-50 p-6 md:p-12 font-sans relative flex items-center justify-center overflow-hidden">
-                 {/* Background Decor */}
-                 <div className='absolute top-0 left-0 w-96 h-96 bg-green-50 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-float'></div>
-                 <div className='absolute bottom-0 right-0 w-96 h-96 bg-yellow-50 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-float' style={{animationDelay: '2s'}}></div>
+            <div className="min-h-screen bg-[#FAF8F5] pt-28 pb-16 px-4 md:px-8 font-sans flex items-center justify-center">
+                 <div className="max-w-md w-full mx-auto animate-fadeIn space-y-6">
+                    <button 
+                        onClick={() => router.push('/')}
+                        className="text-xs font-bold text-gray-500 hover:text-black flex items-center gap-1.5 transition-colors"
+                    >
+                        ← Back to home
+                    </button>
 
-                 <div className="max-w-6xl mx-auto relative z-10 w-full animate-fadeIn">
-                    <div className="text-center mb-16">
-                        <h1 className="text-3xl md:text-3xl font-bold text-gray-900 tracking-tight lowercase mb-6">
-                            Moments we build this for...
+                    <div>
+                        <span className="text-[11px] font-bold uppercase tracking-widest text-[#1E3A2F]">
+                            Step 1 · Choose Your Role
+                        </span>
+                        <h1 className="text-3xl md:text-4xl font-display font-black text-gray-900 tracking-tight mt-1">
+                            I&apos;m here as a...
                         </h1>
-
-                        {/* Situational Clarity List */}
-                        <div className="mb-8 flex flex-col gap-1.5 opacity-70 text-sm md:text-base font-medium text-gray-500 items-center">
-                            <p>• Before walking into a café alone</p>
-                            <p>• Waiting rooms</p>
-                            <p>• First day in a new city</p>
-                            <p>• Entering events solo</p>
-                            <p>• Long public waits</p>
-                        </div>
-
-                        <p className="text-xl text-gray-400 font-medium tracking-wide">
-                            Choose your journey
+                        <p className="text-sm text-gray-500 mt-1">
+                            Presence without pressure. Choose how you&apos;d like to use PRSNN.
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                        {/* Basic User Card */}
+                    <div className="space-y-4">
+                        {/* Option 1: Find a companion */}
                         <div 
                             onClick={() => setUserChoice('basic')}
-                            className="bg-white p-12 rounded-[3rem] shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer flex flex-col justify-between min-h-[450px] border border-gray-100 group relative overflow-hidden"
+                            className="bg-white p-6 rounded-3xl border border-[#EAE6DF] hover:border-[#1E3A2F] shadow-sm hover:shadow-md transition-all cursor-pointer group flex items-center justify-between gap-4"
                         >
-                            <div className="absolute top-0 right-0 w-48 h-48 bg-green-50 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                            <div className="relative z-10">
-                                <span className="bg-green-50 text-green-800 px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest mb-8 inline-block border border-green-100">For Members</span>
-                                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">I want company.</h2>
-                                <p className="text-gray-500 font-medium text-lg leading-relaxed max-w-sm">
-                                    Find a companion to sit with you. No pressure, just human presence.
-                                </p>
+                            <div className="flex items-center gap-4">
+                                <div className="w-14 h-14 rounded-2xl bg-[#E8EFE9] text-[#1E3A2F] flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">
+                                    🚶
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-lg text-gray-900 group-hover:text-[#1E3A2F] transition-colors">
+                                        Find a companion
+                                    </h3>
+                                    <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">
+                                        Book verified companions for your activities, coffee, or events.
+                                    </p>
+                                </div>
                             </div>
-
-                             <div className="mt-10 flex items-center text-gray-900 font-bold group-hover:translate-x-2 transition-transform relative z-10 text-lg">
-                                Join as Member <span className="ml-2">→</span>
+                            <div className="w-9 h-9 rounded-full bg-[#FAF8F5] border border-[#EAE6DF] flex items-center justify-center text-gray-400 group-hover:bg-[#1E3A2F] group-hover:text-white transition-all shrink-0 font-bold text-sm">
+                                ›
                             </div>
                         </div>
-                        
-                        {/* Companion Card */}
+
+                        {/* Option 2: Become a companion */}
                         <div 
                             onClick={() => setUserChoice('companion')}
-                            className="bg-white p-12 rounded-[3rem] shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer flex flex-col justify-between min-h-[450px] border border-gray-100 group relative overflow-hidden"
+                            className="bg-white p-6 rounded-3xl border border-[#EAE6DF] hover:border-[#D97757] shadow-sm hover:shadow-md transition-all cursor-pointer group flex items-center justify-between gap-4"
                         >
-                             <div className="absolute top-0 right-0 w-48 h-48 bg-yellow-50 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                            
-                            <div className="relative z-10">
-                                <span className="bg-yellow-50 text-yellow-800 px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest mb-8 inline-block border border-yellow-100">For Companions</span>
-                                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">I want to join as a companion</h2>
-                                <p className="text-gray-500 font-medium text-lg leading-relaxed max-w-sm">
-                                    Become a verified companion. Share your time and get paid for your presence.
-                                </p>
+                            <div className="flex items-center gap-4">
+                                <div className="w-14 h-14 rounded-2xl bg-[#FDF1EC] text-[#D97757] flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">
+                                    🤝
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-lg text-gray-900 group-hover:text-[#D97757] transition-colors">
+                                        Become a companion
+                                    </h3>
+                                    <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">
+                                        Meet new people, share everyday moments, and earn on your terms.
+                                    </p>
+                                </div>
                             </div>
-                            
-                            <div className="mt-10 flex items-center text-gray-900 font-bold group-hover:translate-x-2 transition-transform relative z-10 text-lg">
-                                Apply Now <span className="ml-2">→</span>
+                            <div className="w-9 h-9 rounded-full bg-[#FAF8F5] border border-[#EAE6DF] flex items-center justify-center text-gray-400 group-hover:bg-[#D97757] group-hover:text-white transition-all shrink-0 font-bold text-sm">
+                                ›
                             </div>
                         </div>
+                    </div>
 
-                        
+                    <div className="pt-2 text-center">
+                        <p className="text-xs text-gray-400">
+                            You can always update your role or become a companion later from your profile.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -554,8 +564,8 @@ const OnboardingContent = () => {
                                     value={formData.phoneNumber}
                                     onChange={handleInputChange}
                                     className={`w-full px-5 py-4 bg-gray-50 border ${phoneError ? 'border-red-300 bg-red-50' : 'border-gray-200'} text-gray-900 rounded-2xl focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-gray-300 transition-all font-medium`}
-                                    placeholder="Enter 10-digit mobile number"
-                                    maxLength={10}
+                                    placeholder="Enter phone number (e.g. +91 9876543210)"
+                                    maxLength={16}
                                 />
                                 {phoneError && <p className="text-red-500 text-xs font-bold mt-2 ml-1">{phoneError}</p>}
                             </div>
@@ -709,8 +719,8 @@ const OnboardingContent = () => {
                                         value={formData.phoneNumber}
                                         onChange={handleInputChange}
                                         className={`w-full px-4 py-3 bg-yellow-50 border-2 ${phoneError ? 'border-red-500' : 'border-black'} text-gray-900 rounded-lg focus:ring-2 focus:ring-black focus:border-black outline-none font-medium`}
-                                        placeholder="Enter 10-digit mobile number"
-                                        maxLength={10}
+                                        placeholder="Enter phone number (e.g. +91 9876543210)"
+                                        maxLength={16}
                                     />
                                     {phoneError && <p className="text-red-500 text-xs font-bold mt-1">{phoneError}</p>}
                                 </div>
@@ -836,7 +846,8 @@ const OnboardingContent = () => {
                                     type="button"
                                     onClick={() => {
                                         if (!formData.fullName.trim()) return alert("Please enter your full name.");
-                                        if (!formData.phoneNumber || formData.phoneNumber.length !== 10) return alert("Please enter a valid 10-digit phone number.");
+                                        const cleanPhone = (formData.phoneNumber || '').replace(/\D/g, '');
+                                        if (!formData.phoneNumber || cleanPhone.length < 7 || cleanPhone.length > 15) return alert("Please enter a valid phone number (7 to 15 digits).");
                                         if (!formData.city) return alert("Please select your city.");
                                         if (!formData.area.trim()) return alert("Please enter your area.");
                                         if (!formData.description.trim()) return alert("Please enter a description.");

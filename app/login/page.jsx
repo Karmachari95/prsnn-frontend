@@ -158,7 +158,12 @@ const LoginContent = () => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [fullName, setFullName] = useState("");
+  const [countryCode, setCountryCode] = useState("+91");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [gender, setGender] = useState("woman");
+  const [genderPreference, setGenderPreference] = useState("women_only");
+  const [genderConsentAcknowledged, setGenderConsentAcknowledged] = useState(false);
+  const [agreementAccepted, setAgreementAccepted] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -185,6 +190,10 @@ const LoginContent = () => {
     setUsername("");
     setFullName("");
     setPhoneNumber("");
+    setGender("woman");
+    setGenderPreference("women_only");
+    setGenderConsentAcknowledged(false);
+    setAgreementAccepted(false);
     setConfirmPassword("");
     setVerificationImage(null);
     setShowPassword(false);
@@ -253,18 +262,19 @@ const LoginContent = () => {
       if (!fullName.trim()) {
         setAlert({
           type: "error",
-          title: "Full Name Required",
-          message: "Please enter your full name",
+          title: "Name Required",
+          message: "Please enter your public display name",
         });
         setLoading(false);
         return;
       }
 
-      if (phoneNumber.trim().length !== 10) {
+      const digitsOnly = phoneNumber.trim().replace(/\D/g, '');
+      if (digitsOnly.length < 7 || digitsOnly.length > 15) {
         setAlert({
           type: "error",
           title: "Invalid Phone Number",
-          message: "Please enter a valid 10-digit mobile number",
+          message: "Please enter a valid phone number (7 to 15 digits)",
         });
         setLoading(false);
         return;
@@ -296,17 +306,43 @@ const LoginContent = () => {
         setLoading(false);
         return;
       }
+
+      if (gender === 'woman' && genderPreference === 'any_gender' && !genderConsentAcknowledged) {
+        setAlert({
+          type: "warning",
+          title: "Matching Consent Required",
+          message: "Please acknowledge the safety guideline consent checkbox for matching with companions of any gender.",
+        });
+        setLoading(false);
+        return;
+      }
+
+      if (!agreementAccepted) {
+        setAlert({
+          type: "warning",
+          title: "Agreement Required",
+          message: "Please review and agree to the PRSNN Participation, Privacy and Boundaries Agreement to continue.",
+        });
+        setLoading(false);
+        return;
+      }
     }
 
     try {
       if (state === "Sign Up") {
+        const fullFormattedPhone = `${countryCode} ${phoneNumber.trim().replace(/\D/g, '')}`;
         const formData = new FormData();
+        formData.append("displayName", fullName.trim());
         formData.append("fullName", fullName.trim());
-        formData.append("phoneNumber", phoneNumber.trim());
+        formData.append("phoneNumber", fullFormattedPhone);
         formData.append("role", accountType);
         formData.append("username", username);
         formData.append("email", email);
         formData.append("password", password);
+        formData.append("gender", gender);
+        formData.append("genderPreference", genderPreference);
+        formData.append("genderConsentAcknowledged", String(genderConsentAcknowledged));
+        formData.append("agreementAccepted", String(agreementAccepted));
         if (verificationImage) {
           formData.append("verificationImage", verificationImage);
         }
@@ -332,11 +368,25 @@ const LoginContent = () => {
       }
     } catch (error) {
       console.error(error);
-      const msg =
-        error.response?.data?.message || "Something went wrong. Please try again.";
+      const resData = error.response?.data;
+      const msg = resData?.message || "Something went wrong. Please try again.";
 
-      if (error.response?.status === 403 && error.response?.data?.emailVerificationRequired) {
-        const userEmail = error.response.data.email || email;
+      // 1. If backend created user but returned warning / email delivery issue
+      if (resData?.userId || (typeof msg === 'string' && msg.includes("User created"))) {
+        setAlert({
+          type: "success",
+          title: "Account Created",
+          message: "Account created successfully. Redirecting you to verify your email...",
+        });
+        setTimeout(() => {
+          router.push(`/verify-email?email=${encodeURIComponent(email)}&role=${encodeURIComponent(accountType)}`);
+        }, 1500);
+        return;
+      }
+
+      // 2. If unverified email on sign in
+      if (error.response?.status === 403 && resData?.emailVerificationRequired) {
+        const userEmail = resData.email || email;
         setAlert({
           type: "warning",
           title: "Email Verification Required",
@@ -344,10 +394,25 @@ const LoginContent = () => {
         });
         setTimeout(() => {
           router.push(`/verify-email?email=${encodeURIComponent(userEmail)}`);
-        }, 2000);
-      } else {
-        setAlert({ type: "error", title: "Error", message: msg });
+        }, 1500);
+        return;
       }
+
+      // 3. If account already exists
+      if (typeof msg === 'string' && msg.includes("already exists")) {
+        setAlert({
+          type: "warning",
+          title: "Account Already Exists",
+          message: "An account with this email or username already exists. Please switch to Sign In or verify your email.",
+        });
+        return;
+      }
+
+      // 4. Fallback network or server error
+      const userFriendlyMsg = !error.response 
+        ? "Unable to reach the PRSNN server. Please check your internet connection and try again."
+        : msg;
+      setAlert({ type: "error", title: "Notice", message: userFriendlyMsg });
     } finally {
       setLoading(false);
     }
@@ -475,7 +540,7 @@ const LoginContent = () => {
                               : "bg-paper text-ink/70 border-line hover:border-ink/20"
                           }`}
                         >
-                          <span className="text-base">👤</span> Member
+                          <span className="text-base">👤</span> User
                         </button>
                         <button
                           type="button"
@@ -496,31 +561,181 @@ const LoginContent = () => {
                       </p>
                     </div>
 
-                    <AuthInput
-                      id="fullName"
-                      label="Full Name"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      placeholder="e.g. Alex Sharma"
-                      icon={IconUser}
-                      required
-                      autoComplete="name"
-                    />
+                    {/* Your Name field per Requirement 8 */}
+                    <div className="space-y-1.5">
+                      <label htmlFor="fullName" className="block text-sm font-semibold text-ink/75">
+                        Your name
+                      </label>
+                      <div className="relative group/input">
+                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-ink/35 group-focus-within/input:text-moss transition-colors duration-300">
+                          <IconUser />
+                        </span>
+                        <input
+                          id="fullName"
+                          type="text"
+                          required
+                          value={fullName}
+                          onChange={(e) => setFullName(e.target.value)}
+                          placeholder="Enter the name you would like to use on PRSNN."
+                          autoComplete="name"
+                          className="w-full h-14 pl-12 pr-4 rounded-2xl bg-paper border border-line text-base font-medium text-ink placeholder:text-ink/30 focus:outline-none focus:border-moss focus:ring-4 focus:ring-moss/10 focus:bg-white transition-all duration-300"
+                        />
+                      </div>
+                      <p className="text-[11px] text-ink/50 leading-relaxed pl-1">
+                        For your privacy, you may use a display name or stage name on your public profile where permitted. If identity verification is required, your verification details must be accurate and will be handled according to our privacy policy.
+                      </p>
+                    </div>
 
-                    <AuthInput
-                      id="phoneNumber"
-                      label="Phone Number"
-                      type="tel"
-                      value={phoneNumber}
-                      onChange={(e) => {
-                        const val = e.target.value.replace(/\D/g, '').slice(0, 10);
-                        setPhoneNumber(val);
-                      }}
-                      placeholder="10-digit mobile number"
-                      icon={IconPhone}
-                      required
-                      autoComplete="tel"
-                    />
+                    {/* International Phone Number per Requirement 7 */}
+                    <div className="space-y-1.5">
+                      <label htmlFor="phoneNumber" className="block text-sm font-semibold text-ink/75">
+                        Mobile number
+                      </label>
+                      <div className="flex gap-2">
+                        <select
+                          value={countryCode}
+                          onChange={(e) => setCountryCode(e.target.value)}
+                          className="h-14 px-3 rounded-2xl bg-paper border border-line text-sm font-semibold text-ink focus:outline-none focus:border-moss focus:bg-white transition-colors"
+                        >
+                          <option value="+91">🇮🇳 +91</option>
+                          <option value="+1">🇺🇸 +1</option>
+                          <option value="+44">🇬🇧 +44</option>
+                          <option value="+971">🇦🇪 +971</option>
+                          <option value="+65">🇸🇬 +65</option>
+                          <option value="+61">🇦🇺 +61</option>
+                          <option value="+49">🇩🇪 +49</option>
+                          <option value="+33">🇫🇷 +33</option>
+                        </select>
+                        <div className="relative flex-1 group/input">
+                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-ink/35 group-focus-within/input:text-moss transition-colors">
+                            <IconPhone />
+                          </span>
+                          <input
+                            id="phoneNumber"
+                            type="tel"
+                            required
+                            value={phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            placeholder="Mobile or phone number"
+                            autoComplete="tel"
+                            className="w-full h-14 pl-12 pr-4 rounded-2xl bg-paper border border-line text-base font-medium text-ink placeholder:text-ink/30 focus:outline-none focus:border-moss focus:ring-4 focus:ring-moss/10 focus:bg-white transition-all"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Gender Selection per Requirement 4 */}
+                    <div className="space-y-2">
+                      <label className="block text-sm font-semibold text-ink/75">
+                        I identify as
+                      </label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {[
+                          { id: 'woman', label: 'Woman' },
+                          { id: 'man', label: 'Man' },
+                          { id: 'non_binary', label: 'Non-binary' },
+                        ].map((g) => (
+                          <button
+                            key={g.id}
+                            type="button"
+                            onClick={() => setGender(g.id)}
+                            className={`py-3 px-3 rounded-xl border text-xs font-bold transition-all ${
+                              gender === g.id
+                                ? 'bg-[#1E3A2F] text-white border-[#1E3A2F] shadow-sm'
+                                : 'bg-paper text-ink/70 border-line hover:border-ink/20'
+                            }`}
+                          >
+                            {g.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Gender-Based Matching Preference per Requirement 4.1 & 4.2 */}
+                    {gender === 'woman' && (
+                      <div className="p-4 rounded-2xl bg-[#F0EBE1] border border-[#E0D8CB] space-y-3">
+                        <div className="flex items-center gap-2">
+                          <span className="text-base">🛡️</span>
+                          <p className="text-xs font-bold text-[#1E3A2F] uppercase tracking-wider">
+                            Women's Safety & Matching Preference
+                          </p>
+                        </div>
+                        <p className="text-xs text-[#2C332E] font-medium">
+                          {accountType === 'companion'
+                            ? 'Who are you comfortable accepting bookings from?'
+                            : 'Who would you feel comfortable booking?'}
+                        </p>
+                        <div className="space-y-2">
+                          <label className="flex items-center gap-3 p-3 rounded-xl bg-white border border-[#E0D8CB] cursor-pointer">
+                            <input
+                              type="radio"
+                              name="matchingPref"
+                              value="women_only"
+                              checked={genderPreference === 'women_only'}
+                              onChange={() => setGenderPreference('women_only')}
+                              className="text-[#1E3A2F] focus:ring-[#1E3A2F]"
+                            />
+                            <div>
+                              <span className="text-xs font-bold text-[#1E3A2F] block">
+                                Women companions only
+                              </span>
+                              <span className="text-[11px] text-[#6B726A]">
+                                Recommended · Selected by default
+                              </span>
+                            </div>
+                          </label>
+
+                          <label className="flex items-center gap-3 p-3 rounded-xl bg-white border border-[#E0D8CB] cursor-pointer">
+                            <input
+                              type="radio"
+                              name="matchingPref"
+                              value="any_gender"
+                              checked={genderPreference === 'any_gender'}
+                              onChange={() => setGenderPreference('any_gender')}
+                              className="text-[#1E3A2F] focus:ring-[#1E3A2F]"
+                            />
+                            <div>
+                              <span className="text-xs font-bold text-[#1E3A2F] block">
+                                Companions of any gender
+                              </span>
+                              <span className="text-[11px] text-[#6B726A]">
+                                Optional · Requires affirmative consent
+                              </span>
+                            </div>
+                          </label>
+                        </div>
+
+                        {/* Women's Safety First Note */}
+                        <div className="p-3.5 rounded-2xl bg-[#E8EFE9] border border-[#1E3A2F]/15 space-y-1.5">
+                          <div className="flex items-center gap-1.5 font-bold text-xs text-[#1E3A2F]">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#D97757]" />
+                            <span>Women&apos;s Safety First</span>
+                          </div>
+                          <p className="text-[11px] leading-relaxed text-[#181B18]/80 font-medium">
+                            We put women&apos;s safety on top priority. By default, you will receive bookings from women companions only. You can optionally choose to accept bookings from people of any gender with your clear consent.
+                          </p>
+                          <p className="text-[11px] leading-relaxed text-[#1E3A2F] font-semibold bg-white/70 p-2 rounded-xl border border-[#1E3A2F]/10">
+                            ✨ You have a completely free hand to change or update your matching preferences anytime whenever you want from <span className="underline">Settings → Preferences → Change Gender</span>.
+                          </p>
+                        </div>
+
+                        {genderPreference === 'any_gender' && (
+                          <div className="pt-2 border-t border-[#E0D8CB]">
+                            <label className="flex items-start gap-2.5 cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={genderConsentAcknowledged}
+                                onChange={(e) => setGenderConsentAcknowledged(e.target.checked)}
+                                className="mt-0.5 rounded text-[#1E3A2F] focus:ring-[#1E3A2F]"
+                              />
+                              <span className="text-[11px] text-[#2C332E] leading-relaxed">
+                                I understand that selecting this option may allow me to be matched with eligible companions of different genders. I have reviewed PRSNN&apos;s safety guidelines and voluntarily choose this preference.
+                              </span>
+                            </label>
+                          </div>
+                        )}
+                      </div>
+                    )}
 
                     <AuthInput
                       id="username"
@@ -663,6 +878,31 @@ const LoginContent = () => {
                   </div>
                 )}
 
+                {!isSignIn && (
+                  <div className="pt-1 pb-2">
+                    <label className="flex items-start gap-3 p-3.5 rounded-2xl bg-paper border border-line cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        required
+                        checked={agreementAccepted}
+                        onChange={(e) => setAgreementAccepted(e.target.checked)}
+                        className="mt-1 w-4 h-4 rounded text-[#1E3A2F] focus:ring-[#1E3A2F]"
+                      />
+                      <span className="text-xs text-ink/75 leading-relaxed font-medium">
+                        I have read and agree to the{" "}
+                        <Link 
+                          href="/agreement" 
+                          target="_blank"
+                          className="font-bold text-[#1E3A2F] underline hover:text-[#D97757]"
+                        >
+                          PRSNN Participation, Privacy and Boundaries Agreement
+                        </Link>
+                        .
+                      </span>
+                    </label>
+                  </div>
+                )}
+
                 <button
                   type="submit"
                   disabled={loading}
@@ -681,6 +921,41 @@ const LoginContent = () => {
                     )}
                   </span>
                 </button>
+
+                <div className="relative my-4 text-center">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-line" />
+                  </div>
+                  <span className="relative bg-paper px-3 text-xs text-ink/40 font-semibold uppercase tracking-wider">
+                    or continue with
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => alert("Google sign in is ready for OAuth configuration.")}
+                    className="flex items-center justify-center gap-2 py-3 px-4 rounded-2xl border border-line bg-paper text-ink font-semibold text-sm hover:bg-mist transition-colors shadow-sm"
+                  >
+                    <svg className="w-4 h-4" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                    </svg>
+                    Google
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => alert("Apple sign in is ready for Apple ID configuration.")}
+                    className="flex items-center justify-center gap-2 py-3 px-4 rounded-2xl border border-line bg-paper text-ink font-semibold text-sm hover:bg-mist transition-colors shadow-sm"
+                  >
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 170 170">
+                      <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.04-7.65-7.74-11.87-14.1-6.1-9.15-10.88-19.5-14.33-31.06-3.46-11.56-5.19-22.39-5.19-32.48 0-14.13 3.63-25.96 10.88-35.48 7.26-9.52 16.29-14.38 27.09-14.59 4.35 0 9.3 1.13 14.85 3.39 5.55 2.26 9.25 3.44 11.11 3.55 1.63-.22 5.56-1.48 11.78-3.77 6.22-2.3 11.23-3.27 15.03-2.92 11.96.97 21.2 5.5 27.72 13.58-10.43 6.31-15.53 14.93-15.3 25.86.23 8.7 3.49 15.93 9.78 21.71 6.28 5.78 13.68 9.07 22.21 9.87-1.84 5.66-4.23 11.83-7.17 18.52zM119.22 33.15c0-6.75 2.45-13.12 7.35-19.11 4.9-5.99 10.98-9.87 18.23-11.64.11 1.09.16 2.07.16 2.94 0 6.64-2.56 13.06-7.68 19.27-5.12 6.2-11.29 10.02-18.51 11.45-.11-.98-.16-1.95-.16-2.91z" />
+                    </svg>
+                    Apple
+                  </button>
+                </div>
 
                 {!isSignIn && (
                   <p className="text-xs text-ink/45 font-medium leading-relaxed text-center pt-1">

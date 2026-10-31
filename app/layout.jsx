@@ -2,6 +2,7 @@ import { Syne, DM_Sans } from "next/font/google";
 import "./globals.css";
 import NavBar from "./components/layout/NavBar";
 import Footer from "./components/layout/Footer";
+import BottomNav from "./components/layout/BottomNav";
 import { AuthProvider } from "./context/AuthContext";
 import VerificationGuard from "./components/common/VerificationGuard";
 import GlobalClickGuard from "./components/auth/GlobalClickGuard";
@@ -47,6 +48,7 @@ export default function RootLayout({ children }) {
             <NavBar />
             {children}
             <Footer />
+            <BottomNav />
             <EnvBanner />
           </NotificationProvider>
         </AuthProvider>

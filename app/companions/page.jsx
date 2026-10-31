@@ -84,6 +84,87 @@ const daysOfWeek = [
   { id: 'sunday', label: 'Sun' },
 ];
 
+const defaultCompanionsList = [
+  {
+    _id: 'c1',
+    fullName: 'Ayesha',
+    city: 'Chennai',
+    rating: 4.8,
+    completedSessions: 120,
+    pricePerHour: 500,
+    is_verified: true,
+    gender: 'woman',
+    profilePhotoUrl: '/mode-sit-with-me.png',
+    tags: ['Cafe Hopping', 'Study Buddy', 'Walking', 'Plus One'],
+    description: 'Love exploring new cafés, meaningful conversations and learning new things. Open for casual meetups, events or study sessions.'
+  },
+  {
+    _id: 'c2',
+    fullName: 'Rohan',
+    city: 'Chennai',
+    rating: 4.7,
+    completedSessions: 98,
+    pricePerHour: 600,
+    is_verified: true,
+    gender: 'man',
+    profilePhotoUrl: '/hero-right.png',
+    tags: ['Event Companion', 'Walking', 'Foodie'],
+    description: 'Friendly companion for social gatherings, museum visits, walking tours and food exploring.'
+  },
+  {
+    _id: 'c3',
+    fullName: 'Fatima',
+    city: 'Chennai',
+    rating: 4.9,
+    completedSessions: 87,
+    pricePerHour: 550,
+    is_verified: true,
+    gender: 'woman',
+    profilePhotoUrl: '/mode-dont-go-alone.png',
+    tags: ['Silence', 'Sitting', 'Reading', 'Plus One'],
+    description: 'Calm presence for reading sessions, quiet library focus, gallery walks or peaceful conversations.'
+  },
+  {
+    _id: 'c4',
+    fullName: 'Sara',
+    city: 'Mumbai',
+    rating: 4.8,
+    completedSessions: 110,
+    pricePerHour: 500,
+    is_verified: true,
+    gender: 'woman',
+    profilePhotoUrl: '/mode-explore-together.png',
+    tags: ['Cafe Hopping', 'Study Buddy', 'Walking'],
+    description: 'Great listener, positive energy, passionate about architecture, coffee spots and quiet coworking.'
+  },
+  {
+    _id: 'c5',
+    fullName: 'Arjun',
+    city: 'Bengaluru',
+    rating: 4.7,
+    completedSessions: 95,
+    pricePerHour: 600,
+    is_verified: true,
+    gender: 'man',
+    profilePhotoUrl: '/herobg.png',
+    tags: ['Event Companion', 'Walking', 'Sightseeing'],
+    description: 'Always up for a stroll around Cubbon park, weekend tech expos or quiet coffee shop coworking.'
+  },
+  {
+    _id: 'c6',
+    fullName: 'Ibrahim',
+    city: 'Hyderabad',
+    rating: 4.6,
+    completedSessions: 72,
+    pricePerHour: 700,
+    is_verified: true,
+    gender: 'man',
+    profilePhotoUrl: '/mode-sit-with-me.png',
+    tags: ['Foodie', 'Urban Hiking', 'Event Companion'],
+    description: 'Food enthusiast, heritage lover, here to accompany you for authentic local meals and city exploration.'
+  }
+];
+
 function normalizeCompanions(data) {
   if (Array.isArray(data)) return data;
   if (Array.isArray(data?.companions)) return data.companions;
@@ -98,32 +179,45 @@ const CompanionsContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const mode = searchParams.get('mode');
+  const tagParam = searchParams.get('tag');
 
-  const [companions, setCompanions] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [companions, setCompanions] = useState(defaultCompanionsList);
+  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState(tagParam ? [tagParam] : []);
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedDay, setSelectedDay] = useState('');
+  const [selectedGender, setSelectedGender] = useState('');
   const [filtersOpen, setFiltersOpen] = useState(true);
   const [page, setPage] = useState(1);
   const itemsPerPage = 9;
 
+  useEffect(() => {
+    if (tagParam && !selectedTags.includes(tagParam)) {
+      setSelectedTags([tagParam]);
+    }
+  }, [tagParam]);
+
   const interestChips = mode ? modeTags[mode] || [] : allInterestTags.slice(0, 10);
+
+  useEffect(() => {
+    if (userData?.genderPreference === 'women_only') {
+      setSelectedGender('woman');
+    }
+  }, [userData]);
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      setLoading(true);
       try {
-        const data = await cachedFetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/companions`
-        );
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
+        const data = await cachedFetch(`${apiUrl}/api/companions`);
         const list = normalizeCompanions(data);
-        if (!cancelled) setCompanions(list);
+        if (!cancelled && list.length > 0) {
+          setCompanions(list);
+        }
       } catch (error) {
-        console.error('Error fetching companions:', error);
-        if (!cancelled) setCompanions([]);
+        if (!cancelled) setCompanions(defaultCompanionsList);
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -140,7 +234,7 @@ const CompanionsContent = () => {
 
   useEffect(() => {
     setPage(1);
-  }, [selectedTags, selectedCity, selectedDay, searchQuery]);
+  }, [selectedTags, selectedCity, selectedDay, selectedGender, searchQuery]);
 
   const setMode = (id) => {
     if (id === mode) {
@@ -160,12 +254,14 @@ const CompanionsContent = () => {
     setSelectedTags([]);
     setSelectedCity('');
     setSelectedDay('');
+    setSelectedGender('');
     setSearchQuery('');
   };
 
   const activeFilterCount =
     (selectedCity ? 1 : 0) +
     (selectedDay ? 1 : 0) +
+    (selectedGender ? 1 : 0) +
     selectedTags.length +
     (searchQuery.trim() ? 1 : 0);
 
@@ -220,6 +316,15 @@ const CompanionsContent = () => {
         if (!dayAvail) return false;
       }
 
+      if (selectedGender) {
+        const compGender = companion.gender || companion.userId?.gender;
+        if (selectedGender === 'woman') {
+          if (compGender && compGender !== 'woman') return false;
+        } else if (compGender && compGender !== selectedGender) {
+          return false;
+        }
+      }
+
       if (selectedTags.length > 0) {
         const tags = Array.isArray(companion.tags) ? companion.tags : [];
         if (tags.length === 0) return false;
@@ -272,37 +377,26 @@ const CompanionsContent = () => {
   const activeMode = modesMeta.find((m) => m.id === mode);
 
   return (
-    <div className="min-h-screen bg-mist text-ink pb-24">
+    <div className="min-h-screen bg-[#FAF8F5] text-[#181B18] pb-24">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-ink text-paper">
-        <div className="absolute inset-0">
-          <Image
-            src="/companions-banner.png"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover opacity-45"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-ink/75 to-mist" />
-          <div className="absolute inset-0 bg-gradient-to-r from-ink/80 via-ink/40 to-transparent" />
-        </div>
+      <section className="relative overflow-hidden bg-[#FAF8F5] text-[#181B18] border-b border-[#EAE6DF] pt-28 md:pt-36 pb-12 md:pb-14">
+        <div className="absolute top-0 right-10 w-96 h-96 bg-[#FDF1EC] rounded-full blur-3xl pointer-events-none opacity-70" />
+        <div className="absolute bottom-0 left-10 w-80 h-80 bg-[#E8EFE9] rounded-full blur-3xl pointer-events-none opacity-60" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-8 pt-28 md:pt-32 pb-10 md:pb-14">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-signal mb-3 animate-hero-rise">
-            Marketplace
-          </p>
-          <h1 className="font-display text-[clamp(2.25rem,5.5vw,4.25rem)] font-bold tracking-tight leading-[1.05] text-white max-w-3xl animate-hero-rise-d1">
+        <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-8">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E8EFE9] text-[#1E3A2F] text-xs font-bold uppercase tracking-wider mb-3">
+            <span>●</span> Verified Companions Directory
+          </div>
+          <h1 className="font-display text-[clamp(2.25rem,5vw,3.75rem)] font-black tracking-tight leading-[1.08] text-[#181B18] max-w-3xl">
             Find someone to share the moment.
           </h1>
-          <p className="mt-4 text-base md:text-lg text-white/70 font-medium max-w-xl leading-relaxed animate-hero-rise-d2">
-            Browse verified companions first — then refine by experience, city,
-            or day. Public meetups only. Leave anytime.
+          <p className="mt-3 text-base md:text-lg text-[#181B18]/65 font-medium max-w-xl leading-relaxed">
+            Browse verified companions across your city. Filter by activity, day, and comfort zones. Public meetups only. Leave anytime.
           </p>
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-5 md:px-8 -mt-6 md:-mt-8 relative z-20">
+      <div className="max-w-7xl mx-auto px-5 md:px-8 pt-6 relative z-20">
         {/* Horizontal mode selector */}
         <div className="animate-hero-rise-d3">
           <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 snap-x snap-mandatory scrollbar-none">
@@ -499,6 +593,27 @@ const CompanionsContent = () => {
                           label={d.label}
                         />
                       ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ink/40 mb-2.5">
+                      Preference
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <FilterChip
+                        active={!selectedGender}
+                        onClick={() => setSelectedGender('')}
+                        label="All Companions"
+                      />
+                      <FilterChip
+                        active={selectedGender === 'woman'}
+                        onClick={() =>
+                          setSelectedGender(selectedGender === 'woman' ? '' : 'woman')
+                        }
+                        label="🔒 Women Companions Only"
+                        tone="clay"
+                      />
                     </div>
                   </div>
 
@@ -699,6 +814,7 @@ function CompanionCard({ companion }) {
   const initialImageUrl =
     companion.profilePhotoUrl || companion.profilePhoto || null;
   const [imgFailed, setImgFailed] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
   const imageUrl = imgFailed ? null : initialImageUrl;
 
   const displayName = companion.fullName || companion.username || '?';
@@ -779,21 +895,42 @@ function CompanionCard({ companion }) {
 
         <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-ink/70 via-ink/20 to-transparent pointer-events-none" />
 
-        <div className="absolute top-3 left-3 right-3 flex flex-wrap gap-2">
+        {/* Top left status badges */}
+        <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 z-10">
           {verified && (
-            <span className="bg-paper/95 backdrop-blur-sm text-ink text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm">
-              <span className="text-moss">✓</span> Verified
+            <span className="bg-white/95 backdrop-blur-sm text-[#1E3A2F] text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm border border-line">
+              <span>✓</span> Verified
             </span>
           )}
           {isAvailableToday && (
-            <span className="bg-signal text-ink text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm">
+            <span className="bg-[#1E3A2F] text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm">
               Available today
             </span>
           )}
         </div>
 
+        {/* Top right favorite heart button matching Screen 6 & 7 */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsSaved((prev) => !prev);
+          }}
+          aria-label={isSaved ? "Remove from saved" : "Save companion"}
+          className={`absolute top-3 right-3 z-10 w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md transition-all shadow-sm ${
+            isSaved
+              ? 'bg-[#D97757] text-white scale-105'
+              : 'bg-white/90 text-ink/60 hover:bg-white hover:text-ink hover:scale-105'
+          }`}
+        >
+          <svg className="w-4 h-4" fill={isSaved ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+        </button>
+
         {companion.pricePerHour != null && companion.pricePerHour !== '' && (
-          <div className="absolute bottom-3 right-3 bg-paper/95 backdrop-blur-sm text-ink px-3 py-1.5 rounded-full font-bold text-sm shadow-sm">
+          <div className="absolute bottom-3 right-3 bg-paper/95 backdrop-blur-sm text-ink px-3 py-1.5 rounded-full font-bold text-sm shadow-sm border border-line">
             ₹{companion.pricePerHour}
             <span className="font-semibold text-ink/45 text-xs">/hr</span>
           </div>

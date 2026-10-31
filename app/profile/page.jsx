@@ -23,9 +23,13 @@ const Profile = () => {
     
     const [formData, setFormData] = useState({
         username: '',
+        displayName: '',
         email: '',
         fullName: '',
         phoneNumber: '',
+        gender: 'prefer_not_to_say',
+        genderPreference: 'women_only',
+        genderConsentAcknowledged: false,
         city: '',
         area: '',
         description: '',
@@ -53,9 +57,13 @@ const Profile = () => {
             // Initialize form data
             setFormData({
                 username: data.username || userData.username || '',
+                displayName: data.displayName || data.username || userData.displayName || '',
                 email: data.email || userData.email || '',
                 fullName: data.fullName || '',
                 phoneNumber: data.phoneNumber || '',
+                gender: data.gender || 'prefer_not_to_say',
+                genderPreference: data.genderPreference || (data.gender === 'woman' ? 'women_only' : 'any'),
+                genderConsentAcknowledged: Boolean(data.genderConsentAcknowledged),
                 city: data.city || '',
                 area: data.area || '',
                 description: data.description || '',
@@ -83,13 +91,9 @@ const Profile = () => {
         const { name, value, type, checked } = e.target;
         
         if (name === 'phoneNumber') {
-            // Allow only digits and max 10 chars
-            if (!/^\d{0,10}$/.test(value)) {
-                return;
-            }
-            
-            if (value.length !== 10) {
-                setPhoneError('Invalid mobile number');
+            const cleanDigits = value.replace(/\D/g, '');
+            if (value && (cleanDigits.length < 7 || cleanDigits.length > 15)) {
+                setPhoneError('Please enter a valid phone number (7-15 digits)');
             } else {
                 setPhoneError('');
             }
@@ -161,8 +165,14 @@ const Profile = () => {
     };
 
     const handleSaveProfile = async () => {
-        if (phoneError || formData.phoneNumber.length !== 10) {
-            showNotification('error', "Please enter a valid 10-digit mobile number");
+        const cleanPhone = (formData.phoneNumber || '').replace(/\D/g, '');
+        if (formData.phoneNumber && (cleanPhone.length < 7 || cleanPhone.length > 15)) {
+            showNotification('error', "Please enter a valid phone number (7 to 15 digits)");
+            return;
+        }
+
+        if (formData.gender === 'woman' && formData.genderPreference === 'any' && !formData.genderConsentAcknowledged) {
+            showNotification('error', "Please confirm the safety consent notice to match with companions of any gender.");
             return;
         }
 
@@ -234,30 +244,38 @@ const Profile = () => {
     const isCompanion = userData?.role === 'companion' || profileData?.role === 'companion' || profileData?.companionProfile;
 
     return (
-        <div className="w-full min-h-screen pt-28 md:pt-32 pb-10 px-4 md:px-0 bg-mist">
-            <div className="max-w-4xl mx-auto">
-                <div className="mb-12 text-center md:text-left">
-                    <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">My Dashboard</h1>
-                    <p className="text-gray-500 font-medium text-lg">Welcome back, {userData.username}</p>
+        <div className="w-full min-h-screen pt-28 md:pt-36 pb-20 px-4 md:px-8 bg-[#FAF8F5] text-[#181B18]">
+            <div className="max-w-5xl mx-auto">
+                <div className="mb-10 text-center md:text-left">
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#E8EFE9] text-[#1E3A2F] text-xs font-bold uppercase tracking-wider mb-3 border border-[#1E3A2F]/15">
+                        <span className="w-2 h-2 rounded-full bg-[#D97757]" />
+                        <span>Member Portal</span>
+                    </div>
+                    <h1 className="font-display text-3xl md:text-5xl font-black text-[#181B18] tracking-tight">
+                        My Dashboard
+                    </h1>
+                    <p className="text-[#181B18]/60 font-medium text-sm md:text-base mt-1">
+                        Welcome back, <span className="font-bold text-[#1E3A2F]">{userData.username}</span>
+                    </p>
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-8">
                     
                     {/* Left Column: Profile Card */}
                     <div className="w-full md:w-1/3">
-                        <div className="bg-white border border-gray-100 rounded-[2rem] p-8 shadow-xl relative overflow-hidden group hover:shadow-2xl transition-all duration-500">
+                        <div className="bg-white border border-[#EAE6DF] rounded-[2rem] p-8 shadow-sm relative overflow-hidden">
                              {/* Decorative Background */}
-                             <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-50 rounded-full blur-3xl opacity-50 transform translate-x-10 -translate-y-10 group-hover:bg-yellow-100 transition-colors"></div>
+                             <div className="absolute top-0 right-0 w-64 h-64 bg-[#FDF1EC] rounded-full blur-3xl opacity-70 transform translate-x-10 -translate-y-10"></div>
 
                              <div className="relative z-10 flex flex-col items-center text-center">
-                                <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg mb-6 overflow-hidden relative group/photo">
+                                <div className="w-32 h-32 rounded-full border-4 border-white shadow-md mb-6 overflow-hidden relative group/photo">
                                     <Image 
                                         src={profileData?.profilePhotoUrl || "/profile_pic.png"} 
                                         alt="Profile" 
                                         fill
                                         className="object-cover"
                                     />
-                                    <label className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/photo:opacity-100 transition-opacity cursor-pointer">
+                                    <label className="absolute inset-0 bg-[#1E3A2F]/60 flex items-center justify-center opacity-0 group-hover/photo:opacity-100 transition-opacity cursor-pointer">
                                         <span className="text-white text-xs font-bold text-center px-2">
                                             {uploadingPhoto ? 'Uploading...' : 'Change Photo'}
                                         </span>
@@ -273,24 +291,24 @@ const Profile = () => {
                                 
                                 {!isEditing ? (
                                     <>
-                                        <h2 className="text-2xl font-bold text-gray-900 tracking-tight mb-2">
-                                            {formData.username}
+                                        <h2 className="font-display text-2xl font-bold text-[#181B18] tracking-tight mb-1">
+                                            {formData.displayName || formData.username}
                                         </h2>
-                                        <p className="text-sm font-medium text-gray-400 bg-gray-50 px-4 py-1.5 rounded-full mb-4">
+                                        <p className="text-xs font-semibold text-[#181B18]/60 bg-[#FAF8F5] border border-[#EAE6DF] px-3.5 py-1 rounded-full mb-4">
                                             {userData.email}
                                         </p>
                                         {isCompanion && (
-                                            <span className="text-[10px] bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full font-bold uppercase tracking-widest mb-6 border border-yellow-200">
-                                                COMPANION
+                                            <span className="text-[10px] bg-[#E8EFE9] text-[#1E3A2F] px-3.5 py-1 rounded-full font-bold uppercase tracking-widest mb-6 border border-[#1E3A2F]/15">
+                                                VERIFIED COMPANION
                                             </span>
                                         )}
                                     </>
                                 ) : (
                                     <div className="w-full mb-6">
-                                        <h2 className="text-2xl font-bold text-gray-900 tracking-tight mb-2">
+                                        <h2 className="font-display text-2xl font-bold text-[#181B18] tracking-tight mb-1">
                                             {formData.username}
                                         </h2>
-                                        <p className="text-sm font-medium text-gray-400 bg-gray-50 px-4 py-1.5 rounded-full">
+                                        <p className="text-xs font-semibold text-[#181B18]/60 bg-[#FAF8F5] border border-[#EAE6DF] px-3.5 py-1 rounded-full">
                                             {userData.email}
                                         </p>
                                     </div>
@@ -301,13 +319,13 @@ const Profile = () => {
                                         <>
                                             <button 
                                                 onClick={() => setIsEditing(true)}
-                                                className="w-full py-3 bg-gray-900 text-white font-bold rounded-xl hover:bg-black transition-all text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                                                className="w-full py-3 bg-[#1E3A2F] text-white font-bold rounded-full hover:bg-[#152a22] transition-all text-xs uppercase tracking-wider shadow-sm"
                                             >
                                                 Edit Profile
                                             </button>
                                             <button 
                                                 onClick={logout}
-                                                className="w-full py-3 bg-white text-red-500 font-bold rounded-xl border border-red-100 hover:border-red-200 hover:bg-red-50 transition-all text-sm"
+                                                className="w-full py-2.5 bg-white text-[#D97757] font-bold rounded-full border border-[#D97757]/30 hover:bg-[#FDF1EC] transition-all text-xs uppercase tracking-wider"
                                             >
                                                 Log Out
                                             </button>
@@ -317,7 +335,7 @@ const Profile = () => {
                                             <button 
                                                 onClick={handleSaveProfile}
                                                 disabled={saving}
-                                                className="w-full py-3 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition-all text-sm disabled:opacity-50 shadow-green-200 shadow-lg"
+                                                className="w-full py-3 bg-[#1E3A2F] text-white font-bold rounded-full hover:bg-[#152a22] transition-all text-xs uppercase tracking-wider disabled:opacity-50 shadow-sm"
                                             >
                                                 {saving ? 'Saving...' : 'Save Changes'}
                                             </button>
@@ -326,7 +344,7 @@ const Profile = () => {
                                                     setIsEditing(false);
                                                     fetchProfile();
                                                 }}
-                                                className="w-full py-3 bg-white text-gray-500 font-bold rounded-xl border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-all text-sm"
+                                                className="w-full py-2.5 bg-white text-[#181B18]/60 font-bold rounded-full border border-[#EAE6DF] hover:bg-[#FAF8F5] transition-all text-xs uppercase tracking-wider"
                                             >
                                                 Cancel
                                             </button>
@@ -338,59 +356,63 @@ const Profile = () => {
 
                         {/* Quick Stats */}
                         {isCompanion && (
-                            <div className="mt-6 grid grid-cols-2 gap-4">
-                                <div className="bg-white border border-gray-100 rounded-[1.5rem] p-6 text-center shadow-lg hover:shadow-xl transition-all">
-                                    <span className="block text-3xl font-bold text-gray-900 mb-1">0</span>
-                                    <span className="text-[10px] font-bold uppercase text-gray-400 tracking-widest">Bookings</span>
+                            <div className="mt-4 grid grid-cols-2 gap-3">
+                                <div className="bg-white border border-[#EAE6DF] rounded-2xl p-4 text-center shadow-sm">
+                                    <span className="block font-display text-2xl font-black text-[#1E3A2F] mb-0.5">0</span>
+                                    <span className="text-[10px] font-bold uppercase text-[#181B18]/45 tracking-wider">Bookings</span>
                                 </div>
-                                <div className="bg-white border border-gray-100 rounded-[1.5rem] p-6 text-center shadow-lg hover:shadow-xl transition-all">
-                                    <span className="block text-3xl font-bold text-gray-900 mb-1">5.0</span>
-                                    <span className="text-[10px] font-bold uppercase text-gray-400 tracking-widest">Rating</span>
+                                <div className="bg-white border border-[#EAE6DF] rounded-2xl p-4 text-center shadow-sm">
+                                    <span className="block font-display text-2xl font-black text-[#D97757] mb-0.5">5.0</span>
+                                    <span className="text-[10px] font-bold uppercase text-[#181B18]/45 tracking-wider">Rating</span>
                                 </div>
                             </div>
                         )}
                     </div>
 
                     {/* Right Column: Content/Activity */}
-                    <div className="w-full md:w-2/3 space-y-8">
+                    <div className="w-full md:w-2/3 space-y-6">
 
                         {/* Profile Details - Visible for ALL users */}
-                        <div className="bg-white border border-gray-100 rounded-[2rem] p-8 shadow-sm">
-                            <h3 className="font-bold text-xs uppercase tracking-widest text-gray-400 mb-6 flex items-center gap-2">
-                                <span className={`w-2 h-2 ${isCompanion ? 'bg-blue-500' : 'bg-gray-400'} rounded-full`}></span>
+                        <div className="bg-white border border-[#EAE6DF] rounded-[2rem] p-7 md:p-8 shadow-sm">
+                            <h3 className="font-bold text-xs uppercase tracking-widest text-[#1E3A2F] mb-6 flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-[#D97757]"></span>
                                 {isCompanion ? 'Companion Details' : 'Profile Details'}
                             </h3>
                             
                             {!isEditing ? (
                                 <div className="space-y-6">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
-                                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 block">Full Name</label>
-                                            <p className="font-bold text-lg text-gray-900 border-b border-gray-100 pb-2">{formData.fullName || 'Not set'}</p>
+                                            <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest mb-1 block">Display Name</label>
+                                            <p className="font-display font-bold text-base text-[#181B18] border-b border-[#EAE6DF] pb-2">{formData.displayName || formData.username || 'Not set'}</p>
+                                        </div>
+                                        <div>
+                                            <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest mb-1 block">Full Name (Private)</label>
+                                            <p className="font-display font-bold text-base text-[#181B18] border-b border-[#EAE6DF] pb-2">{formData.fullName || 'Not set'}</p>
                                         </div>
                                          <div>
-                                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 block">Email</label>
-                                            <p className="font-bold text-lg text-gray-900 border-b border-gray-100 pb-2">{formData.email}</p>
+                                            <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest mb-1 block">Email</label>
+                                            <p className="font-medium text-base text-[#181B18] border-b border-[#EAE6DF] pb-2">{formData.email}</p>
                                         </div>
                                         <div>
-                                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 block">Phone</label>
-                                            <p className="font-bold text-lg text-gray-900 border-b border-gray-100 pb-2">{formData.phoneNumber || 'Not set'}</p>
+                                            <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest mb-1 block">Phone</label>
+                                            <p className="font-medium text-base text-[#181B18] border-b border-[#EAE6DF] pb-2">{formData.phoneNumber || 'Not set'}</p>
                                         </div>
                                         <div>
-                                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 block">City</label>
-                                            <p className="font-bold text-lg text-gray-900 border-b border-gray-100 pb-2">{formData.city || 'Not set'}</p>
+                                            <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest mb-1 block">City</label>
+                                            <p className="font-medium text-base text-[#181B18] border-b border-[#EAE6DF] pb-2">{formData.city || 'Not set'}</p>
                                         </div>
                                         <div>
-                                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 block">Area</label>
-                                            <p className="font-bold text-lg text-gray-900 border-b border-gray-100 pb-2">{formData.area || 'Not set'}</p>
+                                            <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest mb-1 block">Area</label>
+                                            <p className="font-medium text-base text-[#181B18] border-b border-[#EAE6DF] pb-2">{formData.area || 'Not set'}</p>
                                         </div>
                                     </div>
                                     
                                     {isCompanion && (
                                         <>
-                                             <div>
-                                                 <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 block">Description</label>
-                                                 <p className="text-base text-gray-600 leading-relaxed bg-gray-50 p-4 rounded-2xl italic">{formData.description || 'No description'}</p>
+                                             <div className="pt-2">
+                                                 <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest mb-2 block">Description</label>
+                                                 <p className="text-sm text-[#181B18]/75 leading-relaxed bg-[#FAF8F5] border border-[#EAE6DF] p-4 rounded-2xl italic">{formData.description || 'No description'}</p>
                                              </div>
                                         </>
                                     )}
@@ -399,15 +421,28 @@ const Profile = () => {
                                 <div className="space-y-6">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
-                                            <label className="text-xs font-bold text-gray-500 uppercase block mb-2">Full Name</label>
+                                            <label className="text-xs font-bold text-gray-500 uppercase block mb-2">Display Name</label>
+                                            <input
+                                                type="text"
+                                                name="displayName"
+                                                value={formData.displayName}
+                                                onChange={handleInputChange}
+                                                className="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all"
+                                                placeholder="Name shown on PRSNN"
+                                            />
+                                            <p className="text-[11px] text-gray-400 mt-1">This is the only name other users will see.</p>
+                                        </div>
+                                        <div>
+                                            <label className="text-xs font-bold text-gray-500 uppercase block mb-2">Full Name (Legal ID)</label>
                                             <input
                                                 type="text"
                                                 name="fullName"
                                                 value={formData.fullName}
                                                 onChange={handleInputChange}
                                                 className="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all"
-                                                placeholder="Your full name"
+                                                placeholder="Your full legal name"
                                             />
+                                            <p className="text-[11px] text-gray-400 mt-1">Kept confidential for verification.</p>
                                         </div>
                                          <div>
                                             <label className="text-xs font-bold text-gray-500 uppercase block mb-2">Email <span className="text-[10px] text-gray-300 ml-1">(Read only)</span></label>
@@ -420,15 +455,17 @@ const Profile = () => {
                                             />
                                         </div>
                                         <div>
-                                            <label className="text-xs font-bold text-gray-500 uppercase block mb-2">Phone <span className="text-[10px] text-gray-300 ml-1">(Read only)</span></label>
+                                            <label className="text-xs font-bold text-gray-500 uppercase block mb-2">Phone</label>
                                             <input
                                                 type="tel"
                                                 name="phoneNumber"
                                                 value={formData.phoneNumber}
-                                                disabled
-                                                className="w-full px-4 py-3 border border-gray-100 bg-white text-gray-400 rounded-xl text-sm cursor-not-allowed"
-                                                maxLength={10}
+                                                onChange={handleInputChange}
+                                                className="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all"
+                                                placeholder="Phone with country code"
+                                                maxLength={16}
                                             />
+                                            {phoneError && <p className="text-xs text-red-500 font-bold mt-1">{phoneError}</p>}
                                         </div>
                                          <div>
                                             <label className="text-xs font-bold text-gray-500 uppercase block mb-2">City</label>
@@ -473,35 +510,168 @@ const Profile = () => {
                             )}
                         </div>
 
+                        {/* Matching Preferences & Safety */}
+                        <div className="bg-white border border-[#EAE6DF] rounded-[2rem] p-7 md:p-8 shadow-sm">
+                            <div className="flex items-center justify-between mb-6">
+                                <h3 className="font-bold text-xs uppercase tracking-widest text-[#1E3A2F] flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-[#D97757] rounded-full"></span>
+                                    Safety & Matching Preferences
+                                </h3>
+                                <a href="/safety" className="text-xs font-bold text-[#D97757] hover:underline">
+                                    View Safety Standards →
+                                </a>
+                            </div>
+
+                            {!isEditing ? (
+                                <div className="space-y-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="bg-[#FAF8F5] p-5 rounded-2xl border border-[#EAE6DF]">
+                                            <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest block mb-1">Your Gender</label>
+                                            <p className="font-display font-bold text-base text-[#181B18] capitalize">
+                                                {formData.gender === 'woman' ? 'Woman' : formData.gender === 'man' ? 'Man' : formData.gender === 'non_binary' ? 'Non-binary' : 'Prefer not to say'}
+                                            </p>
+                                        </div>
+                                        <div className="bg-[#FAF8F5] p-5 rounded-2xl border border-[#EAE6DF]">
+                                            <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest block mb-1">Matching Preference</label>
+                                            <p className="font-display font-bold text-base text-[#181B18]">
+                                                {formData.genderPreference === 'women_only' ? 'Women companions only' : 'Companions of any gender'}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {formData.genderPreference === 'women_only' && (
+                                        <div className="bg-[#E8EFE9] border border-[#1E3A2F]/15 rounded-2xl p-4 text-xs text-[#1E3A2F] font-medium">
+                                            🔒 Women-only matching is active. You will only be matched with verified women companions.
+                                        </div>
+                                    )}
+
+                                    {/* Women's Safety First Note */}
+                                    <div className="p-4 rounded-2xl bg-[#E8EFE9] border border-[#1E3A2F]/15 space-y-2">
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-1.5 font-bold text-xs text-[#1E3A2F]">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-[#D97757]" />
+                                                <span>Women&apos;s Safety First</span>
+                                            </div>
+                                            <a
+                                                href="/settings/preferences"
+                                                className="text-xs font-bold text-[#1E3A2F] hover:underline flex items-center gap-1"
+                                            >
+                                                Change Preference →
+                                            </a>
+                                        </div>
+                                        <p className="text-xs leading-relaxed text-[#181B18]/80 font-medium">
+                                            We put women&apos;s safety on top priority. By default, you will receive bookings from women companions only. You can optionally choose to accept bookings from people of any gender with your clear consent.
+                                        </p>
+                                        <p className="text-xs leading-relaxed text-[#1E3A2F] font-semibold bg-white/70 p-2 rounded-xl border border-[#1E3A2F]/10">
+                                            ✨ You have a completely free hand to change or update this preference anytime whenever you want from <a href="/settings/preferences" className="underline font-bold">Settings → Preferences → Change Gender</a>.
+                                        </p>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="space-y-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label className="text-xs font-bold text-gray-500 uppercase block mb-2">Gender</label>
+                                            <select
+                                                name="gender"
+                                                value={formData.gender}
+                                                onChange={handleInputChange}
+                                                className="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all"
+                                            >
+                                                <option value="woman">Woman</option>
+                                                <option value="man">Man</option>
+                                                <option value="non_binary">Non-binary</option>
+                                                <option value="prefer_not_to_say">Prefer not to say</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="text-xs font-bold text-gray-500 uppercase block mb-2">Who would you feel comfortable booking?</label>
+                                            <select
+                                                name="genderPreference"
+                                                value={formData.genderPreference}
+                                                onChange={(e) => {
+                                                    const val = e.target.value;
+                                                    setFormData(prev => ({
+                                                        ...prev,
+                                                        genderPreference: val,
+                                                        genderConsentAcknowledged: val === 'women_only' ? false : prev.genderConsentAcknowledged
+                                                    }));
+                                                }}
+                                                className="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all"
+                                            >
+                                                <option value="women_only">Women companions only (selected by default)</option>
+                                                <option value="any">Companions of any gender (optional)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    {/* Women's Safety First Note */}
+                                    <div className="p-4 rounded-2xl bg-[#E8EFE9] border border-[#1E3A2F]/15 space-y-1">
+                                        <div className="flex items-center gap-1.5 font-bold text-xs text-[#1E3A2F]">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-[#D97757]" />
+                                            <span>Women&apos;s Safety First</span>
+                                        </div>
+                                        <p className="text-xs leading-relaxed text-[#181B18]/80 font-medium">
+                                            We put women&apos;s safety on top priority. By default, you will receive bookings from women companions only. You can optionally choose to accept bookings from people of any gender with your clear consent. And you can change preferences anytime from settings → preferences → change gender.
+                                        </p>
+                                    </div>
+
+                                    {formData.genderPreference === 'any' && (
+                                        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 space-y-3">
+                                            <div className="flex items-start gap-3">
+                                                <span className="text-xl">⚠️</span>
+                                                <div className="text-xs text-amber-900 leading-relaxed font-medium">
+                                                    <strong>Affirmative Consent Notice:</strong> I understand that opting into matching with companions of any gender means I may be matched with male or non-binary companions. I confirm that I am comfortable with this preference and that all bookings remain subject to PRSNN&apos;s safety guidelines and Boundaries Agreement.
+                                                </div>
+                                            </div>
+                                            <label className="flex items-center gap-3 pt-2 border-t border-amber-200/60 cursor-pointer">
+                                                <input
+                                                    type="checkbox"
+                                                    name="genderConsentAcknowledged"
+                                                    checked={formData.genderConsentAcknowledged}
+                                                    onChange={handleInputChange}
+                                                    className="w-4 h-4 text-gray-900 rounded border-amber-400 focus:ring-black"
+                                                />
+                                                <span className="text-xs font-bold text-amber-950">
+                                                    I understand and confirm this preference.
+                                                </span>
+                                            </label>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+
                         {/* Notification Banner - Restrict to regular users who aren't companions yet */}
                         {(!isCompanion && userData.role === 'user' && !userData.is_verified) && (
-                            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 p-8 rounded-[2rem] flex items-start gap-6 shadow-sm">
-                                <span className="text-4xl">📢</span>
+                            <div className="bg-gradient-to-r from-[#1E3A2F] to-[#2A4F40] text-white p-8 rounded-[2rem] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-md border border-[#1E3A2F]">
                                 <div>
-                                    <h3 className="font-bold text-xl text-blue-900 mb-2">
+                                    <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-white/20 text-white text-[10px] font-bold uppercase tracking-wider mb-2">
+                                        Join PRSNN
+                                    </div>
+                                    <h3 className="font-display font-black text-xl md:text-2xl text-white mb-1">
                                         Want to become a companion?
                                     </h3>
-                                    <p className="text-sm text-blue-700/80 leading-relaxed font-medium mb-4">
-                                        Join our community of companions and start earning by spending time with people!
+                                    <p className="text-xs md:text-sm text-white/80 max-w-md leading-relaxed">
+                                        Provide calm presence, explore local spots, and earn flexibly under strict daylight & safety guidelines.
                                     </p>
-                                    <button 
-                                        onClick={() => router.push('/onboarding')}
-                                        className="px-6 py-2.5 bg-blue-600 text-white font-bold rounded-full hover:bg-blue-700 shadow-blue-200 shadow-lg hover:-translate-y-0.5 transition-all text-sm"
-                                    >
-                                        Become a Companion
-                                    </button>
                                 </div>
+                                <button 
+                                    onClick={() => router.push('/onboarding')}
+                                    className="px-6 py-3 bg-[#D97757] text-white font-bold rounded-full hover:bg-[#C26243] shadow-md transition-all text-xs uppercase tracking-wider shrink-0"
+                                >
+                                    Become a Companion →
+                                </button>
                             </div>
                         )}
                         
-                        {/* If they ARE a companion, maybe show a different tip or nothing */}
+                        {/* If they ARE a companion, show helpful status card */}
                         {isCompanion && (
-                             <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-100 p-8 rounded-[2rem] flex items-start gap-6 shadow-sm">
-                                <span className="text-4xl">💡</span>
+                             <div className="bg-[#E8EFE9] border border-[#1E3A2F]/15 p-6 rounded-[2rem] flex items-start gap-4">
+                                <span className="text-2xl">🌿</span>
                                 <div>
-                                    <h3 className="font-bold text-xl text-green-900 mb-2">Keep your profile updated!</h3>
-                                    <p className="text-sm text-green-700/80 leading-relaxed font-medium">
-                                        Make sure your availability and pricing are up to date to get more bookings.
+                                    <h3 className="font-display font-bold text-base text-[#1E3A2F] mb-1">Presence without pressure</h3>
+                                    <p className="text-xs text-[#1E3A2F]/80 leading-relaxed font-medium">
+                                        Keep your city, hourly rate, and active daytime hours accurate. All bookings follow PRSNN&apos;s 7 AM – 10 PM daylight window and Boundaries Charter.
                                     </p>
                                 </div>
                             </div>
@@ -509,35 +679,35 @@ const Profile = () => {
 
                         {/* Availability & Settings (Companion Only) */}
                         {isCompanion && (
-                            <div className="bg-white border border-gray-100 rounded-[2rem] p-8 shadow-sm">
-                                <h3 className="font-bold text-xs uppercase tracking-widest text-gray-400 mb-6 flex items-center gap-2">
-                                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                            <div className="bg-white border border-[#EAE6DF] rounded-[2rem] p-7 md:p-8 shadow-sm">
+                                <h3 className="font-bold text-xs uppercase tracking-widest text-[#1E3A2F] mb-6 flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-[#1E3A2F] rounded-full"></span>
                                     Rate & Availability
                                 </h3>
 
                                 {!isEditing ? (
-                                    <div className="space-y-8">
-                                        <div className="grid grid-cols-2 gap-6">
-                                            <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
-                                                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Hourly Rate</label>
-                                                <p className="font-bold text-4xl text-gray-900 tracking-tight">₹{formData.pricePerHour || '0'}</p>
+                                    <div className="space-y-6">
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="bg-[#FAF8F5] p-5 rounded-2xl border border-[#EAE6DF]">
+                                                <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest block mb-1">Hourly Rate</label>
+                                                <p className="font-display font-black text-3xl text-[#1E3A2F]">₹{formData.pricePerHour || '0'}<span className="text-xs font-normal text-[#181B18]/50">/hr</span></p>
                                             </div>
-                                            <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
-                                                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Active Hours</label>
-                                                <p className="font-bold text-xl text-gray-900">{formData.startTime || '--:--'} - {formData.endTime || '--:--'}</p>
+                                            <div className="bg-[#FAF8F5] p-5 rounded-2xl border border-[#EAE6DF]">
+                                                <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest block mb-1">Active Hours</label>
+                                                <p className="font-display font-bold text-lg text-[#181B18] mt-1">{formData.startTime || '07:00'} - {formData.endTime || '22:00'}</p>
                                             </div>
                                         </div>
 
                                         <div>
-                                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-3">Weekly Schedule</label>
+                                            <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest block mb-3">Weekly Schedule</label>
                                             <div className="flex flex-wrap gap-2">
                                                 {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(day => (
                                                     <span 
                                                         key={day}
-                                                        className={`text-xs font-bold px-4 py-2 rounded-full border ${
+                                                        className={`text-xs font-bold px-4 py-2 rounded-full border transition-all ${
                                                             formData[`${day.toLowerCase()}_availability`] 
-                                                            ? 'bg-black text-white border-black' 
-                                                            : 'bg-white text-gray-300 border-gray-100'
+                                                            ? 'bg-[#1E3A2F] text-white border-[#1E3A2F]' 
+                                                            : 'bg-[#FAF8F5] text-[#181B18]/30 border-[#EAE6DF]'
                                                         }`}
                                                     >
                                                         {day.slice(0,3)}

@@ -6,7 +6,8 @@ import { useAuth } from "../../context/AuthContext";
 
 const marketingLinks = [
   { name: "How it Works", path: "/#how-it-works" },
-  { name: "Safety", path: "/#safety" },
+  { name: "Safety", path: "/safety" },
+  { name: "Our Story", path: "/our-story" },
   { name: "Become Companion", path: "/#become" },
   { name: "FAQ", path: "/#faq" },
 ];
@@ -146,6 +147,13 @@ const NavBarInner = () => {
                                   className="px-4 py-2.5 text-sm text-ink/70 hover:text-ink hover:bg-mist transition-colors cursor-pointer"
                                 >
                                   My Profile
+                                </p>
+                                <p
+                                  onClick={() => router.push("/settings/preferences")}
+                                  className="px-4 py-2.5 text-sm font-medium text-moss hover:bg-mist transition-colors cursor-pointer flex items-center justify-between"
+                                >
+                                  <span>Matching Preferences</span>
+                                  <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-moss-soft/60">Safety</span>
                                 </p>
                                 <p
                                   onClick={() => router.push("/my-bookings")}
@@ -295,6 +303,16 @@ const NavBarInner = () => {
                               className="block px-4 py-3 rounded-xl text-ink/70 hover:bg-mist"
                             >
                               My Profile
+                            </Link>
+                          </li>
+                          <li className="nav-drawer-item" style={{ animationDelay: "0.36s" }}>
+                            <Link
+                              href="/settings/preferences"
+                              onClick={() => setIsMenuOpen(false)}
+                              className="block px-4 py-3 rounded-xl text-moss font-semibold hover:bg-mist flex items-center justify-between"
+                            >
+                              <span>Matching Preferences</span>
+                              <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-moss-soft/60">Safety</span>
                             </Link>
                           </li>
                           <li className="nav-drawer-item" style={{ animationDelay: "0.38s" }}>

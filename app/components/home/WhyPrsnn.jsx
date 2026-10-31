@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import Reveal from '../common/Reveal';
 
 const cards = [
@@ -74,6 +75,16 @@ export default function WhyPrsnn() {
                   </div>
                 </Reveal>
               ))}
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-line/60 flex items-center justify-between">
+              <Link
+                href="/our-story"
+                className="text-sm font-bold text-[#1E3A2F] hover:text-[#D97757] flex items-center gap-1.5 transition-colors group"
+              >
+                <span>Read Mukarram Jah&apos;s story on why we built PRSNN</span>
+                <span className="group-hover:translate-x-1 transition-transform">→</span>
+              </Link>
             </div>
           </div>
         </div>

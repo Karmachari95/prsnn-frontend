@@ -45,9 +45,9 @@ const PaymentModal = ({ booking, onClose, onSuccess }) => {
             const options = {
                 key: data.keyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
                 amount: data.amount, // Amount is in paise
-                currency: data.currency,
-                name: "Rent A Fellow",
-                description: `Booking with ${booking.companionId?.fullName || "your Companion"}`,
+                currency: data.currency || 'INR',
+                name: "PRSNN",
+                description: `PRSNN Companionship Booking`,
                 order_id: data.orderId,
                 handler: async function (response) {
                     setIsLoading(true);
@@ -152,11 +152,21 @@ const PaymentModal = ({ booking, onClose, onSuccess }) => {
                     <p className="text-gray-500 mt-2">
                         Complete your payment to enter the session with <span className="font-bold text-black">{booking.companionId?.fullName || "your Companion"}</span>
                     </p>
-                    <div className="mt-4 bg-gray-50 py-3 rounded-xl border border-gray-100">
-                        <p className="text-sm text-gray-400 uppercase tracking-widest font-bold mb-1">Total Amount</p>
-                        <p className="text-3xl font-bold text-green-600">
-                           ₹{(booking.pricePerHour * ((parseInt(booking.duration, 10) || 60) / 60)).toFixed(2)}
-                        </p>
+                    <div className="mt-4 bg-gray-50 p-4 rounded-xl border border-gray-100 text-left space-y-1.5">
+                        <div className="flex justify-between text-xs text-gray-500 font-medium">
+                            <span>Companion Fee ({booking.duration || 60} mins)</span>
+                            <span>₹{(booking.basePrice || (booking.pricePerHour * ((parseInt(booking.duration, 10) || 60) / 60))).toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between text-xs text-gray-500 font-medium">
+                            <span>PRSNN Safety & Platform Fee</span>
+                            <span>₹{(booking.platformFee ?? 50).toFixed(2)}</span>
+                        </div>
+                        <div className="pt-2 border-t border-gray-200 flex justify-between items-baseline">
+                            <span className="text-xs text-gray-700 uppercase tracking-widest font-bold">Total Prepaid</span>
+                            <span className="text-2xl font-black text-gray-950">
+                               ₹{(booking.totalAmount || ((booking.basePrice || (booking.pricePerHour * ((parseInt(booking.duration, 10) || 60) / 60))) + (booking.platformFee ?? 50))).toFixed(2)}
+                            </span>
+                        </div>
                     </div>
                 </div>
 
