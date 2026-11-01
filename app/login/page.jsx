@@ -3,7 +3,6 @@ import React, { useState, useEffect, useMemo, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import Script from "next/script";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import Alert from "../components/common/Alert";
@@ -159,12 +158,7 @@ const LoginContent = () => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [fullName, setFullName] = useState("");
-  const [countryCode, setCountryCode] = useState("+91");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [gender, setGender] = useState("woman");
-  const [genderPreference, setGenderPreference] = useState("women_only");
-  const [genderConsentAcknowledged, setGenderConsentAcknowledged] = useState(false);
-  const [agreementAccepted, setAgreementAccepted] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -191,68 +185,11 @@ const LoginContent = () => {
     setUsername("");
     setFullName("");
     setPhoneNumber("");
-    setGender("woman");
-    setGenderPreference("women_only");
-    setGenderConsentAcknowledged(false);
-    setAgreementAccepted(false);
     setConfirmPassword("");
     setVerificationImage(null);
     setShowPassword(false);
     setShowConfirmPassword(false);
   }, [state]);
-
-  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-
-  const handleGoogleCredentialResponse = async (response) => {
-    try {
-      setLoading(true);
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com'}/api/auth/google`,
-        { credential: response.credential }
-      );
-      const data = res.data;
-      if (data.token) {
-        login(data.token, data.user);
-        if (data.user.role === "superadmin") {
-          router.push("/super-admin");
-        } else if (data.user.role === "admin") {
-          router.push("/admin");
-        } else {
-          router.push("/");
-        }
-      }
-    } catch (error) {
-      console.error("Google Auth error:", error);
-      setAlert({
-        type: "error",
-        title: "Google Sign-In Failed",
-        message: error.response?.data?.message || "Failed to sign in with Google.",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (googleClientId && typeof window !== "undefined" && window.google?.accounts?.id) {
-      try {
-        window.google.accounts.id.initialize({
-          client_id: googleClientId,
-          callback: handleGoogleCredentialResponse,
-        });
-        const container = document.getElementById("google-signin-btn");
-        if (container) {
-          window.google.accounts.id.renderButton(container, {
-            theme: "outline",
-            size: "large",
-            width: "100%",
-          });
-        }
-      } catch (err) {
-        console.error("Google render button error:", err);
-      }
-    }
-  }, [googleClientId, state]);
 
   const validatePassword = (pwd) => {
     const minLength = 8;
@@ -316,19 +253,18 @@ const LoginContent = () => {
       if (!fullName.trim()) {
         setAlert({
           type: "error",
-          title: "Name Required",
-          message: "Please enter your public display name",
+          title: "Full Name Required",
+          message: "Please enter your full name",
         });
         setLoading(false);
         return;
       }
 
-      const digitsOnly = phoneNumber.trim().replace(/\D/g, '');
-      if (digitsOnly.length < 7 || digitsOnly.length > 15) {
+      if (phoneNumber.trim().length !== 10) {
         setAlert({
           type: "error",
           title: "Invalid Phone Number",
-          message: "Please enter a valid phone number (7 to 15 digits)",
+          message: "Please enter a valid 10-digit mobile number",
         });
         setLoading(false);
         return;
@@ -360,43 +296,17 @@ const LoginContent = () => {
         setLoading(false);
         return;
       }
-
-      if (gender === 'woman' && genderPreference === 'any_gender' && !genderConsentAcknowledged) {
-        setAlert({
-          type: "warning",
-          title: "Matching Consent Required",
-          message: "Please acknowledge the safety guideline consent checkbox for matching with companions of any gender.",
-        });
-        setLoading(false);
-        return;
-      }
-
-      if (!agreementAccepted) {
-        setAlert({
-          type: "warning",
-          title: "Agreement Required",
-          message: "Please review and agree to the PRSNN Participation, Privacy and Boundaries Agreement to continue.",
-        });
-        setLoading(false);
-        return;
-      }
     }
 
     try {
       if (state === "Sign Up") {
-        const fullFormattedPhone = `${countryCode} ${phoneNumber.trim().replace(/\D/g, '')}`;
         const formData = new FormData();
-        formData.append("displayName", fullName.trim());
         formData.append("fullName", fullName.trim());
-        formData.append("phoneNumber", fullFormattedPhone);
+        formData.append("phoneNumber", phoneNumber.trim());
         formData.append("role", accountType);
         formData.append("username", username);
         formData.append("email", email);
         formData.append("password", password);
-        formData.append("gender", gender);
-        formData.append("genderPreference", genderPreference);
-        formData.append("genderConsentAcknowledged", String(genderConsentAcknowledged));
-        formData.append("agreementAccepted", String(agreementAccepted));
         if (verificationImage) {
           formData.append("verificationImage", verificationImage);
         }
@@ -422,25 +332,11 @@ const LoginContent = () => {
       }
     } catch (error) {
       console.error(error);
-      const resData = error.response?.data;
-      const msg = resData?.message || "Something went wrong. Please try again.";
+      const msg =
+        error.response?.data?.message || "Something went wrong. Please try again.";
 
-      // 1. If backend created user but returned warning / email delivery issue
-      if (resData?.userId || (typeof msg === 'string' && msg.includes("User created"))) {
-        setAlert({
-          type: "success",
-          title: "Account Created",
-          message: "Account created successfully. Redirecting you to verify your email...",
-        });
-        setTimeout(() => {
-          router.push(`/verify-email?email=${encodeURIComponent(email)}&role=${encodeURIComponent(accountType)}`);
-        }, 1500);
-        return;
-      }
-
-      // 2. If unverified email on sign in
-      if (error.response?.status === 403 && resData?.emailVerificationRequired) {
-        const userEmail = resData.email || email;
+      if (error.response?.status === 403 && error.response?.data?.emailVerificationRequired) {
+        const userEmail = error.response.data.email || email;
         setAlert({
           type: "warning",
           title: "Email Verification Required",
@@ -448,25 +344,10 @@ const LoginContent = () => {
         });
         setTimeout(() => {
           router.push(`/verify-email?email=${encodeURIComponent(userEmail)}`);
-        }, 1500);
-        return;
+        }, 2000);
+      } else {
+        setAlert({ type: "error", title: "Error", message: msg });
       }
-
-      // 3. If account already exists
-      if (typeof msg === 'string' && msg.includes("already exists")) {
-        setAlert({
-          type: "warning",
-          title: "Account Already Exists",
-          message: "An account with this email or username already exists. Please switch to Sign In or verify your email.",
-        });
-        return;
-      }
-
-      // 4. Fallback network or server error
-      const userFriendlyMsg = !error.response 
-        ? "Unable to reach the PRSNN server. Please check your internet connection and try again."
-        : msg;
-      setAlert({ type: "error", title: "Notice", message: userFriendlyMsg });
     } finally {
       setLoading(false);
     }
@@ -594,7 +475,7 @@ const LoginContent = () => {
                               : "bg-paper text-ink/70 border-line hover:border-ink/20"
                           }`}
                         >
-                          <span className="text-base">👤</span> User
+                          <span className="text-base">👤</span> Member
                         </button>
                         <button
                           type="button"
@@ -615,169 +496,31 @@ const LoginContent = () => {
                       </p>
                     </div>
 
-                    {/* Full Name field */}
-                    <div className="space-y-1.5">
-                      <label htmlFor="fullName" className="block text-sm font-semibold text-ink/75">
-                        Full Name <span className="text-xs font-normal text-ink/50">(or Display Name)</span>
-                      </label>
-                      <div className="relative group/input">
-                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-ink/35 group-focus-within/input:text-moss transition-colors duration-300">
-                          <IconUser />
-                        </span>
-                        <input
-                          id="fullName"
-                          type="text"
-                          required
-                          value={fullName}
-                          onChange={(e) => setFullName(e.target.value)}
-                          placeholder="e.g. Maya Sharma"
-                          autoComplete="name"
-                          className="w-full h-14 pl-12 pr-4 rounded-2xl bg-paper border border-line text-base font-medium text-ink placeholder:text-ink/30 focus:outline-none focus:border-moss focus:ring-4 focus:ring-moss/10 focus:bg-white transition-all duration-300"
-                        />
-                      </div>
-                    </div>
+                    <AuthInput
+                      id="fullName"
+                      label="Full Name"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      placeholder="e.g. Alex Sharma"
+                      icon={IconUser}
+                      required
+                      autoComplete="name"
+                    />
 
-                    {/* International Phone Number per Requirement 7 */}
-                    <div className="space-y-1.5">
-                      <label htmlFor="phoneNumber" className="block text-sm font-semibold text-ink/75">
-                        Mobile number
-                      </label>
-                      <div className="flex gap-2">
-                        <select
-                          value={countryCode}
-                          onChange={(e) => setCountryCode(e.target.value)}
-                          className="h-14 px-3 rounded-2xl bg-paper border border-line text-sm font-semibold text-ink focus:outline-none focus:border-moss focus:bg-white transition-colors"
-                        >
-                          <option value="+91">🇮🇳 +91</option>
-                          <option value="+1">🇺🇸 +1</option>
-                          <option value="+44">🇬🇧 +44</option>
-                          <option value="+971">🇦🇪 +971</option>
-                          <option value="+65">🇸🇬 +65</option>
-                          <option value="+61">🇦🇺 +61</option>
-                          <option value="+49">🇩🇪 +49</option>
-                          <option value="+33">🇫🇷 +33</option>
-                        </select>
-                        <div className="relative flex-1 group/input">
-                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-ink/35 group-focus-within/input:text-moss transition-colors">
-                            <IconPhone />
-                          </span>
-                          <input
-                            id="phoneNumber"
-                            type="tel"
-                            required
-                            value={phoneNumber}
-                            onChange={(e) => setPhoneNumber(e.target.value)}
-                            placeholder="Mobile or phone number"
-                            autoComplete="tel"
-                            className="w-full h-14 pl-12 pr-4 rounded-2xl bg-paper border border-line text-base font-medium text-ink placeholder:text-ink/30 focus:outline-none focus:border-moss focus:ring-4 focus:ring-moss/10 focus:bg-white transition-all"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Gender Selection per Requirement 4 */}
-                    <div className="space-y-2">
-                      <label className="block text-sm font-semibold text-ink/75">
-                        I identify as
-                      </label>
-                      <div className="grid grid-cols-3 gap-2">
-                        {[
-                          { id: 'woman', label: 'Woman' },
-                          { id: 'man', label: 'Man' },
-                          { id: 'non_binary', label: 'Non-binary' },
-                        ].map((g) => (
-                          <button
-                            key={g.id}
-                            type="button"
-                            onClick={() => setGender(g.id)}
-                            className={`py-3 px-3 rounded-xl border text-xs font-bold transition-all ${
-                              gender === g.id
-                                ? 'bg-[#1E3A2F] text-white border-[#1E3A2F] shadow-sm'
-                                : 'bg-paper text-ink/70 border-line hover:border-ink/20'
-                            }`}
-                          >
-                            {g.label}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Matching Preference for Women */}
-                    {gender === 'woman' && (
-                      <div className="p-4 rounded-2xl bg-[#F4EFEA] border border-line space-y-3">
-                        <div className="flex items-center justify-between">
-                          <label className="text-xs font-bold text-ink uppercase tracking-wider">
-                            Matching Preference
-                          </label>
-                          <span className="text-[11px] font-semibold text-moss">
-                            🔒 Women-only default
-                          </span>
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                          <label className={`flex items-center gap-2.5 p-3 rounded-xl border cursor-pointer transition-all ${
-                            genderPreference === 'women_only'
-                              ? 'bg-white border-moss shadow-xs'
-                              : 'bg-white/60 border-line hover:border-ink/20'
-                          }`}>
-                            <input
-                              type="radio"
-                              name="matchingPref"
-                              value="women_only"
-                              checked={genderPreference === 'women_only'}
-                              onChange={() => setGenderPreference('women_only')}
-                              className="text-moss focus:ring-moss"
-                            />
-                            <div>
-                              <span className="text-xs font-bold text-ink block">
-                                Women only
-                              </span>
-                              <span className="text-[10px] text-ink/50">
-                                Recommended
-                              </span>
-                            </div>
-                          </label>
-
-                          <label className={`flex items-center gap-2.5 p-3 rounded-xl border cursor-pointer transition-all ${
-                            genderPreference === 'any_gender'
-                              ? 'bg-white border-moss shadow-xs'
-                              : 'bg-white/60 border-line hover:border-ink/20'
-                          }`}>
-                            <input
-                              type="radio"
-                              name="matchingPref"
-                              value="any_gender"
-                              checked={genderPreference === 'any_gender'}
-                              onChange={() => setGenderPreference('any_gender')}
-                              className="text-moss focus:ring-moss"
-                            />
-                            <div>
-                              <span className="text-xs font-bold text-ink block">
-                                Any gender
-                              </span>
-                              <span className="text-[10px] text-ink/50">
-                                Optional
-                              </span>
-                            </div>
-                          </label>
-                        </div>
-
-                        {genderPreference === 'any_gender' && (
-                          <div className="pt-2 border-t border-line/60">
-                            <label className="flex items-start gap-2.5 cursor-pointer">
-                              <input
-                                type="checkbox"
-                                checked={genderConsentAcknowledged}
-                                onChange={(e) => setGenderConsentAcknowledged(e.target.checked)}
-                                className="mt-0.5 rounded text-moss focus:ring-moss"
-                              />
-                              <span className="text-[11px] text-ink/75 leading-relaxed">
-                                I voluntarily consent to match with companions of any gender.
-                              </span>
-                            </label>
-                          </div>
-                        )}
-                      </div>
-                    )}
+                    <AuthInput
+                      id="phoneNumber"
+                      label="Phone Number"
+                      type="tel"
+                      value={phoneNumber}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                        setPhoneNumber(val);
+                      }}
+                      placeholder="10-digit mobile number"
+                      icon={IconPhone}
+                      required
+                      autoComplete="tel"
+                    />
 
                     <AuthInput
                       id="username"
@@ -920,31 +663,6 @@ const LoginContent = () => {
                   </div>
                 )}
 
-                {!isSignIn && (
-                  <div className="pt-1 pb-2">
-                    <label className="flex items-start gap-3 p-3.5 rounded-2xl bg-paper border border-line cursor-pointer select-none">
-                      <input
-                        type="checkbox"
-                        required
-                        checked={agreementAccepted}
-                        onChange={(e) => setAgreementAccepted(e.target.checked)}
-                        className="mt-1 w-4 h-4 rounded text-[#1E3A2F] focus:ring-[#1E3A2F]"
-                      />
-                      <span className="text-xs text-ink/75 leading-relaxed font-medium">
-                        I have read and agree to the{" "}
-                        <Link 
-                          href="/agreement" 
-                          target="_blank"
-                          className="font-bold text-[#1E3A2F] underline hover:text-[#D97757]"
-                        >
-                          PRSNN Participation, Privacy and Boundaries Agreement
-                        </Link>
-                        .
-                      </span>
-                    </label>
-                  </div>
-                )}
-
                 <button
                   type="submit"
                   disabled={loading}
@@ -963,23 +681,6 @@ const LoginContent = () => {
                     )}
                   </span>
                 </button>
-
-                {googleClientId && (
-                  <>
-                    <div className="relative my-4 text-center">
-                      <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-line" />
-                      </div>
-                      <span className="relative bg-paper px-3 text-xs text-ink/40 font-semibold uppercase tracking-wider">
-                        or continue with
-                      </span>
-                    </div>
-
-                    <div className="flex justify-center w-full min-h-[44px]">
-                      <div id="google-signin-btn" className="w-full flex justify-center" />
-                    </div>
-                  </>
-                )}
 
                 {!isSignIn && (
                   <p className="text-xs text-ink/45 font-medium leading-relaxed text-center pt-1">
@@ -1028,28 +729,6 @@ const LoginContent = () => {
           </div>
         </section>
       </div>
-      {googleClientId && (
-        <Script
-          src="https://accounts.google.com/gsi/client"
-          strategy="afterInteractive"
-          onLoad={() => {
-            if (window.google?.accounts?.id) {
-              window.google.accounts.id.initialize({
-                client_id: googleClientId,
-                callback: handleGoogleCredentialResponse,
-              });
-              const container = document.getElementById("google-signin-btn");
-              if (container) {
-                window.google.accounts.id.renderButton(container, {
-                  theme: "outline",
-                  size: "large",
-                  width: "100%",
-                });
-              }
-            }
-          }}
-        />
-      )}
     </div>
   );
 };
