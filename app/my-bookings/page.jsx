@@ -114,13 +114,13 @@ const MyBookings = () => {
             case 'pending': 
                 return { text: 'Awaiting Acceptance', color: 'bg-[#FEF3C7] text-[#92400E] border-[#FDE68A]' };
             case 'paid_awaiting_companion':
-                return { text: 'Prepaid · Matching Companion', color: 'bg-[#FDF1EC] text-[#D97757] border-[#D97757]/30 font-bold' };
+                return { text: 'Prepaid · Matching Companion', color: 'bg-[#E8EFE9] text-[#2F4A34] border-[#2F4A34]/30 font-bold' };
             case 'accepted': 
                 return { text: 'Confirmed Session', color: 'bg-[#E8EFE9] text-[#1E3A2F] border-[#1E3A2F]/20 font-bold' };
             case 'rejected': 
                 return { text: 'Declined', color: 'bg-[#FEE2E2] text-[#991B1B] border-[#FECACA]' };
             case 'refund_pending':
-                return { text: 'Refund Pending', color: 'bg-[#FDF1EC] text-[#D97757] border-[#D97757]/30' };
+                return { text: 'Refund Pending', color: 'bg-[#E8EFE9] text-[#2F4A34] border-[#2F4A34]/30' };
             case 'cancelled':
                 return { text: 'Cancelled', color: 'bg-[#FAF8F5] text-[#181B18]/60 border-[#EAE6DF]' };
             default: 
@@ -140,7 +140,7 @@ const MyBookings = () => {
            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
                 <div>
                      <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#E8EFE9] text-[#1E3A2F] text-xs font-bold uppercase tracking-wider mb-3 border border-[#1E3A2F]/15">
-                        <span className="w-2 h-2 rounded-full bg-[#D97757]" />
+                        <span className="w-2 h-2 rounded-full bg-[#2F4A34]" />
                         <span>{userData.role === 'companion' ? 'Companion Sessions' : 'Presence without pressure'}</span>
                      </div>
                      <h1 className="font-display text-3xl md:text-5xl font-black tracking-tight text-[#181B18]">
@@ -149,7 +149,7 @@ const MyBookings = () => {
                 </div>
                 {userData.role !== 'companion' && (
                     <Link href="/companions">
-                        <button className="px-6 py-3 bg-[#D97757] text-white font-bold hover:bg-[#C26243] transition-all rounded-full shadow-sm text-xs uppercase tracking-wider">
+                        <button className="px-6 py-3 bg-[#2F4A34] text-white font-bold hover:bg-[#1E3A2F] transition-all rounded-full shadow-sm text-xs uppercase tracking-wider">
                             + Find Companion
                         </button>
                     </Link>

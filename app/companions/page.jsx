@@ -65,6 +65,19 @@ const allInterestTags = [
 
 import liveCompanions from '../data/liveCompanions.json';
 
+const INDIAN_CITIES = [
+  "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai", "Kolkata", "Pune", 
+  "Ahmedabad", "Jaipur", "Surat", "Lucknow", "Kanpur", "Nagpur", "Indore", 
+  "Thane", "Bhopal", "Visakhapatnam", "Patna", "Vadodara", "Ghaziabad", 
+  "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", 
+  "Kalyan-Dombivli", "Vasai-Virar", "Varanasi", "Srinagar", "Aurangabad", 
+  "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", 
+  "Coimbatore", "Jabalpur", "Gwalior", "Vijayawada", "Jodhpur", "Madurai",
+  "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad",
+  "Mysore", "Tiruchirappalli", "Bareilly", "Aligarh", "Tiruppur", "Gurgaon",
+  "Moradabad", "Jalandhar", "Bhubaneswar", "Salem", "Warangal", "Dehradun"
+].sort();
+
 const popularCities = [
   'Bangalore',
   'Hyderabad',
@@ -475,6 +488,21 @@ const CompanionsContent = () => {
                           label={city}
                         />
                       ))}
+                      <select
+                        value={popularCities.includes(selectedCity) ? '' : selectedCity}
+                        onChange={(e) => setSelectedCity(e.target.value)}
+                        className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
+                          selectedCity && !popularCities.includes(selectedCity)
+                            ? 'bg-ink text-paper border-ink'
+                            : 'bg-paper text-ink/70 border-line hover:border-ink/20'
+                        }`}
+                        aria-label="Filter by more Indian cities"
+                      >
+                        <option value="">More Indian cities...</option>
+                        {INDIAN_CITIES.filter(c => !popularCities.includes(c)).map(c => (
+                          <option key={c} value={c}>{c}</option>
+                        ))}
+                      </select>
                     </div>
                   </div>
 

@@ -7,6 +7,20 @@ import Loading from '../components/common/Loading';
 import { useNotification } from '../context/NotificationContext';
 import cachedFetch, { clearCache } from '../utils/cache';
 
+// Prominent Indian Cities List
+const INDIAN_CITIES = [
+    "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai", "Kolkata", "Pune", 
+    "Ahmedabad", "Jaipur", "Surat", "Lucknow", "Kanpur", "Nagpur", "Indore", 
+    "Thane", "Bhopal", "Visakhapatnam", "Patna", "Vadodara", "Ghaziabad", 
+    "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", 
+    "Kalyan-Dombivli", "Vasai-Virar", "Varanasi", "Srinagar", "Aurangabad", 
+    "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", 
+    "Coimbatore", "Jabalpur", "Gwalior", "Vijayawada", "Jodhpur", "Madurai",
+    "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad",
+    "Mysore", "Tiruchirappalli", "Bareilly", "Aligarh", "Tiruppur", "Gurgaon",
+    "Moradabad", "Jalandhar", "Bhubaneswar", "Salem", "Warangal", "Dehradun"
+].sort();
+
 /**
  * Profile Page with Edit Functionality
  */
@@ -164,6 +178,70 @@ const Profile = () => {
         }
     };
 
+    const handleUploadSlot = async (e, slotKey) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        if (file.size > 5 * 1024 * 1024) {
+            showNotification('error', 'Image size must be less than 5MB');
+            return;
+        }
+
+        const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        if (!validTypes.includes(file.type)) {
+            showNotification('error', 'Only JPG, PNG and WEBP formats are allowed');
+            return;
+        }
+
+        setUploadingPhoto(true);
+        try {
+            const formDataToSubmit = new FormData();
+            if (slotKey === 'profilePhoto') {
+                formDataToSubmit.append('profilePhoto', file);
+            } else if (slotKey === 'backupPhoto') {
+                formDataToSubmit.append('backupPhoto', file);
+            } else {
+                formDataToSubmit.append('additionalPhoto', file);
+            }
+            
+            const token = localStorage.getItem('token');
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
+            const response = await fetch(`${apiUrl}/api/profile/update`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formDataToSubmit
+            });
+
+            if (response.ok) {
+                clearCache();
+                
+                // Read local data URL for instantaneous preview
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    const dataUrl = reader.result;
+                    setProfileData(prev => ({
+                        ...prev,
+                        [slotKey === 'profilePhoto' ? 'profilePhotoUrl' : slotKey === 'backupPhoto' ? 'backupPhotoUrl' : 'additionalPhotoUrl']: dataUrl
+                    }));
+                };
+                reader.readAsDataURL(file);
+
+                await fetchProfile();
+                showNotification('success', 'Photo uploaded successfully!');
+            } else {
+                const error = await response.json();
+                showNotification('error', `Error: ${error.message}`);
+            }
+        } catch (error) {
+            console.error('Error updating photo:', error);
+            showNotification('error', 'Failed to update photo');
+        } finally {
+            setUploadingPhoto(false);
+        }
+    };
+
     const handleSaveProfile = async () => {
         const cleanPhone = (formData.phoneNumber || '').replace(/\D/g, '');
         if (formData.phoneNumber && (cleanPhone.length < 7 || cleanPhone.length > 15)) {
@@ -248,7 +326,7 @@ const Profile = () => {
             <div className="max-w-5xl mx-auto">
                 <div className="mb-10 text-center md:text-left">
                     <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#E8EFE9] text-[#1E3A2F] text-xs font-bold uppercase tracking-wider mb-3 border border-[#1E3A2F]/15">
-                        <span className="w-2 h-2 rounded-full bg-[#D97757]" />
+                        <span className="w-2 h-2 rounded-full bg-[#1E3A2F]" />
                         <span>Member Portal</span>
                     </div>
                     <h1 className="font-display text-3xl md:text-5xl font-black text-[#181B18] tracking-tight">
@@ -265,7 +343,7 @@ const Profile = () => {
                     <div className="w-full md:w-1/3">
                         <div className="bg-white border border-[#EAE6DF] rounded-[2rem] p-8 shadow-sm relative overflow-hidden">
                              {/* Decorative Background */}
-                             <div className="absolute top-0 right-0 w-64 h-64 bg-[#FDF1EC] rounded-full blur-3xl opacity-70 transform translate-x-10 -translate-y-10"></div>
+                             <div className="absolute top-0 right-0 w-64 h-64 bg-[#E8EFE9] rounded-full blur-3xl opacity-70 transform translate-x-10 -translate-y-10"></div>
 
                              <div className="relative z-10 flex flex-col items-center text-center">
                                 <div className="w-32 h-32 rounded-full border-4 border-white shadow-md mb-6 overflow-hidden relative group/photo">
@@ -325,7 +403,7 @@ const Profile = () => {
                                             </button>
                                             <button 
                                                 onClick={logout}
-                                                className="w-full py-2.5 bg-white text-[#D97757] font-bold rounded-full border border-[#D97757]/30 hover:bg-[#FDF1EC] transition-all text-xs uppercase tracking-wider"
+                                                className="w-full py-2.5 bg-white text-red-600 font-bold rounded-full border border-red-200 hover:bg-red-50 transition-all text-xs uppercase tracking-wider"
                                             >
                                                 Log Out
                                             </button>
@@ -362,7 +440,7 @@ const Profile = () => {
                                     <span className="text-[10px] font-bold uppercase text-[#181B18]/45 tracking-wider">Bookings</span>
                                 </div>
                                 <div className="bg-white border border-[#EAE6DF] rounded-2xl p-4 text-center shadow-sm">
-                                    <span className="block font-display text-2xl font-black text-[#D97757] mb-0.5">5.0</span>
+                                    <span className="block font-display text-2xl font-black text-[#1E3A2F] mb-0.5">5.0</span>
                                     <span className="text-[10px] font-bold uppercase text-[#181B18]/45 tracking-wider">Rating</span>
                                 </div>
                             </div>
@@ -375,7 +453,7 @@ const Profile = () => {
                         {/* Profile Details - Visible for ALL users */}
                         <div className="bg-white border border-[#EAE6DF] rounded-[2rem] p-7 md:p-8 shadow-sm">
                             <h3 className="font-bold text-xs uppercase tracking-widest text-[#1E3A2F] mb-6 flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-[#D97757]"></span>
+                                <span className="w-2 h-2 rounded-full bg-[#1E3A2F]"></span>
                                 {isCompanion ? 'Companion Details' : 'Profile Details'}
                             </h3>
                             
@@ -468,25 +546,29 @@ const Profile = () => {
                                             {phoneError && <p className="text-xs text-red-500 font-bold mt-1">{phoneError}</p>}
                                         </div>
                                          <div>
-                                            <label className="text-xs font-bold text-gray-500 uppercase block mb-2">City</label>
-                                            <input
-                                                type="text"
+                                            <label className="text-xs font-bold text-gray-500 uppercase block mb-2">City (India)</label>
+                                            <select
                                                 name="city"
                                                 value={formData.city}
                                                 onChange={handleInputChange}
-                                                className="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all"
-                                                placeholder="City"
-                                            />
+                                                className="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all"
+                                            >
+                                                <option value="">Select your city</option>
+                                                {INDIAN_CITIES.map(c => (
+                                                    <option key={c} value={c}>{c}</option>
+                                                ))}
+                                                <option value="Other">Other</option>
+                                            </select>
                                         </div>
                                         <div>
-                                            <label className="text-xs font-bold text-gray-500 uppercase block mb-2">Area</label>
+                                            <label className="text-xs font-bold text-gray-500 uppercase block mb-2">Area / Locality</label>
                                             <input
                                                 type="text"
                                                 name="area"
                                                 value={formData.area}
                                                 onChange={handleInputChange}
                                                 className="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all"
-                                                placeholder="Area/Locality"
+                                                placeholder="e.g. Banjara Hills, Indiranagar, Bandra"
                                             />
                                         </div>
                                     </div>
@@ -510,135 +592,100 @@ const Profile = () => {
                             )}
                         </div>
 
-                        {/* Matching Preferences & Safety */}
+                        {/* Member Photo Gallery — 2-3 photos */}
                         <div className="bg-white border border-[#EAE6DF] rounded-[2rem] p-7 md:p-8 shadow-sm">
-                            <div className="flex items-center justify-between mb-6">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+                                <div>
+                                    <h3 className="font-bold text-xs uppercase tracking-widest text-[#1E3A2F] flex items-center gap-2">
+                                        <span className="w-2 h-2 rounded-full bg-[#1E3A2F]" />
+                                        Profile Photos & Gallery
+                                    </h3>
+                                    <p className="text-xs text-[#181B18]/60 mt-1">
+                                        Upload 2 to 3 photos so companions and members can recognize you during meetups.
+                                    </p>
+                                </div>
+                                <span className="self-start sm:self-auto text-[11px] font-bold px-3 py-1 bg-[#E8EFE9] text-[#1E3A2F] rounded-full border border-[#1E3A2F]/20">
+                                    2–3 Photos
+                                </span>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                {/* Slot 1: Primary Profile Photo */}
+                                <div className="border border-[#EAE6DF] rounded-2xl p-4 bg-[#FAF8F5] text-center flex flex-col items-center justify-between min-h-[220px]">
+                                    <p className="text-[11px] font-bold uppercase tracking-wider text-[#1E3A2F] mb-2">Photo 1 (Profile)</p>
+                                    <div className="relative w-28 h-28 rounded-2xl overflow-hidden border-2 border-white shadow-sm bg-white flex items-center justify-center">
+                                        {profileData?.profilePhotoUrl ? (
+                                            <img src={profileData.profilePhotoUrl} alt="Photo 1" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <span className="text-3xl text-gray-300">👤</span>
+                                        )}
+                                    </div>
+                                    <label className="mt-3 w-full py-2 bg-[#1E3A2F] text-white text-xs font-bold rounded-xl cursor-pointer hover:bg-[#2A4F40] transition-colors shadow-sm block text-center">
+                                        {uploadingPhoto ? 'Uploading...' : (profileData?.profilePhotoUrl ? 'Change Photo' : '+ Add Photo')}
+                                        <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" disabled={uploadingPhoto} onChange={(e) => handleUploadSlot(e, 'profilePhoto')} />
+                                    </label>
+                                </div>
+
+                                {/* Slot 2: Secondary / Backup Photo */}
+                                <div className="border border-[#EAE6DF] rounded-2xl p-4 bg-[#FAF8F5] text-center flex flex-col items-center justify-between min-h-[220px]">
+                                    <p className="text-[11px] font-bold uppercase tracking-wider text-[#1E3A2F] mb-2">Photo 2 (Full View)</p>
+                                    <div className="relative w-28 h-28 rounded-2xl overflow-hidden border-2 border-white shadow-sm bg-white flex items-center justify-center">
+                                        {profileData?.backupPhotoUrl ? (
+                                            <img src={profileData.backupPhotoUrl} alt="Photo 2" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <span className="text-3xl text-gray-300">📷</span>
+                                        )}
+                                    </div>
+                                    <label className="mt-3 w-full py-2 bg-[#1E3A2F] text-white text-xs font-bold rounded-xl cursor-pointer hover:bg-[#2A4F40] transition-colors shadow-sm block text-center">
+                                        {uploadingPhoto ? 'Uploading...' : (profileData?.backupPhotoUrl ? 'Change Photo' : '+ Add Photo')}
+                                        <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" disabled={uploadingPhoto} onChange={(e) => handleUploadSlot(e, 'backupPhoto')} />
+                                    </label>
+                                </div>
+
+                                {/* Slot 3: Additional Activity / Casual Photo */}
+                                <div className="border border-[#EAE6DF] rounded-2xl p-4 bg-[#FAF8F5] text-center flex flex-col items-center justify-between min-h-[220px]">
+                                    <p className="text-[11px] font-bold uppercase tracking-wider text-[#1E3A2F] mb-2">Photo 3 (Casual / Activity)</p>
+                                    <div className="relative w-28 h-28 rounded-2xl overflow-hidden border-2 border-white shadow-sm bg-white flex items-center justify-center">
+                                        {profileData?.additionalPhotoUrl ? (
+                                            <img src={profileData.additionalPhotoUrl} alt="Photo 3" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <span className="text-3xl text-gray-300">✨</span>
+                                        )}
+                                    </div>
+                                    <label className="mt-3 w-full py-2 bg-[#1E3A2F] text-white text-xs font-bold rounded-xl cursor-pointer hover:bg-[#2A4F40] transition-colors shadow-sm block text-center">
+                                        {uploadingPhoto ? 'Uploading...' : (profileData?.additionalPhotoUrl ? 'Change Photo' : '+ Add Photo')}
+                                        <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" disabled={uploadingPhoto} onChange={(e) => handleUploadSlot(e, 'additionalPhoto')} />
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Safety & Matching Preferences (Clean Olive Theme) */}
+                        <div className="bg-white border border-[#EAE6DF] rounded-[2rem] p-7 md:p-8 shadow-sm">
+                            <div className="flex items-center justify-between mb-4">
                                 <h3 className="font-bold text-xs uppercase tracking-widest text-[#1E3A2F] flex items-center gap-2">
-                                    <span className="w-2 h-2 bg-[#D97757] rounded-full"></span>
+                                    <span className="w-2 h-2 bg-[#1E3A2F] rounded-full"></span>
                                     Safety & Matching Preferences
                                 </h3>
-                                <a href="/safety" className="text-xs font-bold text-[#D97757] hover:underline">
-                                    View Safety Standards →
+                                <a href="/settings/preferences" className="text-xs font-bold text-[#1E3A2F] hover:underline">
+                                    Settings →
                                 </a>
                             </div>
 
-                            {!isEditing ? (
-                                <div className="space-y-4">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div className="bg-[#FAF8F5] p-5 rounded-2xl border border-[#EAE6DF]">
-                                            <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest block mb-1">Your Gender</label>
-                                            <p className="font-display font-bold text-base text-[#181B18] capitalize">
-                                                {formData.gender === 'woman' ? 'Woman' : formData.gender === 'man' ? 'Man' : formData.gender === 'non_binary' ? 'Non-binary' : 'Prefer not to say'}
-                                            </p>
-                                        </div>
-                                        <div className="bg-[#FAF8F5] p-5 rounded-2xl border border-[#EAE6DF]">
-                                            <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest block mb-1">Matching Preference</label>
-                                            <p className="font-display font-bold text-base text-[#181B18]">
-                                                {formData.genderPreference === 'women_only' ? 'Women companions only' : 'Companions of any gender'}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {formData.genderPreference === 'women_only' && (
-                                        <div className="bg-[#E8EFE9] border border-[#1E3A2F]/15 rounded-2xl p-4 text-xs text-[#1E3A2F] font-medium">
-                                            🔒 Women-only matching is active. You will only be matched with verified women companions.
-                                        </div>
-                                    )}
-
-                                    {/* Women's Safety First Note */}
-                                    <div className="p-4 rounded-2xl bg-[#E8EFE9] border border-[#1E3A2F]/15 space-y-2">
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-1.5 font-bold text-xs text-[#1E3A2F]">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-[#D97757]" />
-                                                <span>Women&apos;s Safety First</span>
-                                            </div>
-                                            <a
-                                                href="/settings/preferences"
-                                                className="text-xs font-bold text-[#1E3A2F] hover:underline flex items-center gap-1"
-                                            >
-                                                Change Preference →
-                                            </a>
-                                        </div>
-                                        <p className="text-xs leading-relaxed text-[#181B18]/80 font-medium">
-                                            We put women&apos;s safety on top priority. By default, you will receive bookings from women companions only. You can optionally choose to accept bookings from people of any gender with your clear consent.
-                                        </p>
-                                        <p className="text-xs leading-relaxed text-[#1E3A2F] font-semibold bg-white/70 p-2 rounded-xl border border-[#1E3A2F]/10">
-                                            ✨ You have a completely free hand to change or update this preference anytime whenever you want from <a href="/settings/preferences" className="underline font-bold">Settings → Preferences → Change Gender</a>.
-                                        </p>
-                                    </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="bg-[#FAF8F5] p-4 rounded-2xl border border-[#EAE6DF]">
+                                    <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest block mb-1">Your Gender</label>
+                                    <p className="font-display font-bold text-base text-[#181B18] capitalize">
+                                        {formData.gender === 'woman' ? 'Woman' : formData.gender === 'man' ? 'Man' : formData.gender === 'non_binary' ? 'Non-binary' : 'Prefer not to say'}
+                                    </p>
                                 </div>
-                            ) : (
-                                <div className="space-y-6">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div>
-                                            <label className="text-xs font-bold text-gray-500 uppercase block mb-2">Gender</label>
-                                            <select
-                                                name="gender"
-                                                value={formData.gender}
-                                                onChange={handleInputChange}
-                                                className="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all"
-                                            >
-                                                <option value="woman">Woman</option>
-                                                <option value="man">Man</option>
-                                                <option value="non_binary">Non-binary</option>
-                                                <option value="prefer_not_to_say">Prefer not to say</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label className="text-xs font-bold text-gray-500 uppercase block mb-2">Who would you feel comfortable booking?</label>
-                                            <select
-                                                name="genderPreference"
-                                                value={formData.genderPreference}
-                                                onChange={(e) => {
-                                                    const val = e.target.value;
-                                                    setFormData(prev => ({
-                                                        ...prev,
-                                                        genderPreference: val,
-                                                        genderConsentAcknowledged: val === 'women_only' ? false : prev.genderConsentAcknowledged
-                                                    }));
-                                                }}
-                                                className="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all"
-                                            >
-                                                <option value="women_only">Women companions only (selected by default)</option>
-                                                <option value="any">Companions of any gender (optional)</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    {/* Women's Safety First Note */}
-                                    <div className="p-4 rounded-2xl bg-[#E8EFE9] border border-[#1E3A2F]/15 space-y-1">
-                                        <div className="flex items-center gap-1.5 font-bold text-xs text-[#1E3A2F]">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-[#D97757]" />
-                                            <span>Women&apos;s Safety First</span>
-                                        </div>
-                                        <p className="text-xs leading-relaxed text-[#181B18]/80 font-medium">
-                                            We put women&apos;s safety on top priority. By default, you will receive bookings from women companions only. You can optionally choose to accept bookings from people of any gender with your clear consent. And you can change preferences anytime from settings → preferences → change gender.
-                                        </p>
-                                    </div>
-
-                                    {formData.genderPreference === 'any' && (
-                                        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 space-y-3">
-                                            <div className="flex items-start gap-3">
-                                                <span className="text-xl">⚠️</span>
-                                                <div className="text-xs text-amber-900 leading-relaxed font-medium">
-                                                    <strong>Affirmative Consent Notice:</strong> I understand that opting into matching with companions of any gender means I may be matched with male or non-binary companions. I confirm that I am comfortable with this preference and that all bookings remain subject to PRSNN&apos;s safety guidelines and Boundaries Agreement.
-                                                </div>
-                                            </div>
-                                            <label className="flex items-center gap-3 pt-2 border-t border-amber-200/60 cursor-pointer">
-                                                <input
-                                                    type="checkbox"
-                                                    name="genderConsentAcknowledged"
-                                                    checked={formData.genderConsentAcknowledged}
-                                                    onChange={handleInputChange}
-                                                    className="w-4 h-4 text-gray-900 rounded border-amber-400 focus:ring-black"
-                                                />
-                                                <span className="text-xs font-bold text-amber-950">
-                                                    I understand and confirm this preference.
-                                                </span>
-                                            </label>
-                                        </div>
-                                    )}
+                                <div className="bg-[#FAF8F5] p-4 rounded-2xl border border-[#EAE6DF]">
+                                    <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest block mb-1">Matching Preference</label>
+                                    <p className="font-display font-bold text-base text-[#181B18]">
+                                        {formData.genderPreference === 'women_only' ? 'Women companions only' : 'Companions of any gender'}
+                                    </p>
                                 </div>
-                            )}
+                            </div>
                         </div>
 
                         {/* Notification Banner - Restrict to regular users who aren't companions yet */}
@@ -657,7 +704,7 @@ const Profile = () => {
                                 </div>
                                 <button 
                                     onClick={() => router.push('/onboarding')}
-                                    className="px-6 py-3 bg-[#D97757] text-white font-bold rounded-full hover:bg-[#C26243] shadow-md transition-all text-xs uppercase tracking-wider shrink-0"
+                                    className="px-6 py-3 bg-white text-[#1E3A2F] font-bold rounded-full hover:bg-[#FAF8F5] shadow-md transition-all text-xs uppercase tracking-wider shrink-0"
                                 >
                                     Become a Companion →
                                 </button>

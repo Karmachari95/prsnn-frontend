@@ -80,7 +80,7 @@ export default function WhyPrsnn() {
             <div className="mt-8 pt-6 border-t border-line/60 flex items-center justify-between">
               <Link
                 href="/our-story"
-                className="text-sm font-bold text-[#1E3A2F] hover:text-[#D97757] flex items-center gap-1.5 transition-colors group"
+                className="text-sm font-bold text-[#1E3A2F] hover:text-[#2F4A34] flex items-center gap-1.5 transition-colors group"
               >
                 <span>Read Mukarram Jah&apos;s story on why we built PRSNN</span>
                 <span className="group-hover:translate-x-1 transition-transform">→</span>

@@ -444,7 +444,7 @@ const LoginContent = () => {
 
         {/* RIGHT — form fills half screen */}
         <section className="relative flex min-h-screen lg:min-h-0 lg:h-screen bg-paper/80 backdrop-blur-sm border-t lg:border-t-0 lg:border-l border-line">
-          <div className="w-full h-full flex flex-col justify-center px-6 py-12 sm:px-10 md:px-14 lg:px-12 xl:px-16 animate-hero-rise-d2 overflow-y-auto">
+          <div className="w-full h-full flex flex-col justify-start lg:justify-center px-6 pt-16 pb-12 sm:px-10 md:px-14 lg:px-12 xl:px-16 animate-hero-rise-d2 overflow-y-auto">
               <p className="font-display text-xl font-extrabold lowercase tracking-tight text-ink mb-8 lg:hidden">
                 prsnn<span className="text-moss">.</span>
               </p>
@@ -482,7 +482,7 @@ const LoginContent = () => {
                           onClick={() => setAccountType("companion")}
                           className={`p-3.5 rounded-2xl border text-sm font-bold flex items-center justify-center gap-2 transition-all ${
                             accountType === "companion"
-                              ? "bg-moss text-signal border-moss shadow-sm"
+                              ? "bg-moss text-white border-moss shadow-sm"
                               : "bg-paper text-ink/70 border-line hover:border-ink/20"
                           }`}
                         >

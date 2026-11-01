@@ -488,14 +488,14 @@ const OnboardingContent = () => {
                         {/* Option 2: Become a companion */}
                         <div 
                             onClick={() => setUserChoice('companion')}
-                            className="bg-white p-6 rounded-3xl border border-[#EAE6DF] hover:border-[#D97757] shadow-sm hover:shadow-md transition-all cursor-pointer group flex items-center justify-between gap-4"
+                            className="bg-white p-6 rounded-3xl border border-[#EAE6DF] hover:border-[#2F4A34] shadow-sm hover:shadow-md transition-all cursor-pointer group flex items-center justify-between gap-4"
                         >
                             <div className="flex items-center gap-4">
-                                <div className="w-14 h-14 rounded-2xl bg-[#FDF1EC] text-[#D97757] flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">
+                                <div className="w-14 h-14 rounded-2xl bg-[#E8EFE9] text-[#2F4A34] flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">
                                     🤝
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-lg text-gray-900 group-hover:text-[#D97757] transition-colors">
+                                    <h3 className="font-bold text-lg text-gray-900 group-hover:text-[#2F4A34] transition-colors">
                                         Become a companion
                                     </h3>
                                     <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">
@@ -503,7 +503,7 @@ const OnboardingContent = () => {
                                     </p>
                                 </div>
                             </div>
-                            <div className="w-9 h-9 rounded-full bg-[#FAF8F5] border border-[#EAE6DF] flex items-center justify-center text-gray-400 group-hover:bg-[#D97757] group-hover:text-white transition-all shrink-0 font-bold text-sm">
+                            <div className="w-9 h-9 rounded-full bg-[#FAF8F5] border border-[#EAE6DF] flex items-center justify-center text-gray-400 group-hover:bg-[#2F4A34] group-hover:text-white transition-all shrink-0 font-bold text-sm">
                                 ›
                             </div>
                         </div>

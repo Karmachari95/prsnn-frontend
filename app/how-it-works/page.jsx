@@ -118,7 +118,7 @@ export default function HowItWorksPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               href="/companions"
-              className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-[#D97757] text-white font-bold text-sm"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-[#2F4A34] text-white font-bold text-sm"
             >
               Browse Companions
             </Link>

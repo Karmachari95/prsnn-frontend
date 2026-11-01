@@ -111,7 +111,7 @@ const AboutUs = () => {
       <section className="py-16 md:py-20 bg-[#1E3A2F] text-white">
         <div className="max-w-7xl mx-auto px-6 md:px-8 grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
           <Reveal className="md:col-span-5">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 text-[#D97757] mb-4 border border-white/15">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 text-[#2F4A34] mb-4 border border-white/15">
               <IconShield className="w-5 h-5" />
               <span className="text-[11px] font-bold uppercase tracking-[0.16em]">
                 Our promise

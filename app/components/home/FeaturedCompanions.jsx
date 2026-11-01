@@ -78,7 +78,7 @@ export default function FeaturedCompanions() {
 
           <Link
             href="/companions"
-            className="inline-flex items-center gap-2 text-sm font-bold text-[#D97757] hover:text-[#C26243] transition-colors self-start md:self-end"
+            className="inline-flex items-center gap-2 text-sm font-bold text-[#2F4A34] hover:text-[#1E3A2F] transition-colors self-start md:self-end"
           >
             <span>Explore all companions</span>
             <span>→</span>
@@ -178,7 +178,7 @@ export default function FeaturedCompanions() {
                         aria-label="Save companion"
                         className={`absolute top-3.5 right-3.5 z-10 w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md transition-all shadow-sm ${
                           isSaved
-                            ? 'bg-[#D97757] text-white scale-105'
+                            ? 'bg-[#2F4A34] text-white scale-105'
                             : 'bg-white/90 text-gray-700 hover:bg-white hover:text-black'
                         }`}
                       >
@@ -251,7 +251,7 @@ export default function FeaturedCompanions() {
             </div>
             <Link
               href="/companions"
-              className="text-xs font-bold text-[#D97757] hover:underline"
+              className="text-xs font-bold text-[#2F4A34] hover:underline"
             >
               See all activities →
             </Link>

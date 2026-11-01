@@ -135,7 +135,7 @@ const NotificationsPage = () => {
         }
         if (type.includes('refund') || text.includes('refund')) {
             return (
-                <div className="w-10 h-10 rounded-full bg-[#FDF1EC] text-[#D97757] flex items-center justify-center text-sm shrink-0">
+                <div className="w-10 h-10 rounded-full bg-[#E8EFE9] text-[#2F4A34] flex items-center justify-center text-sm shrink-0">
                     💳
                 </div>
             );

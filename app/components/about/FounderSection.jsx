@@ -29,7 +29,7 @@ export default function FounderSection() {
                 {/* Floating badge */}
                 <div className="absolute bottom-6 inset-x-6 p-5 rounded-2xl bg-white/95 backdrop-blur-md border border-white/60 shadow-lg">
                   <p className="font-display text-xl font-bold text-[#1E3A2F]">Mukarram Jah</p>
-                  <p className="text-xs font-semibold text-[#D97757] uppercase tracking-wider mt-0.5">
+                  <p className="text-xs font-semibold text-[#2F4A34] uppercase tracking-wider mt-0.5">
                     Founder of PRSNN · Technology Leader
                   </p>
                   <p className="text-xs text-[#5A635B] mt-2 leading-relaxed">
@@ -44,7 +44,7 @@ export default function FounderSection() {
           <div className="lg:col-span-7 order-1 lg:order-2 space-y-6">
             <Reveal>
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1E3A2F]/10 border border-[#1E3A2F]/15 mb-4">
-                <span className="w-2 h-2 rounded-full bg-[#D97757]" />
+                <span className="w-2 h-2 rounded-full bg-[#2F4A34]" />
                 <span className="text-xs font-bold tracking-wider uppercase text-[#1E3A2F]">
                   About the Founder
                 </span>
@@ -53,7 +53,7 @@ export default function FounderSection() {
               <h2 className="font-display text-3xl md:text-5xl font-black tracking-tight text-[#1E3A2F] leading-tight">
                 Meet Mukarram Jah
               </h2>
-              <p className="text-lg md:text-xl font-medium text-[#D97757] mt-1">
+              <p className="text-lg md:text-xl font-medium text-[#2F4A34] mt-1">
                 Building technology that brings people closer.
               </p>
             </Reveal>
@@ -66,7 +66,7 @@ export default function FounderSection() {
                 <p>
                   My work in technology has taught me how to build systems that solve problems. But some problems are not purely technical. They are human.
                 </p>
-                <p className="p-4 rounded-2xl bg-white border border-[#E5DECF] italic text-[#1E3A2F] border-l-4 border-l-[#D97757]">
+                <p className="p-4 rounded-2xl bg-white border border-[#E5DECF] italic text-[#1E3A2F] border-l-4 border-l-[#2F4A34]">
                   One of the experiences that shaped my thinking was seeing my grandfather live with dementia and the concern that came with him wandering off. It made me think more deeply about the importance of trusted people being available when someone needs support.
                 </p>
                 <p>

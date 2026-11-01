@@ -94,7 +94,7 @@ export default function FAQ() {
                           <div className="mt-3">
                             <a 
                               href={item.link} 
-                              className="inline-flex items-center gap-1.5 text-sm font-bold text-[#1E3A2F] hover:text-[#D97757] underline transition-colors"
+                              className="inline-flex items-center gap-1.5 text-sm font-bold text-[#1E3A2F] hover:text-[#2F4A34] underline transition-colors"
                             >
                               {item.linkText}
                             </a>

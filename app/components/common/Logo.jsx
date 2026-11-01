@@ -29,10 +29,10 @@ export default function Logo({
   };
 
   const dotColors = {
-    dark: 'text-[#D97757]', // Warm terracotta
+    dark: 'text-[#2F4A34]', // Warm terracotta
     light: 'text-[#E5896B]',
-    white: 'text-[#D97757]',
-    ink: 'text-[#D97757]',
+    white: 'text-[#2F4A34]',
+    ink: 'text-[#2F4A34]',
   };
 
   const content = (

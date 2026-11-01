@@ -85,7 +85,7 @@ const BottomNav = () => {
                                 {item.label}
                             </span>
                             {isActive && (
-                                <span className="absolute bottom-1 w-1 h-1 rounded-full bg-[#D97757]" />
+                                <span className="absolute bottom-1 w-1 h-1 rounded-full bg-[#2F4A34]" />
                             )}
                         </Link>
                     );

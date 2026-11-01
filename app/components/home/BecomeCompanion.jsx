@@ -42,7 +42,7 @@ export default function BecomeCompanion() {
 
           <div className="lg:col-span-6 p-8 md:p-12 lg:p-14 flex flex-col justify-center">
             <Reveal>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#D97757] mb-3">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#2F4A34] mb-3">
                 Join the Network
               </p>
               <h2 className="font-display text-[clamp(2rem,4vw,3rem)] font-bold text-ink tracking-tight leading-[1.1]">

@@ -9,7 +9,7 @@ const Footer = () => {
   return (
     <footer className="relative w-full bg-[#14231C] text-white overflow-hidden mt-0 border-t border-[#1E3A2F]">
       <div className="absolute inset-0 opacity-[0.08] pointer-events-none" aria-hidden>
-        <div className="absolute -top-24 -right-24 w-[28rem] h-[28rem] rounded-full bg-[#D97757] blur-3xl" />
+        <div className="absolute -top-24 -right-24 w-[28rem] h-[28rem] rounded-full bg-[#2F4A34] blur-3xl" />
         <div className="absolute -bottom-32 -left-16 w-[24rem] h-[24rem] rounded-full bg-[#1E3A2F] blur-3xl" />
       </div>
 
@@ -22,7 +22,7 @@ const Footer = () => {
             >
               prsnn<span className="text-signal">.</span>
             </Link>
-            <p className="mt-3 text-[#D97757] font-semibold text-xs tracking-wider uppercase">
+            <p className="mt-3 text-[#2F4A34] font-semibold text-xs tracking-wider uppercase">
               Presence without pressure.
             </p>
             <p className="mt-3 text-paper/60 font-normal leading-relaxed max-w-sm text-sm">
@@ -39,7 +39,7 @@ const Footer = () => {
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-xs font-semibold text-paper/70 hover:bg-[#D97757] hover:text-white hover:border-[#D97757] transition-colors duration-250"
+                  className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-xs font-semibold text-paper/70 hover:bg-[#2F4A34] hover:text-white hover:border-[#2F4A34] transition-colors duration-250"
                 >
                   {s.label}
                 </a>

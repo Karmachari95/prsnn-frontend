@@ -142,7 +142,7 @@ export default function CompanionDashboardPage() {
         <div className="p-4 rounded-2xl bg-[#E8EFE9] border border-[#1E3A2F]/15 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="space-y-1">
             <div className="flex items-center gap-1.5 font-bold text-xs text-[#1E3A2F]">
-              <span className="w-2 h-2 rounded-full bg-[#D97757]" />
+              <span className="w-2 h-2 rounded-full bg-[#2F4A34]" />
               <span>Women&apos;s Safety First Protected</span>
             </div>
             <p className="text-xs text-[#181B18]/75 font-medium leading-relaxed">

@@ -109,7 +109,7 @@ export default function Safety() {
           </Link>
           <Link
             href="/agreement"
-            className="px-6 py-3 rounded-full bg-[#D97757] hover:bg-[#c66647] text-white text-xs font-bold uppercase tracking-wider transition-all hover:scale-105 shadow-sm"
+            className="px-6 py-3 rounded-full bg-[#2F4A34] hover:bg-[#2A4F40] text-white text-xs font-bold uppercase tracking-wider transition-all hover:scale-105 shadow-sm"
           >
             Boundaries & Participation Agreement →
           </Link>

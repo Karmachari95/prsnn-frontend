@@ -19,7 +19,7 @@ export function LegalHero({
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[#1E3A2F] via-[#193228] to-[#12251D] text-white">
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
-        <div className="absolute -top-24 -right-20 w-[28rem] h-[28rem] rounded-full bg-[#D97757]/20 blur-[100px]" />
+        <div className="absolute -top-24 -right-20 w-[28rem] h-[28rem] rounded-full bg-[#2F4A34]/20 blur-[100px]" />
         <div className="absolute bottom-0 left-0 w-[22rem] h-[22rem] rounded-full bg-[#E8EFE9]/10 blur-[90px]" />
         <div className="noise absolute inset-0 opacity-20" />
       </div>
@@ -27,7 +27,7 @@ export function LegalHero({
       <div className="relative z-10 max-w-4xl mx-auto px-5 md:px-8 pt-28 md:pt-36 pb-14 md:pb-16">
         <Reveal>
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 text-white/90 text-[11px] font-bold uppercase tracking-[0.18em] mb-4 border border-white/15">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#D97757]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#2F4A34]" />
             <span>{eyebrow}</span>
           </div>
           <h1 className="font-display text-[clamp(2.25rem,5vw,3.75rem)] font-black tracking-tight leading-[1.08] text-white">
@@ -94,7 +94,7 @@ export function LegalSection({ number, title, children, dark = false, className 
             {number != null && (
               <span
                 className={`shrink-0 w-10 h-10 rounded-2xl font-display font-black text-sm flex items-center justify-center border ${
-                  dark ? 'bg-[#D97757] text-white border-white/20' : 'bg-[#E8EFE9] text-[#1E3A2F] border-[#1E3A2F]/15'
+                  dark ? 'bg-[#2F4A34] text-white border-white/20' : 'bg-[#E8EFE9] text-[#1E3A2F] border-[#1E3A2F]/15'
                 }`}
               >
                 {number}
@@ -131,7 +131,7 @@ export function LegalList({ items, variant = 'disc' }) {
           <span
             className={`mt-0.5 shrink-0 font-bold ${
               variant === 'x'
-                ? 'text-[#D97757]'
+                ? 'text-[#2F4A34]'
                 : variant === 'check'
                   ? 'text-[#1E3A2F]'
                   : 'text-[#181B18]/40'

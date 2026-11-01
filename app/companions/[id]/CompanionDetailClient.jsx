@@ -31,12 +31,18 @@ const CompanionDetailClient = () => {
 
     // Booking Details
     const [bookingDate, setBookingDate] = useState('');
-    const [bookingTime, setBookingTime] = useState('');
+    const [bookingTime, setBookingTime] = useState('11:00');
     const [duration, setDuration] = useState('60');
     const [minDate, setMinDate] = useState('');
 
     useEffect(() => {
-        setMinDate(new Date().toISOString().split('T')[0]);
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        const dateStr = `${yyyy}-${mm}-${dd}`;
+        setMinDate(dateStr);
+        setBookingDate(dateStr);
     }, []);
 
     useEffect(() => {
@@ -284,11 +290,20 @@ const CompanionDetailClient = () => {
 
                             <button 
                                 type="button"
-                                onClick={() => setStep('hesitation')}
-                                disabled={!bookingDate || !bookingTime}
-                                className="w-full py-4 rounded-full bg-ink text-paper font-bold text-base hover:bg-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                onClick={() => {
+                                    if (!bookingDate) {
+                                        showNotification('warning', 'Please select a date for your meetup.');
+                                        return;
+                                    }
+                                    if (!bookingTime) {
+                                        showNotification('warning', 'Please select a time for your meetup.');
+                                        return;
+                                    }
+                                    setStep('hesitation');
+                                }}
+                                className="w-full py-4 rounded-full bg-moss text-white font-bold text-base hover:bg-moss-mid transition-all shadow-md active:scale-[0.99] flex items-center justify-center gap-2"
                             >
-                                Request booking
+                                Continue to Review →
                             </button>
                         </div>
                     )}
@@ -304,12 +319,12 @@ const CompanionDetailClient = () => {
                                     { key: 'silenceOk', label: 'I accept silence as valid presence.' },
                                     { key: 'canLeave', label: 'I understand they can leave anytime.' }
                                 ].map((item) => (
-                                    <label key={item.key} className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer transition-colors ${checks[item.key] ? 'border-ink bg-mist' : 'border-line'}`}>
-                                        <div className={`mt-0.5 w-5 h-5 rounded-full border flex items-center justify-center ${checks[item.key] ? 'bg-ink border-ink' : 'border-ink/25'}`}>
-                                            {checks[item.key] && <span className="text-paper text-[10px]">✓</span>}
+                                    <label key={item.key} className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer transition-colors ${checks[item.key] ? 'border-moss bg-moss-soft/40' : 'border-line'}`}>
+                                        <div className={`mt-0.5 w-5 h-5 rounded-full border flex items-center justify-center ${checks[item.key] ? 'bg-moss border-moss' : 'border-ink/25'}`}>
+                                            {checks[item.key] && <span className="text-white text-[10px]">✓</span>}
                                         </div>
                                         <input type="checkbox" checked={checks[item.key]} onChange={(e) => setChecks({...checks, [item.key]: e.target.checked})} className="hidden" />
-                                        <span className={`text-sm font-medium ${checks[item.key] ? 'text-ink' : 'text-ink/50'}`}>{item.label}</span>
+                                        <span className={`text-sm font-medium ${checks[item.key] ? 'text-ink font-semibold' : 'text-ink/60'}`}>{item.label}</span>
                                     </label>
                                 ))}
                             </div>
@@ -322,7 +337,7 @@ const CompanionDetailClient = () => {
                                     type="button"
                                     onClick={handleConfirm}
                                     disabled={!Object.values(checks).every(Boolean) || submitting}
-                                    className="flex-[2] py-3.5 bg-ink text-paper font-bold rounded-xl hover:bg-black transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                                    className="flex-[2] py-3.5 bg-moss text-white font-bold rounded-xl hover:bg-moss-mid transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
                                 >
                                     {submitting ? 'Submitting...' : 'I agree & Send Request'}
                                 </button>

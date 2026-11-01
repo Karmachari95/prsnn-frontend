@@ -44,7 +44,8 @@ const NavBarInner = () => {
 
   // Focused auth pages carry their own frame and close button; the marketing
   // nav's white-on-hero styling would be unreadable over their pale ground.
-  if (["/login", "/verify-email", "/forgot-password", "/reset-password"].includes(pathname)) {
+  const cleanPath = (pathname || "").replace(/\/+$/, "") || "/";
+  if (["/login", "/verify-email", "/forgot-password", "/reset-password"].includes(cleanPath)) {
     return null;
   }
 
@@ -77,7 +78,7 @@ const NavBarInner = () => {
                 onClick={() => router.push("/")}
                 className="font-display text-xl md:text-2xl font-extrabold tracking-tight text-white lowercase leading-none px-1"
               >
-                prsnn<span className="text-signal">.</span>
+                prsnn<span className="text-moss">.</span>
               </button>
             </div>
 
@@ -106,7 +107,7 @@ const NavBarInner = () => {
               <button
                 type="button"
                 onClick={() => router.push("/companions")}
-                className="bg-signal text-ink px-4 md:px-6 py-2.5 md:py-3 rounded-full font-bold text-sm tracking-wide hover:bg-signal-deep hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap"
+                className="bg-moss text-white px-4 md:px-6 py-2.5 md:py-3 rounded-full font-bold text-sm tracking-wide hover:bg-moss-mid hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap shadow-sm"
               >
                 Find Companion
               </button>

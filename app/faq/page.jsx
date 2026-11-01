@@ -87,7 +87,7 @@ export default function FAQPage() {
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E8EFE9] text-[#1E3A2F] text-xs font-bold uppercase tracking-wider mb-4 border border-[#1E3A2F]/15">
-            <span className="w-2 h-2 rounded-full bg-[#D97757]" />
+            <span className="w-2 h-2 rounded-full bg-[#2F4A34]" />
             <span>Help & FAQ</span>
           </div>
 
@@ -145,7 +145,7 @@ export default function FAQPage() {
                     {faq.link && (
                       <Link
                         href={faq.link}
-                        className="inline-block mt-4 text-xs font-bold text-[#D97757] hover:underline"
+                        className="inline-block mt-4 text-xs font-bold text-[#2F4A34] hover:underline"
                       >
                         {faq.linkText}
                       </Link>

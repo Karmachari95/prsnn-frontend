@@ -14,7 +14,7 @@ export default function SafetyPage() {
     {
       title: "Identity verification",
       icon: "🪪",
-      iconBg: "bg-[#FDF1EC]",
+      iconBg: "bg-[#E8EFE9]",
       tag: "Verification",
       content: "Companions must complete the verification process required by PRSNN before becoming eligible for bookings. Government-issued photo IDs (Aadhaar, Passport, or Driving License) are manually inspected and approved by authorized platform administrators."
     },
@@ -35,7 +35,7 @@ export default function SafetyPage() {
     {
       title: "Leave when you feel uncomfortable",
       icon: "🚪",
-      iconBg: "bg-[#FDF1EC]",
+      iconBg: "bg-[#E8EFE9]",
       tag: "Voluntary",
       content: "You may end a session immediately if you feel unsafe or uncomfortable. You do not need to continue an interaction simply because you booked or paid for it. Your personal safety and peace of mind always supersede any booking."
     },
@@ -69,7 +69,7 @@ export default function SafetyPage() {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E8EFE9] text-[#1E3A2F] text-xs font-bold uppercase tracking-wider mb-4 border border-[#1E3A2F]/15">
-            <span className="w-2 h-2 rounded-full bg-[#D97757]" />
+            <span className="w-2 h-2 rounded-full bg-[#2F4A34]" />
             <span>Safety & Standards Charter</span>
           </div>
 
@@ -98,7 +98,7 @@ export default function SafetyPage() {
               All bookings must strictly start and conclude between 7:00 AM and 10:00 PM. Bookings outside this daytime window are automatically disabled to protect community safety.
             </p>
           </div>
-          <span className="shrink-0 px-5 py-2.5 rounded-full bg-[#D97757] text-white text-xs font-bold uppercase tracking-wider shadow-sm">
+          <span className="shrink-0 px-5 py-2.5 rounded-full bg-[#2F4A34] text-white text-xs font-bold uppercase tracking-wider shadow-sm">
             ☀️ 7 AM – 10 PM
           </span>
         </div>
@@ -142,7 +142,7 @@ export default function SafetyPage() {
         {/* Participation & Boundaries Box */}
         <div className="p-8 md:p-12 rounded-[2.5rem] bg-white border border-[#EAE6DF] shadow-xl text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="max-w-xl">
-            <span className="px-3.5 py-1.5 rounded-full bg-[#FDF1EC] text-[#D97757] text-xs font-bold uppercase tracking-wider">
+            <span className="px-3.5 py-1.5 rounded-full bg-[#E8EFE9] text-[#2F4A34] text-xs font-bold uppercase tracking-wider">
               Legal & Behavioral Standard
             </span>
             <h3 className="font-display text-2xl md:text-3xl font-black text-[#181B18] mt-3">
