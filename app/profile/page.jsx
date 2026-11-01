@@ -686,6 +686,16 @@ const Profile = () => {
                                     </p>
                                 </div>
                             </div>
+                            <div className="mt-4 pt-4 border-t border-[#EAE6DF]/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <span className="text-xs text-[#181B18]/60 font-medium">✨ You have a free hand to update this anytime.</span>
+                                <button
+                                    type="button"
+                                    onClick={() => router.push('/settings/preferences')}
+                                    className="px-4 py-2 rounded-full bg-[#1E3A2F] text-white font-bold text-xs hover:bg-[#2A4F40] transition-all shadow-sm text-center"
+                                >
+                                    Change Matching Preferences →
+                                </button>
+                            </div>
                         </div>
 
                         {/* Notification Banner - Restrict to regular users who aren't companions yet */}
