@@ -45,7 +45,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <section className="relative w-full overflow-hidden bg-ink text-paper">
+    <section className="relative w-full overflow-hidden bg-[#162720] text-paper">
       <div className="absolute inset-0">
         <Image
           src="/herobg.png"
@@ -53,10 +53,10 @@ const Hero = () => {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center animate-kenburns opacity-55"
+          className="object-cover object-center animate-kenburns opacity-50"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/40" />
-        <div className="absolute inset-0 bg-gradient-to-r from-ink/90 via-ink/55 to-ink/25" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#162720] via-[#1E3A2F]/80 to-[#162720]/50" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#162720]/95 via-[#1E3A2F]/60 to-[#162720]/30" />
         <div className="noise absolute inset-0" aria-hidden />
       </div>
 
