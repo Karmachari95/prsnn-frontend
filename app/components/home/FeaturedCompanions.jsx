@@ -25,7 +25,7 @@ export default function FeaturedCompanions() {
         }
       } catch (e) {}
     }
-    return 'women_only';
+    return 'all';
   });
   const [savedIds, setSavedIds] = useState(new Set());
 

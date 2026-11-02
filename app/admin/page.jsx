@@ -14,6 +14,7 @@ const AdminPanel = () => {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
+  const [companionsList, setCompanionsList] = useState(liveCompanions || []);
   const [stats, setStats] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
@@ -32,6 +33,7 @@ const AdminPanel = () => {
 
     fetchUnverifiedUsers();
     fetchAllUsers();
+    fetchCompanions();
     fetchStats();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, userData]);
@@ -76,6 +78,22 @@ const AdminPanel = () => {
         created_at: new Date().toISOString()
       }));
       setAllUsers(companionUsers);
+    }
+  };
+
+  const fetchCompanions = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/api/companions`);
+      const list = Array.isArray(res.data)
+        ? res.data
+        : Array.isArray(res.data?.companions)
+        ? res.data.companions
+        : [];
+      if (list.length > 0) {
+        setCompanionsList(list);
+      }
+    } catch (err) {
+      console.error("Error fetching companions", err);
     }
   };
 
@@ -251,7 +269,7 @@ const AdminPanel = () => {
               <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
                 activeTab === 'companions' ? 'bg-white/20 text-white' : 'bg-green-100 text-green-800'
               }`}>
-                {liveCompanions.length}
+                {companionsList.length}
               </span>
             </button>
           </div>
@@ -418,14 +436,14 @@ const AdminPanel = () => {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-xl font-bold text-gray-900">
-                  All Verified Companions ({liveCompanions.length})
+                  All Verified Companions ({companionsList.length})
                 </h2>
-                <p className="text-xs text-gray-500 mt-0.5">Includes all real database profiles and verified women companions.</p>
+                <p className="text-xs text-gray-500 mt-0.5">All verified companions currently active in database.</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {liveCompanions.map((comp) => {
+              {companionsList.map((comp) => {
                 const compId = comp.id || comp._id;
                 return (
                   <div key={compId} className="bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-md p-6 flex flex-col justify-between hover:shadow-xl transition-all">
@@ -542,7 +560,7 @@ const AdminPanel = () => {
                      onClick={() => setActiveTab('companions')}
                      className="px-6 py-3 bg-white text-gray-700 border border-gray-200 font-bold rounded-full text-xs uppercase tracking-wider hover:bg-gray-50 transition-all shadow-sm"
                    >
-                     View {liveCompanions.length} Companions
+                     View {companionsList.length} Companions
                    </button>
                  </div>
                </div>

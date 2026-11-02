@@ -133,7 +133,7 @@ const CompanionsContent = () => {
         }
       } catch (e) {}
     }
-    return 'women_only';
+    return 'all';
   });
   const [filtersOpen, setFiltersOpen] = useState(true);
   const [page, setPage] = useState(1);
