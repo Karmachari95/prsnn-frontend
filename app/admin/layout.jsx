@@ -23,32 +23,14 @@ export default function AdminLayout({ children }) {
             router.push("/");
             return;
         }
-
-        // 3. Admin Verification Guard
-        // Admins must be verified to access anything NOT /admin/onboarding
-        if (userData && userData.role === 'admin' && !userData.is_verified && pathname !== "/admin/onboarding") {
-            router.push("/admin/onboarding");
-            return;
-        }
-        
-        // 4. If they ARE verified but trying to go to onboarding, send them to dashboard
-        if (userData && userData.role === 'admin' && userData.is_verified && pathname === "/admin/onboarding") {
-            router.push("/admin");
-            return;
-        }
-
     }, [token, userData, authLoading, pathname, router]);
 
     if (authLoading) {
         return <Loading message="Verifying access..." />;
     }
 
-    // Safety check - while we are redirecting in useEffect, prevent content flash
-    const isUnverifiedAdmin = userData?.role === 'admin' && !userData?.is_verified;
-    const isTryingToAccessDashboard = pathname !== "/admin/onboarding";
-    
-    if (isUnverifiedAdmin && isTryingToAccessDashboard) {
-        return <Loading message="Redirecting to onboarding..." />;
+    if (userData && !['admin', 'superadmin'].includes(userData.role)) {
+        return <Loading message="Unauthorized. Redirecting..." />;
     }
 
     return <>{children}</>;

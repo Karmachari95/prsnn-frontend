@@ -156,9 +156,11 @@ const SuperAdminPanel = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, userData]);
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
+
   const fetchAnalytics = async () => {
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/super-stats`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await axios.get(`${API_URL}/api/admin/super-stats`, { headers: { Authorization: `Bearer ${token}` } });
       setAnalytics(res.data);
     } catch (err) { console.error(err); }
   };
@@ -166,7 +168,7 @@ const SuperAdminPanel = () => {
   const fetchPayments = async () => {
     setPaymentsLoading(true);
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/payments`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await axios.get(`${API_URL}/api/admin/payments`, { headers: { Authorization: `Bearer ${token}` } });
       setPayments(res.data);
     } catch (err) { console.error('Payments fetch error:', err); }
     finally { setPaymentsLoading(false); }
@@ -175,7 +177,7 @@ const SuperAdminPanel = () => {
   const handleCreateAdmin = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/create-admin`, newAdmin, {
+      await axios.post(`${API_URL}/api/admin/create-admin`, newAdmin, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert('Admin created successfully!');

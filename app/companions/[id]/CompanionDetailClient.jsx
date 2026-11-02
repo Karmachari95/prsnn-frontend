@@ -99,6 +99,14 @@ const CompanionDetailClient = () => {
             return;
         }
 
+        const isWomenOnly = userData?.genderPreference === 'women_only';
+        const isMaleCompanion = (fellow?.gender || '').toLowerCase() === 'man' || (fellow?.gender || '').toLowerCase() === 'male';
+
+        if (isWomenOnly && isMaleCompanion) {
+            showNotification('warning', "Your safety matching preference is set to 'Women companions only'. Please update your preferences in Settings to book companions of any gender.");
+            return;
+        }
+
         setSubmitting(true);
         try {
             const fellowId = fellow.id || fellow._id || fellow.userId;
@@ -199,10 +207,25 @@ const CompanionDetailClient = () => {
                             <h1 className="font-display text-4xl md:text-5xl font-bold text-ink mb-2 tracking-tight">
                                 {fellow.fullName}
                             </h1>
-                            <p className="text-ink/40 font-medium mb-8 flex items-center gap-2 text-sm">
+                            <p className="text-ink/40 font-medium mb-4 flex items-center gap-2 text-sm">
                                 <span className="w-2 h-2 rounded-full bg-moss"></span>
                                 Verified companion
                             </p>
+
+                            {userData?.genderPreference === 'women_only' && ((fellow?.gender || '').toLowerCase() === 'man' || (fellow?.gender || '').toLowerCase() === 'male') && (
+                              <div className="mb-6 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 text-xs space-y-1.5 animate-fadeIn">
+                                <p className="font-bold flex items-center gap-1.5 text-amber-900 text-sm">
+                                  <span>🛡️</span>
+                                  <span>Safety &amp; Matching Preference Notice</span>
+                                </p>
+                                <p className="leading-relaxed">
+                                  Your current matching preference is set to <strong>Women companions only</strong>. To book companions of any gender, you can update your preference with consent anytime in{' '}
+                                  <Link href="/settings/preferences" className="underline font-bold text-[#1E3A2F]">
+                                    Matching Preferences →
+                                  </Link>
+                                </p>
+                              </div>
+                            )}
 
                             <p className="text-ink/60 mb-10 leading-relaxed text-lg font-medium">
                                 &ldquo;{fellow.description || "I am here simply to be present. No expectations."}&rdquo;

@@ -55,7 +55,7 @@ const NavBarInner = () => {
         {/* Always the dark pill. The old transparent top-of-page state relied on
             sitting over the dark hero; on any pale page its white text vanished. */}
         <header
-          className="pointer-events-auto w-full max-w-6xl rounded-full border bg-ink/75 border-white/15 shadow-[0_12px_40px_-12px_rgba(14,17,13,0.55)] backdrop-blur-xl"
+          className="pointer-events-auto w-full max-w-6xl rounded-full border bg-[#1E3A2F] border-white/20 shadow-[0_12px_40px_-12px_rgba(30,58,47,0.7)] backdrop-blur-xl"
         >
           <div className="flex items-center justify-between gap-3 h-14 md:h-[3.75rem] px-3.5 md:px-5">
             <div className="flex items-center gap-2 min-w-0">
@@ -78,20 +78,25 @@ const NavBarInner = () => {
                 onClick={() => router.push("/")}
                 className="font-display text-xl md:text-2xl font-extrabold tracking-tight text-white lowercase leading-none px-1"
               >
-                prsnn<span className="text-moss">.</span>
+                prsnn<span className="text-[#A3E635]">.</span>
               </button>
             </div>
 
             <nav className="hidden lg:flex items-center gap-0.5">
-              {links.map((link) => (
-                <Link
-                  key={link.path}
-                  href={link.path}
-                  className="px-3.5 py-2 rounded-full text-sm font-semibold transition-colors duration-200 text-white/90 hover:text-white hover:bg-white/15"
-                >
-                  {link.name}
-                </Link>
-              ))}
+              {links.map((link) => {
+                const isBecome = link.name === "Become Companion";
+                const displayTitle = (isBecome && userData?.role === "companion") ? "Companion Hub" : link.name;
+                const targetPath = (isBecome && userData?.role === "companion") ? "/companion/dashboard" : link.path;
+                return (
+                  <Link
+                    key={link.path}
+                    href={targetPath}
+                    className="px-3.5 py-2 rounded-full text-sm font-semibold transition-colors duration-200 text-white/90 hover:text-white hover:bg-white/15"
+                  >
+                    {displayTitle}
+                  </Link>
+                );
+              })}
             </nav>
 
             <div className="flex items-center gap-2">
@@ -107,7 +112,7 @@ const NavBarInner = () => {
               <button
                 type="button"
                 onClick={() => router.push("/companions")}
-                className="bg-moss text-white px-4 md:px-6 py-2.5 md:py-3 rounded-full font-bold text-sm tracking-wide hover:bg-moss-mid hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap shadow-sm"
+                className="bg-[#2A4F40] text-white px-4 md:px-6 py-2.5 md:py-3 rounded-full font-bold text-sm tracking-wide hover:bg-[#34604E] hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap shadow-sm border border-white/20"
               >
                 Find Companion
               </button>
@@ -139,7 +144,7 @@ const NavBarInner = () => {
                           {userData?.email}
                         </p>
                       </div>
-                      {userData?.is_verified || userData?.role === "superadmin" ? (
+                      {userData?.is_verified || userData?.role === "superadmin" || userData?.role === "companion" || userData?.role === "admin" ? (
                         <>
                           {userData?.role !== "admin" &&
                             userData?.role !== "superadmin" && (
@@ -172,24 +177,30 @@ const NavBarInner = () => {
                               </>
                             )}
                           {userData?.role === "companion" && (
-                            <div className="mx-3 my-1 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-moss bg-moss-soft/60 rounded-lg">
-                              Verified Companion
-                            </div>
+                            <p
+                              onClick={() => router.push("/companion/dashboard")}
+                              className="px-4 py-2.5 text-sm font-bold text-[#1E3A2F] bg-[#E8EFE9] hover:bg-[#D5E3D8] transition-colors cursor-pointer flex items-center justify-between mx-2 rounded-xl my-1"
+                            >
+                              <span>Companion Dashboard</span>
+                              <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-[#1E3A2F] text-white">Hub</span>
+                            </p>
                           )}
-                          {userData?.role === "admin" && (
+                          {(userData?.role === "admin" || userData?.role === "superadmin") && (
                             <p
                               onClick={() => router.push("/admin")}
-                              className="px-4 py-2.5 text-sm text-ink hover:bg-mist transition-colors cursor-pointer border-t border-line"
+                              className="px-4 py-2.5 text-sm font-semibold text-ink hover:bg-mist transition-colors cursor-pointer border-t border-line flex items-center justify-between"
                             >
-                              Admin Dashboard
+                              <span>Admin Dashboard</span>
+                              <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-gray-100 text-gray-700">Staff</span>
                             </p>
                           )}
                           {userData?.role === "superadmin" && (
                             <p
                               onClick={() => router.push("/super-admin")}
-                              className="px-4 py-2.5 text-sm text-ink hover:bg-mist transition-colors cursor-pointer border-t border-line"
+                              className="px-4 py-2.5 text-sm font-semibold text-ink hover:bg-mist transition-colors cursor-pointer border-t border-line flex items-center justify-between"
                             >
-                              Super Admin Dashboard
+                              <span>Super Admin Dashboard</span>
+                              <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-purple-100 text-purple-700">Root</span>
                             </p>
                           )}
                         </>
@@ -293,7 +304,7 @@ const NavBarInner = () => {
                 >
                   Account
                 </li>
-                {userData?.is_verified || userData?.role === "superadmin" ? (
+                {userData?.is_verified || userData?.role === "superadmin" || userData?.role === "companion" || userData?.role === "admin" ? (
                   <>
                     {userData?.role !== "admin" &&
                       userData?.role !== "superadmin" && (
@@ -307,6 +318,17 @@ const NavBarInner = () => {
                               My Profile
                             </Link>
                           </li>
+                          {userData?.role === "companion" && (
+                            <li className="nav-drawer-item" style={{ animationDelay: "0.35s" }}>
+                              <Link
+                                href="/companion/dashboard"
+                                onClick={() => setIsMenuOpen(false)}
+                                className="block px-4 py-3 rounded-xl bg-[#E8EFE9] text-[#1E3A2F] font-bold hover:bg-[#D5E3D8]"
+                              >
+                                Companion Dashboard ⭐️
+                              </Link>
+                            </li>
+                          )}
                           <li className="nav-drawer-item" style={{ animationDelay: "0.36s" }}>
                             <Link
                               href="/settings/preferences"
@@ -337,23 +359,23 @@ const NavBarInner = () => {
                           </li>
                         </>
                       )}
-                    {userData?.role === "admin" && (
+                    {(userData?.role === "admin" || userData?.role === "superadmin") && (
                       <li className="nav-drawer-item" style={{ animationDelay: "0.34s" }}>
                         <Link
                           href="/admin"
                           onClick={() => setIsMenuOpen(false)}
-                          className="block px-4 py-3 rounded-xl text-ink hover:bg-mist"
+                          className="block px-4 py-3 rounded-xl text-ink hover:bg-mist font-semibold"
                         >
                           Admin Dashboard
                         </Link>
                       </li>
                     )}
                     {userData?.role === "superadmin" && (
-                      <li className="nav-drawer-item" style={{ animationDelay: "0.34s" }}>
+                      <li className="nav-drawer-item" style={{ animationDelay: "0.36s" }}>
                         <Link
                           href="/super-admin"
                           onClick={() => setIsMenuOpen(false)}
-                          className="block px-4 py-3 rounded-xl text-ink hover:bg-mist"
+                          className="block px-4 py-3 rounded-xl text-ink hover:bg-mist font-semibold"
                         >
                           Super Admin Dashboard
                         </Link>

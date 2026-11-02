@@ -14,27 +14,58 @@ export default function CompanionDashboardPage() {
 
   const [availableForBookings, setAvailableForBookings] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [bookings, setBookings] = useState([]);
   const [stats, setStats] = useState({
-    totalBookings: 12,
-    earnings: 8400,
-    rating: 4.8,
-    reviewCount: 120,
+    totalBookings: 0,
+    earnings: 0,
+    rating: 5.0,
+    reviewCount: 0,
   });
 
   useEffect(() => {
-    if (!token && !localStorage.getItem("token")) {
-      router.push("/login?role=companion");
-      return;
-    }
-    setLoading(false);
-  }, [token, router]);
+    const fetchCompanionData = async () => {
+      const activeToken = token || (typeof window !== "undefined" ? localStorage.getItem("token") : null);
+      if (!activeToken) {
+        router.push("/login?role=companion");
+        return;
+      }
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
+        const res = await fetch(`${apiUrl}/api/bookings/my-bookings`, {
+          headers: { Authorization: `Bearer ${activeToken}` },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const list = Array.isArray(data) ? data : data?.bookings || [];
+          setBookings(list);
+          const completedOrAccepted = list.filter(b => b.status === 'completed' || b.status === 'accepted' || b.status === 'confirmed');
+          const totalEarned = completedOrAccepted.reduce((sum, b) => {
+            const price = Number(b.totalAmount) || Number(b.amount) || Number(userData?.pricePerHour) || 399;
+            return sum + price;
+          }, 0);
+          setStats({
+            totalBookings: list.length,
+            earnings: totalEarned,
+            rating: userData?.rating || 4.9,
+            reviewCount: userData?.completedSessions || list.length || 0,
+          });
+        }
+      } catch (err) {
+        console.warn("Failed to load companion bookings", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCompanionData();
+  }, [token, router, userData]);
 
   const toggleAvailability = async () => {
     const nextState = !availableForBookings;
     setAvailableForBookings(nextState);
     try {
       const activeToken = token || localStorage.getItem("token");
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || ""}/api/profile/update`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
+      await fetch(`${apiUrl}/api/profile/update`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

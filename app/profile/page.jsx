@@ -395,6 +395,15 @@ const Profile = () => {
                                 <div className="w-full space-y-3 mt-2">
                                     {!isEditing ? (
                                         <>
+                                            {isCompanion && (
+                                                <button 
+                                                    type="button"
+                                                    onClick={() => router.push('/companion/dashboard')}
+                                                    className="w-full py-2.5 bg-[#E8EFE9] text-[#1E3A2F] font-bold rounded-full border border-[#1E3A2F]/20 hover:bg-[#1E3A2F] hover:text-white transition-all text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm"
+                                                >
+                                                    <span>Companion Dashboard →</span>
+                                                </button>
+                                            )}
                                             <button 
                                                 onClick={() => setIsEditing(true)}
                                                 className="w-full py-3 bg-[#1E3A2F] text-white font-bold rounded-full hover:bg-[#152a22] transition-all text-xs uppercase tracking-wider shadow-sm"

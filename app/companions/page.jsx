@@ -120,9 +120,27 @@ const CompanionsContent = () => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedDay, setSelectedDay] = useState('');
+  const [matchingFilter, setMatchingFilter] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('userData');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed.genderPreference) return parsed.genderPreference;
+        }
+      } catch (e) {}
+    }
+    return 'women_only';
+  });
   const [filtersOpen, setFiltersOpen] = useState(true);
   const [page, setPage] = useState(1);
   const itemsPerPage = 9;
+
+  useEffect(() => {
+    if (userData?.genderPreference) {
+      setMatchingFilter(userData.genderPreference);
+    }
+  }, [userData]);
 
   const interestChips = mode ? modeTags[mode] || [] : allInterestTags.slice(0, 10);
 
@@ -152,7 +170,7 @@ const CompanionsContent = () => {
 
   useEffect(() => {
     setPage(1);
-  }, [selectedTags, selectedCity, selectedDay, searchQuery]);
+  }, [selectedTags, selectedCity, selectedDay, searchQuery, matchingFilter]);
 
   const setMode = (id) => {
     if (id === mode) {
@@ -199,6 +217,14 @@ const CompanionsContent = () => {
           companion.id === userData._id)
       ) {
         return false;
+      }
+
+      // Safety & Matching filter: If women_only, strictly show ONLY female companions
+      if (matchingFilter === 'women_only') {
+        const g = (companion.gender || '').toLowerCase();
+        if (g !== 'woman' && g !== 'female') {
+          return false;
+        }
       }
 
       if (mode) {
@@ -423,6 +449,42 @@ const CompanionsContent = () => {
                   ×
                 </button>
               )}
+            </div>
+
+            {/* Matching Safety Preference Controls */}
+            <div className="mt-3.5 pt-3.5 border-t border-line/80 flex flex-wrap items-center justify-between gap-2.5">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#1E3A2F]" />
+                <span className="text-xs font-bold text-ink">
+                  {matchingFilter === 'women_only' ? "Matching Filter: Women Companions Only" : "Matching Filter: Companions of Any Gender"}
+                </span>
+                <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
+                  matchingFilter === 'women_only' 
+                    ? 'bg-[#E8EFE9] text-[#1E3A2F] border border-[#1E3A2F]/20'
+                    : 'bg-amber-100 text-amber-800 border border-amber-200'
+                }`}>
+                  {matchingFilter === 'women_only' ? 'Default · Highest Safety' : 'All Genders'}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const next = matchingFilter === 'women_only' ? 'any' : 'women_only';
+                    setMatchingFilter(next);
+                  }}
+                  className="text-xs font-bold text-[#1E3A2F] hover:underline"
+                >
+                  {matchingFilter === 'women_only' ? "Show companions of any gender →" : "Show women companions only →"}
+                </button>
+                <Link
+                  href="/settings/preferences"
+                  className="text-[11px] font-semibold text-ink/50 hover:text-ink transition-colors ml-1"
+                >
+                  (Settings)
+                </Link>
+              </div>
             </div>
 
             {/* Collapse toggle */}

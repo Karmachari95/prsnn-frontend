@@ -20,25 +20,21 @@ const AdminPanel = () => {
        router.push('/');
        return;
     }
-    
-    // Admin Verification Check (for 'admin' role)
-    if (userData && userData.role === 'admin' && !userData.is_verified) {
-        router.push('/admin/onboarding');
-        return;
-    }
 
     fetchUnverifiedUsers();
     fetchStats();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, userData]);
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
+
   const fetchUnverifiedUsers = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/unverified`, {
+      const res = await axios.get(`${API_URL}/api/admin/unverified`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setUsers(res.data);
+      setUsers(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error("Error fetching users", err);
     } finally {
@@ -48,7 +44,7 @@ const AdminPanel = () => {
 
   const fetchStats = async () => {
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/stats`, {
+      const res = await axios.get(`${API_URL}/api/admin/stats`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setStats(res.data);
@@ -60,18 +56,16 @@ const AdminPanel = () => {
   const handleVerify = async (userId, status) => {
     try {
       await axios.put(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/verify/${userId}`, 
+        `${API_URL}/api/admin/verify/${userId}`, 
         { status }, 
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      // Remove from list
-// Update local state instead of removing
+      // Update local state instead of removing
       setUsers(prev => prev.map(u => 
         u.id === userId ? { ...u, verificationStatus: status } : u
       ));
       // Refresh stats
       fetchStats();
-      // alert(`User ${status} successfully!`);
     } catch (err) {
       console.error("Error verifying user", err);
       alert("Failed to update status");
