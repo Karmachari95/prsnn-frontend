@@ -119,6 +119,7 @@ const CompanionsContent = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedCity, setSelectedCity] = useState('');
+  const [selectedArea, setSelectedArea] = useState('');
   const [selectedDay, setSelectedDay] = useState('');
   const [matchingFilter, setMatchingFilter] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -130,7 +131,7 @@ const CompanionsContent = () => {
         }
       } catch (e) {}
     }
-    return 'women_only';
+    return 'all';
   });
   const [filtersOpen, setFiltersOpen] = useState(true);
   const [page, setPage] = useState(1);
@@ -151,7 +152,23 @@ const CompanionsContent = () => {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
         const data = await cachedFetch(`${apiUrl}/api/companions`);
         const list = normalizeCompanions(data);
-        if (!cancelled && list.length > 0) setCompanions(list);
+        if (!cancelled && list.length > 0) {
+          // Merge API data with liveCompanions to preserve ALL 14 companions
+          const map = new Map();
+          for (const item of liveCompanions) {
+            map.set(String(item.id || item._id || item.username), { ...item });
+          }
+          for (const item of list) {
+            const key = String(item.id || item._id || item.username);
+            const existing = map.get(key);
+            if (existing) {
+              map.set(key, { ...existing, ...item, gender: item.gender || existing.gender || 'man' });
+            } else {
+              map.set(key, { ...item, gender: item.gender || 'man' });
+            }
+          }
+          setCompanions(Array.from(map.values()));
+        }
       } catch (error) {
         if (!cancelled) setCompanions(liveCompanions);
       } finally {
@@ -170,7 +187,27 @@ const CompanionsContent = () => {
 
   useEffect(() => {
     setPage(1);
-  }, [selectedTags, selectedCity, selectedDay, searchQuery, matchingFilter]);
+  }, [selectedTags, selectedCity, selectedArea, selectedDay, searchQuery, matchingFilter]);
+
+  // When city changes, reset selected area
+  useEffect(() => {
+    setSelectedArea('');
+  }, [selectedCity]);
+
+  // Compute available areas for selected city
+  const availableAreas = useMemo(() => {
+    if (!selectedCity) return [];
+    const areas = new Set();
+    companions.forEach((c) => {
+      if (c.city && c.city.toLowerCase() === selectedCity.toLowerCase() && c.area) {
+        c.area.split(/[,/]+/).forEach((part) => {
+          const trimmed = part.trim();
+          if (trimmed) areas.add(trimmed);
+        });
+      }
+    });
+    return Array.from(areas).sort();
+  }, [companions, selectedCity]);
 
   const setMode = (id) => {
     if (id === mode) {
@@ -189,15 +226,18 @@ const CompanionsContent = () => {
   const clearFilters = () => {
     setSelectedTags([]);
     setSelectedCity('');
+    setSelectedArea('');
     setSelectedDay('');
     setSearchQuery('');
   };
 
   const activeFilterCount =
     (selectedCity ? 1 : 0) +
+    (selectedArea ? 1 : 0) +
     (selectedDay ? 1 : 0) +
     selectedTags.length +
-    (searchQuery.trim() ? 1 : 0);
+    (searchQuery.trim() ? 1 : 0) +
+    (matchingFilter !== 'all' ? 1 : 0);
 
   const hasActiveFilters = activeFilterCount > 0;
 
@@ -219,10 +259,15 @@ const CompanionsContent = () => {
         return false;
       }
 
-      // Safety & Matching filter: If women_only, strictly show ONLY female companions
+      // Safety & Matching filter: strictly honor user selection
       if (matchingFilter === 'women_only') {
         const g = (companion.gender || '').toLowerCase();
         if (g !== 'woman' && g !== 'female') {
+          return false;
+        }
+      } else if (matchingFilter === 'men_only') {
+        const g = (companion.gender || '').toLowerCase();
+        if (g !== 'man' && g !== 'male') {
           return false;
         }
       }
@@ -243,6 +288,13 @@ const CompanionsContent = () => {
           !companion.city ||
           companion.city.toLowerCase() !== selectedCity.toLowerCase()
         ) {
+          return false;
+        }
+      }
+
+      if (selectedArea) {
+        const areaStr = (companion.area || '').toLowerCase();
+        if (!areaStr.includes(selectedArea.toLowerCase())) {
           return false;
         }
       }
@@ -452,37 +504,54 @@ const CompanionsContent = () => {
             </div>
 
             {/* Matching Safety Preference Controls */}
-            <div className="mt-3.5 pt-3.5 border-t border-line/80 flex flex-wrap items-center justify-between gap-2.5">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#1E3A2F]" />
-                <span className="text-xs font-bold text-ink">
-                  {matchingFilter === 'women_only' ? "Matching Filter: Women Companions Only" : "Matching Filter: Companions of Any Gender"}
-                </span>
-                <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
-                  matchingFilter === 'women_only' 
-                    ? 'bg-[#E8EFE9] text-[#1E3A2F] border border-[#1E3A2F]/20'
-                    : 'bg-amber-100 text-amber-800 border border-amber-200'
-                }`}>
-                  {matchingFilter === 'women_only' ? 'Default · Highest Safety' : 'All Genders'}
-                </span>
+            <div className="mt-3.5 pt-3.5 border-t border-line/80 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-xs font-bold text-ink mr-1">Matching View:</span>
+                <button
+                  type="button"
+                  onClick={() => setMatchingFilter('all')}
+                  className={`text-xs font-bold px-3 py-1 rounded-full transition-all ${
+                    matchingFilter === 'all'
+                      ? 'bg-[#1E3A2F] text-white shadow-sm'
+                      : 'bg-paper text-ink/70 border border-line hover:border-ink/20'
+                  }`}
+                >
+                  All Companions ({companions.length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMatchingFilter('women_only')}
+                  className={`text-xs font-bold px-3 py-1 rounded-full transition-all flex items-center gap-1.5 ${
+                    matchingFilter === 'women_only'
+                      ? 'bg-[#1E3A2F] text-white shadow-sm'
+                      : 'bg-paper text-ink/70 border border-line hover:border-[#1E3A2F]/30 hover:text-[#1E3A2F]'
+                  }`}
+                >
+                  <span>Women Only ({companions.filter(c => (c.gender || '').toLowerCase() === 'woman' || (c.gender || '').toLowerCase() === 'female').length})</span>
+                  <span className={`text-[9px] uppercase px-1.5 py-0.2 rounded-full ${
+                    matchingFilter === 'women_only' ? 'bg-white/20 text-white' : 'bg-[#E8EFE9] text-[#1E3A2F]'
+                  }`}>Safety</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMatchingFilter('men_only')}
+                  className={`text-xs font-bold px-3 py-1 rounded-full transition-all ${
+                    matchingFilter === 'men_only'
+                      ? 'bg-[#1E3A2F] text-white shadow-sm'
+                      : 'bg-paper text-ink/70 border border-line hover:border-ink/20'
+                  }`}
+                >
+                  Men ({companions.filter(c => (c.gender || '').toLowerCase() === 'man' || (c.gender || '').toLowerCase() === 'male').length})
+                </button>
               </div>
 
               <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    const next = matchingFilter === 'women_only' ? 'any' : 'women_only';
-                    setMatchingFilter(next);
-                  }}
-                  className="text-xs font-bold text-[#1E3A2F] hover:underline"
-                >
-                  {matchingFilter === 'women_only' ? "Show companions of any gender →" : "Show women companions only →"}
-                </button>
                 <Link
                   href="/settings/preferences"
-                  className="text-[11px] font-semibold text-ink/50 hover:text-ink transition-colors ml-1"
+                  className="text-xs font-bold text-[#1E3A2F] hover:underline inline-flex items-center gap-1"
                 >
-                  (Settings)
+                  <span>Change default in Settings</span>
+                  <span>→</span>
                 </Link>
               </div>
             </div>
@@ -532,7 +601,7 @@ const CompanionsContent = () => {
                 <div className="pt-4 space-y-4">
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ink/40 mb-2.5">
-                      City
+                      City {selectedCity ? `& Localities in ${selectedCity}` : ''}
                     </p>
                     <div className="flex flex-wrap gap-2">
                       <FilterChip
@@ -565,6 +634,23 @@ const CompanionsContent = () => {
                           <option key={c} value={c}>{c}</option>
                         ))}
                       </select>
+                      {availableAreas.length > 0 && (
+                        <select
+                          value={selectedArea}
+                          onChange={(e) => setSelectedArea(e.target.value)}
+                          className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
+                            selectedArea
+                              ? 'bg-[#1E3A2F] text-white border-[#1E3A2F]'
+                              : 'bg-paper text-ink/70 border-line hover:border-ink/20'
+                          }`}
+                          aria-label={`Filter by locality in ${selectedCity}`}
+                        >
+                          <option value="">All localities in {selectedCity}</option>
+                          {availableAreas.map((area) => (
+                            <option key={area} value={area}>{area}</option>
+                          ))}
+                        </select>
+                      )}
                     </div>
                   </div>
 

@@ -29,7 +29,20 @@ export default function FeaturedCompanions() {
           ? data.data
           : [];
         if (!cancelled && list.length > 0) {
-          setCompanions(list);
+          const map = new Map();
+          for (const item of liveCompanions) {
+            map.set(String(item.id || item._id || item.username), { ...item });
+          }
+          for (const item of list) {
+            const key = String(item.id || item._id || item.username);
+            const existing = map.get(key);
+            if (existing) {
+              map.set(key, { ...existing, ...item, gender: item.gender || existing.gender || 'man' });
+            } else {
+              map.set(key, { ...item, gender: item.gender || 'man' });
+            }
+          }
+          setCompanions(Array.from(map.values()));
         }
       } catch (err) {
         if (!cancelled) setCompanions(liveCompanions);

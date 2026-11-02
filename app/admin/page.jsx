@@ -3,11 +3,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Loading from "../components/common/Loading";
+import liveCompanions from "../data/liveCompanions.json";
 
 const AdminPanel = () => {
   const { token, userData } = useAuth();
   const router = useRouter();
+  const [activeTab, setActiveTab] = useState('pending'); // 'pending' or 'companions'
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const [stats, setStats] = useState(null);
@@ -139,7 +142,131 @@ const AdminPanel = () => {
             </div>
         )}
 
-        {loading ? (
+        {/* Navigation Tabs */}
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-8 border-b border-gray-200 pb-4">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setActiveTab('pending')}
+              className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${
+                activeTab === 'pending'
+                  ? 'bg-gray-900 text-white shadow-md'
+                  : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+              }`}
+            >
+              <span>Pending Verifications</span>
+              <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
+                activeTab === 'pending' ? 'bg-white/20 text-white' : 'bg-yellow-100 text-yellow-800'
+              }`}>
+                {users.length}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab('companions')}
+              className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${
+                activeTab === 'companions'
+                  ? 'bg-gray-900 text-white shadow-md'
+                  : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+              }`}
+            >
+              <span>All Verified Companions</span>
+              <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
+                activeTab === 'companions' ? 'bg-white/20 text-white' : 'bg-green-100 text-green-800'
+              }`}>
+                {liveCompanions.length}
+              </span>
+            </button>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Link
+              href="/super-admin/all-users"
+              className="px-4 py-2 bg-[#1E3A2F] text-white text-xs font-bold rounded-xl hover:bg-[#2A4F40] transition-colors shadow-sm"
+            >
+              Super Admin: All Users →
+            </Link>
+          </div>
+        </div>
+
+        {activeTab === 'companions' ? (
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-gray-900">
+                All Verified Companions in Database ({liveCompanions.length})
+              </h2>
+              <span className="text-xs font-semibold text-gray-500">
+                Includes all real database profiles and verified women companions
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {liveCompanions.map((comp) => (
+                <div key={comp.id || comp._id} className="bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-md p-6 flex flex-col justify-between hover:shadow-xl transition-all">
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="relative w-16 h-16 rounded-2xl overflow-hidden bg-gray-100 shrink-0 border border-gray-200">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img 
+                        src={comp.profilePhoto || comp.profilePhotoUrl || '/mode-sit-with-me.png'} 
+                        alt={comp.fullName}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-1">
+                        <h3 className="font-bold text-base text-gray-900 truncate">{comp.fullName}</h3>
+                        <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-green-50 text-green-700 border border-green-200 uppercase tracking-widest shrink-0">
+                          Verified
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-500 font-medium truncate">@{comp.username} · {comp.city}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-xs font-bold text-[#1E3A2F]">₹{comp.pricePerHour}/hr</span>
+                        <span className="text-xs text-gray-400">·</span>
+                        <span className="text-[11px] font-semibold text-amber-600">★ {comp.rating}</span>
+                        <span className="text-xs text-gray-400">·</span>
+                        <span className={`text-[10px] font-bold uppercase px-1.5 py-0.2 rounded-full ${comp.gender === 'woman' ? 'bg-pink-50 text-pink-700' : 'bg-blue-50 text-blue-700'}`}>
+                          {comp.gender === 'woman' ? 'Woman' : 'Man'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-gray-600 line-clamp-3 mb-4 leading-relaxed font-normal">
+                    {comp.description}
+                  </p>
+
+                  <div className="flex flex-wrap gap-1.5 mb-4">
+                    {(comp.tags || []).slice(0, 3).map((tag) => (
+                      <span key={tag} className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-gray-100 text-gray-600">
+                        {tag}
+                      </span>
+                    ))}
+                    {(comp.tags || []).length > 3 && (
+                      <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-md bg-gray-50 text-gray-400">
+                        +{(comp.tags || []).length - 3}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
+                    <span className="text-[11px] text-gray-400 font-medium truncate">
+                      {comp.area ? `📍 ${comp.area}` : `📍 ${comp.city}`}
+                    </span>
+                    <Link
+                      href={`/companions/${comp.id || comp._id}`}
+                      target="_blank"
+                      className="text-xs font-bold text-[#1E3A2F] hover:underline"
+                    >
+                      View Live →
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : loading ? (
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
              {[1, 2, 3].map((i) => (
                 <div key={i} className="bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-sm animate-pulse flex flex-col h-96">
@@ -162,6 +289,12 @@ const AdminPanel = () => {
              </div>
              <h3 className="text-2xl font-bold text-gray-900 tracking-tight">All caught up!</h3>
              <p className="text-gray-500 font-medium mt-2">There are no pending user verifications at the moment.</p>
+             <button
+               onClick={() => setActiveTab('companions')}
+               className="mt-6 px-6 py-3 bg-[#1E3A2F] text-white font-bold rounded-full text-xs uppercase tracking-wider hover:bg-[#2A4F40] transition-all shadow-md"
+             >
+               View All {liveCompanions.length} Verified Companions →
+             </button>
            </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
