@@ -176,6 +176,9 @@ const LoginContent = () => {
       setState("Sign Up");
       setAccountType("companion");
     }
+    // Proactively warm up backend service on Render
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
+    fetch(`${apiUrl}/api/health`, { method: 'GET' }).catch(() => {});
   }, [roleParam]);
 
   useEffect(() => {
@@ -314,10 +317,31 @@ const LoginContent = () => {
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`, formData);
         router.push(`/verify-email?email=${encodeURIComponent(email)}&role=${encodeURIComponent(accountType)}`);
       } else {
-        const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
-          { email, password }
-        );
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
+        let response;
+        try {
+          response = await axios.post(
+            `${apiUrl}/api/auth/login`,
+            { email: email.trim(), password },
+            { timeout: 60000 }
+          );
+        } catch (firstErr) {
+          if (!firstErr.response) {
+            setAlert({
+              type: "warning",
+              title: "Waking up server",
+              message: "Connecting to PRSNN backend, please wait a moment..."
+            });
+            await new Promise(r => setTimeout(r, 2000));
+            response = await axios.post(
+              `${apiUrl}/api/auth/login`,
+              { email: email.trim(), password },
+              { timeout: 60000 }
+            );
+          } else {
+            throw firstErr;
+          }
+        }
         const data = response.data;
         if (data.token) {
           login(data.token, data.user);
@@ -333,7 +357,10 @@ const LoginContent = () => {
     } catch (error) {
       console.error(error);
       const msg =
-        error.response?.data?.message || "Something went wrong. Please try again.";
+        error.response?.data?.message ||
+        (!error.response
+          ? "The server was in sleep mode and is warming up. Please click Log In again in a few seconds."
+          : "Something went wrong. Please try again.");
 
       if (error.response?.status === 403 && error.response?.data?.emailVerificationRequired) {
         const userEmail = error.response.data.email || email;
@@ -346,7 +373,7 @@ const LoginContent = () => {
           router.push(`/verify-email?email=${encodeURIComponent(userEmail)}`);
         }, 2000);
       } else {
-        setAlert({ type: "error", title: "Error", message: msg });
+        setAlert({ type: "error", title: "Notice", message: msg });
       }
     } finally {
       setLoading(false);
