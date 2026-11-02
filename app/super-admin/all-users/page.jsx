@@ -25,18 +25,17 @@ const AllUsersPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [token, userData]);
     
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
+
     const fetchAllUsers = async () => {
         try {
             setLoading(true);
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/all-users`, {
+            const res = await axios.get(`${API_URL}/api/admin/all-users`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            setUsers(res.data);
+            setUsers(Array.isArray(res.data) ? res.data : []);
         } catch (err) {
             console.error("Error fetching users", err);
-            if (err.response && err.response.status === 404) {
-                alert("Please restart your backend server to enable this feature.");
-            }
         } finally {
             setLoading(false);
         }
