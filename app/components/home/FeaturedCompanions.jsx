@@ -13,6 +13,20 @@ export default function FeaturedCompanions() {
   const [companions, setCompanions] = useState(liveCompanions);
   const [loading, setLoading] = useState(false);
   const [selectedCity, setSelectedCity] = useState('All');
+  const [matchingFilter, setMatchingFilter] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const storedPref = localStorage.getItem('genderPreference');
+        if (storedPref) return storedPref;
+        const stored = localStorage.getItem('userData');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed.genderPreference) return parsed.genderPreference;
+        }
+      } catch (e) {}
+    }
+    return 'women_only';
+  });
   const [savedIds, setSavedIds] = useState(new Set());
 
   useEffect(() => {
@@ -64,7 +78,27 @@ export default function FeaturedCompanions() {
     });
   };
 
+  const handleMatchingChange = (filter) => {
+    setMatchingFilter(filter);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('genderPreference', filter);
+    }
+  };
+
   const filtered = companions.filter((c) => {
+    // If women_only, strictly show ONLY female companions
+    if (matchingFilter === 'women_only') {
+      const g = (c.gender || '').toLowerCase().trim();
+      if (g !== 'woman' && g !== 'female') {
+        return false;
+      }
+    } else if (matchingFilter === 'men_only') {
+      const g = (c.gender || '').toLowerCase().trim();
+      if (g !== 'man' && g !== 'male') {
+        return false;
+      }
+    }
+
     if (selectedCity === 'All') return true;
     return (
       c.city?.toLowerCase().includes(selectedCity.toLowerCase()) ||
@@ -96,6 +130,48 @@ export default function FeaturedCompanions() {
             <span>Explore all companions</span>
             <span>→</span>
           </Link>
+        </div>
+
+        {/* Matching Safety Preference Controls */}
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-6 bg-white border border-[#EAE6DF] rounded-2xl p-4 shadow-sm">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-bold text-[#181B18] mr-1">Matching View:</span>
+            <button
+              type="button"
+              onClick={() => handleMatchingChange('women_only')}
+              className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
+                matchingFilter === 'women_only'
+                  ? 'bg-[#1E3A2F] text-white shadow-sm'
+                  : 'bg-[#FAF8F5] text-[#181B18]/70 border border-[#EAE6DF] hover:border-[#1E3A2F]/30 hover:text-[#1E3A2F]'
+              }`}
+            >
+              <span>Women Companions Only</span>
+              <span className={`text-[9px] uppercase px-1.5 py-0.2 rounded-full ${
+                matchingFilter === 'women_only' ? 'bg-white/20 text-white' : 'bg-[#E8EFE9] text-[#1E3A2F]'
+              }`}>Default</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleMatchingChange('all')}
+              className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all ${
+                matchingFilter === 'all'
+                  ? 'bg-[#1E3A2F] text-white shadow-sm'
+                  : 'bg-[#FAF8F5] text-[#181B18]/70 border border-[#EAE6DF] hover:border-[#181B18]/20'
+              }`}
+            >
+              All Companions
+            </button>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Link
+              href="/settings/preferences"
+              className="text-xs font-bold text-[#1E3A2F] hover:underline inline-flex items-center gap-1"
+            >
+              <span>Settings</span>
+              <span>→</span>
+            </Link>
+          </div>
         </div>
 
         {/* City Filter Pills */}

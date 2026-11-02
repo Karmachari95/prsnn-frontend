@@ -124,6 +124,8 @@ const CompanionsContent = () => {
   const [matchingFilter, setMatchingFilter] = useState(() => {
     if (typeof window !== 'undefined') {
       try {
+        const storedPref = localStorage.getItem('genderPreference');
+        if (storedPref) return storedPref;
         const stored = localStorage.getItem('userData');
         if (stored) {
           const parsed = JSON.parse(stored);
@@ -131,11 +133,18 @@ const CompanionsContent = () => {
         }
       } catch (e) {}
     }
-    return 'all';
+    return 'women_only';
   });
   const [filtersOpen, setFiltersOpen] = useState(true);
   const [page, setPage] = useState(1);
   const itemsPerPage = 9;
+
+  const handleMatchingFilterChange = (filter) => {
+    setMatchingFilter(filter);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('genderPreference', filter);
+    }
+  };
 
   useEffect(() => {
     if (userData?.genderPreference) {
@@ -509,8 +518,22 @@ const CompanionsContent = () => {
                 <span className="text-xs font-bold text-ink mr-1">Matching View:</span>
                 <button
                   type="button"
-                  onClick={() => setMatchingFilter('all')}
-                  className={`text-xs font-bold px-3 py-1 rounded-full transition-all ${
+                  onClick={() => handleMatchingFilterChange('women_only')}
+                  className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
+                    matchingFilter === 'women_only'
+                      ? 'bg-[#1E3A2F] text-white shadow-sm'
+                      : 'bg-paper text-ink/70 border border-line hover:border-[#1E3A2F]/30 hover:text-[#1E3A2F]'
+                  }`}
+                >
+                  <span>Women Only ({companions.filter(c => (c.gender || '').toLowerCase() === 'woman' || (c.gender || '').toLowerCase() === 'female').length})</span>
+                  <span className={`text-[9px] uppercase px-1.5 py-0.2 rounded-full ${
+                    matchingFilter === 'women_only' ? 'bg-white/20 text-white' : 'bg-[#E8EFE9] text-[#1E3A2F]'
+                  }`}>Default</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleMatchingFilterChange('all')}
+                  className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all ${
                     matchingFilter === 'all'
                       ? 'bg-[#1E3A2F] text-white shadow-sm'
                       : 'bg-paper text-ink/70 border border-line hover:border-ink/20'
@@ -520,22 +543,8 @@ const CompanionsContent = () => {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setMatchingFilter('women_only')}
-                  className={`text-xs font-bold px-3 py-1 rounded-full transition-all flex items-center gap-1.5 ${
-                    matchingFilter === 'women_only'
-                      ? 'bg-[#1E3A2F] text-white shadow-sm'
-                      : 'bg-paper text-ink/70 border border-line hover:border-[#1E3A2F]/30 hover:text-[#1E3A2F]'
-                  }`}
-                >
-                  <span>Women Only ({companions.filter(c => (c.gender || '').toLowerCase() === 'woman' || (c.gender || '').toLowerCase() === 'female').length})</span>
-                  <span className={`text-[9px] uppercase px-1.5 py-0.2 rounded-full ${
-                    matchingFilter === 'women_only' ? 'bg-white/20 text-white' : 'bg-[#E8EFE9] text-[#1E3A2F]'
-                  }`}>Safety</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMatchingFilter('men_only')}
-                  className={`text-xs font-bold px-3 py-1 rounded-full transition-all ${
+                  onClick={() => handleMatchingFilterChange('men_only')}
+                  className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all ${
                     matchingFilter === 'men_only'
                       ? 'bg-[#1E3A2F] text-white shadow-sm'
                       : 'bg-paper text-ink/70 border border-line hover:border-ink/20'
@@ -737,6 +746,25 @@ const CompanionsContent = () => {
             </p>
           </div>
         </div>
+
+        {/* Active Filter Notice */}
+        {matchingFilter === 'women_only' && (
+          <div className="mb-6 p-4 rounded-2xl bg-[#E8EFE9] border border-[#1E3A2F]/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#1E3A2F] shrink-0" />
+              <p className="text-xs font-bold text-[#1E3A2F]">
+                Matching Filter Active: Showing strictly verified Women Companions ({filteredCompanions.length}) only.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => handleMatchingFilterChange('all')}
+              className="text-xs font-bold text-[#1E3A2F] hover:underline text-left sm:text-right"
+            >
+              Show companions of any gender ({companions.length}) →
+            </button>
+          </div>
+        )}
 
         {/* Grid */}
         {loading ? (
