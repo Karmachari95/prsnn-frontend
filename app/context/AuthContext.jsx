@@ -1,4 +1,3 @@
-
 "use client";
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
@@ -7,109 +6,132 @@ import axios from 'axios';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [token, setToken] = useState(null);
-    const [userData, setUserData] = useState(null);
     const router = useRouter();
+
+    // Synchronously initialize auth state from localStorage on client
+    const [token, setToken] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('token') || null;
+        }
+        return null;
+    });
+
+    const [userData, setUserData] = useState(() => {
+        if (typeof window !== 'undefined') {
+            try {
+                const stored = localStorage.getItem('userData');
+                return stored ? JSON.parse(stored) : null;
+            } catch {
+                return null;
+            }
+        }
+        return null;
+    });
+
+    const [loading, setLoading] = useState(false);
 
     const logout = () => {
         setToken(null);
         setUserData(null);
-        localStorage.removeItem('token');
-        localStorage.removeItem('userData');
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('token');
+            localStorage.removeItem('userData');
+        }
         router.push('/login');
     };
 
     const fetchProfile = async (authToken, fallbackUser) => {
+        if (!authToken) return;
         try {
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/profile`, {
-                headers: { 'Authorization': `Bearer ${authToken}` }
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
+            const res = await axios.get(`${apiUrl}/api/profile`, {
+                headers: { 'Authorization': `Bearer ${authToken}` },
+                timeout: 15000
             });
-            // Merge basic user data with profile data (isVerified, etc)
-            const fullUserData = { ...fallbackUser, ...res.data };
-            setUserData(fullUserData);
-            localStorage.setItem('userData', JSON.stringify(fullUserData));
+            if (res.data) {
+                const fullUserData = { ...(fallbackUser || {}), ...res.data };
+                setUserData(fullUserData);
+                if (typeof window !== 'undefined') {
+                    localStorage.setItem('userData', JSON.stringify(fullUserData));
+                }
+            }
         } catch (error) {
-            if (error.response && error.response.status === 404) {
-                // User profile not found. 
-                // If it's a superadmin, this is expected as they don't have a profile document in 'profiles' collection usually (or maybe they do? depends on implementation).
-                // If we want to support profile updates for superadmin, we need that endpoint to work.
-                // For now, let's just ignore 404 for superadmin to avoid console spam.
-                if (fallbackUser?.role === 'superadmin') return;
-
-                // For others, likely needs onboarding
-            } else if (error.response && error.response.status === 401) {
-                // Token invalid or expired
+            if (error.response && error.response.status === 401) {
+                // Token explicitly invalid or expired
                 logout();
             } else {
-                console.error("Could not fetch profile", error);
+                console.warn("Could not sync profile in background:", error?.message);
             }
         }
     };
 
     useEffect(() => {
-        // Check for token in localStorage on mount
+        if (typeof window === 'undefined') return;
+
         const storedToken = localStorage.getItem('token');
         const storedUserData = localStorage.getItem('userData');
-        
-        if (storedToken) {
-            setToken(storedToken);
-            // Fetch latest profile data to get verification status
-            fetchProfile(storedToken, storedUserData ? JSON.parse(storedUserData) : null);
-        }
-        
+        let parsedUser = null;
+
         if (storedUserData) {
             try {
-                setUserData(JSON.parse(storedUserData));
+                parsedUser = JSON.parse(storedUserData);
+                setUserData(parsedUser);
             } catch (e) {
                 console.error("Failed to parse user data", e);
             }
         }
+
+        if (storedToken) {
+            setToken(storedToken);
+            fetchProfile(storedToken, parsedUser);
+        }
+        setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const login = async (newToken, user) => {
+    const login = (newToken, user) => {
         setToken(newToken);
         setUserData(user);
-        localStorage.setItem('token', newToken);
-        if (user) {
-            localStorage.setItem('userData', JSON.stringify(user));
+        setLoading(false);
+
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('token', newToken);
+            if (user) {
+                localStorage.setItem('userData', JSON.stringify(user));
+            }
         }
 
-        // 1. Initial Role-Based Redirect
+        // Clean role-based navigation
         if (user?.role === 'superadmin') {
             router.push('/super-admin');
         } else if (user?.role === 'admin') {
-            if (user?.is_verified) {
-                router.push('/admin');
-            } else {
-                router.push('/admin/onboarding');
-            }
-        } else if (user?.role === 'companion' && !user?.is_verified) {
-            router.push('/onboarding?role=companion');
+            router.push('/admin');
+        } else if (user?.role === 'companion') {
+            router.push('/companion/dashboard');
         } else {
             router.push('/');
         }
 
-        // 2. Fetch latest profile in background and sync
-        try {
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/profile`, {
-                headers: { 'Authorization': `Bearer ${newToken}` }
-            });
-            const fullUserData = { ...user, ...res.data };
-            setUserData(fullUserData);
-            localStorage.setItem('userData', JSON.stringify(fullUserData));
-
-            // Optional: Re-check redirect if background data differs significantly
-            if (!user?.is_verified && fullUserData.is_verified && fullUserData.role === 'admin') {
-                router.push('/admin');
-            }
-        } catch {
-            // Background profile check failed, silent error
+        // Background profile sync
+        if (newToken) {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
+            axios.get(`${apiUrl}/api/profile`, {
+                headers: { 'Authorization': `Bearer ${newToken}` },
+                timeout: 15000
+            }).then(res => {
+                if (res.data) {
+                    const fullUserData = { ...(user || {}), ...res.data };
+                    setUserData(fullUserData);
+                    if (typeof window !== 'undefined') {
+                        localStorage.setItem('userData', JSON.stringify(fullUserData));
+                    }
+                }
+            }).catch(() => {});
         }
     };
 
     return (
-        <AuthContext.Provider value={{ token, setToken, userData, setUserData, login, logout, fetchProfile }}>
+        <AuthContext.Provider value={{ token, setToken, userData, setUserData, loading, login, logout, fetchProfile }}>
             {children}
         </AuthContext.Provider>
     );

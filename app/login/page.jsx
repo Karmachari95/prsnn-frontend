@@ -345,13 +345,6 @@ const LoginContent = () => {
         const data = response.data;
         if (data.token) {
           login(data.token, data.user);
-          if (data.user.role === "superadmin") {
-            router.push("/super-admin");
-          } else if (data.user.role === "admin") {
-            router.push("/admin");
-          } else {
-            router.push("/");
-          }
         }
       }
     } catch (error) {

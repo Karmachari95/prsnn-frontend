@@ -26,7 +26,8 @@ const MyBookings = () => {
     const [submittingReport, setSubmittingReport] = useState(false);
 
     useEffect(() => {
-        if (!token) {
+        const activeToken = token || (typeof window !== "undefined" ? localStorage.getItem("token") : null);
+        if (!activeToken) {
             router.push('/login');
             return;
         }

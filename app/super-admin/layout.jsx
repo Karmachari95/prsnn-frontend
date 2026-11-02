@@ -5,33 +5,35 @@ import { useRouter } from "next/navigation";
 import Loading from "../components/common/Loading";
 
 export default function SuperAdminLayout({ children }) {
-    const { token, userData, loading: authLoading } = useAuth();
+    const { token, userData, loading } = useAuth();
     const router = useRouter();
 
     useEffect(() => {
-        if (authLoading) return;
+        if (loading) return;
 
-        // 1. If not logged in, go to login
-        if (!token) {
+        const effectiveToken = token || (typeof window !== "undefined" ? localStorage.getItem("token") : null);
+        const storedUser = userData || (typeof window !== "undefined" ? JSON.parse(localStorage.getItem("userData") || "null") : null);
+
+        // 1. If not logged in at all, go to login
+        if (!effectiveToken) {
             router.push("/login");
             return;
         }
 
         // 2. Role Check - SuperAdmin Only
-        if (userData && userData.role !== 'superadmin') {
-            router.push("/"); // Or /admin if they are an admin
+        if (storedUser && storedUser.role !== 'superadmin') {
+            router.push(storedUser.role === 'admin' ? '/admin' : '/');
             return;
         }
+    }, [token, userData, loading, router]);
 
-    }, [token, userData, authLoading, router]);
-
-    if (authLoading) {
-        return <Loading message="Verifying super access..." />;
+    if (loading) {
+        return <Loading message="Verifying super admin access..." />;
     }
 
-    // Safety check
-    if (userData?.role !== 'superadmin') {
-        return <Loading message="Unauthorized. Redirecting..." />;
+    const effectiveToken = token || (typeof window !== "undefined" ? localStorage.getItem("token") : null);
+    if (!effectiveToken) {
+        return <Loading message="Redirecting to login..." />;
     }
 
     return <>{children}</>;
