@@ -63,8 +63,6 @@ const allInterestTags = [
   ...new Set(Object.values(modeTags).flat()),
 ];
 
-import liveCompanions from '../data/liveCompanions.json';
-
 const INDIAN_CITIES = [
   "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai", "Kolkata", "Pune", 
   "Ahmedabad", "Jaipur", "Surat", "Lucknow", "Kanpur", "Nagpur", "Indore", 
@@ -114,8 +112,8 @@ const CompanionsContent = () => {
   const searchParams = useSearchParams();
   const mode = searchParams.get('mode');
 
-  const [companions, setCompanions] = useState(liveCompanions);
-  const [loading, setLoading] = useState(false);
+  const [companions, setCompanions] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedCity, setSelectedCity] = useState('');
@@ -158,28 +156,15 @@ const CompanionsContent = () => {
     let cancelled = false;
     (async () => {
       try {
+        setLoading(true);
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
         const data = await cachedFetch(`${apiUrl}/api/companions`);
         const list = normalizeCompanions(data);
-        if (!cancelled && list.length > 0) {
-          // Merge API data with liveCompanions to preserve ALL 14 companions
-          const map = new Map();
-          for (const item of liveCompanions) {
-            map.set(String(item.id || item._id || item.username), { ...item });
-          }
-          for (const item of list) {
-            const key = String(item.id || item._id || item.username);
-            const existing = map.get(key);
-            if (existing) {
-              map.set(key, { ...existing, ...item, gender: item.gender || existing.gender || 'man' });
-            } else {
-              map.set(key, { ...item, gender: item.gender || 'man' });
-            }
-          }
-          setCompanions(Array.from(map.values()));
+        if (!cancelled) {
+          setCompanions(list);
         }
       } catch (error) {
-        if (!cancelled) setCompanions(liveCompanions);
+        console.error("Error fetching companions:", error);
       } finally {
         if (!cancelled) setLoading(false);
       }

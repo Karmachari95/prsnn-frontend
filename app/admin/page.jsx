@@ -5,7 +5,6 @@ import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Loading from "../components/common/Loading";
-import liveCompanions from "../data/liveCompanions.json";
 
 const AdminPanel = () => {
   const { token, userData } = useAuth();
@@ -14,7 +13,7 @@ const AdminPanel = () => {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
-  const [companionsList, setCompanionsList] = useState(liveCompanions || []);
+  const [companionsList, setCompanionsList] = useState([]);
   const [stats, setStats] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
@@ -62,22 +61,6 @@ const AdminPanel = () => {
       }
     } catch (err) {
       console.error("Error fetching all users", err);
-      // Fallback: build list from liveCompanions so list is never empty
-      const companionUsers = (liveCompanions || []).map(c => ({
-        id: c.id || c._id,
-        userId: c.id || c._id,
-        username: c.username,
-        email: c.email || `${c.username}@prsnn.com`,
-        fullName: c.fullName,
-        phoneNumber: c.phoneNumber || 'Not provided',
-        profilePhotoUrl: c.profilePhoto || c.profilePhotoUrl,
-        idProofFrontUrl: c.profilePhoto || c.profilePhotoUrl,
-        role: 'companion',
-        verificationStatus: 'verified',
-        verification_status: 'verified',
-        created_at: new Date().toISOString()
-      }));
-      setAllUsers(companionUsers);
     }
   };
 

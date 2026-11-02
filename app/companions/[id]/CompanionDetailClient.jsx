@@ -6,7 +6,6 @@ import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { useNotification } from '../../context/NotificationContext';
 import Loading from '../../components/common/Loading';
-import liveCompanions from '../../data/liveCompanions.json';
 
 const CompanionDetailClient = () => {
     const params = useParams();
@@ -72,13 +71,6 @@ const CompanionDetailClient = () => {
                 console.error("Fetch companion error:", err);
             }
 
-            // Fallback to real companions database
-            const local = liveCompanions.find(c => String(c.id || c._id) === String(id));
-            if (local) {
-                setFellow(local);
-            } else if (liveCompanions.length > 0) {
-                setFellow(liveCompanions[0]);
-            }
             setLoading(false);
         };
 

@@ -4,7 +4,6 @@ import axios from "axios";
 import { useAuth } from "../../../context/AuthContext";
 import { useRouter, useParams } from "next/navigation";
 import Loading from "../../../components/common/Loading";
-import liveCompanions from "../../../data/liveCompanions.json";
 
 const UserDetailsPage = ({ params }) => {
   const routeParams = useParams();
@@ -44,64 +43,17 @@ const UserDetailsPage = ({ params }) => {
   const fetchUserDetails = async () => {
     try {
       setLoading(true);
-      // First check if this ID is a known curated companion
-      const companionMatch = (liveCompanions || []).find(
-        c => String(c.id || c._id) === String(effectiveId) || c.username === effectiveId
-      );
-
-      // Attempt to fetch from backend
-      try {
-        const res = await axios.get(`${API_URL}/api/admin/user/${effectiveId}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        if (res.data) {
-          setUser(res.data);
-          return;
-        }
-      } catch (backendErr) {
-        console.warn("Backend user fetch failed, checking fallback companion data:", backendErr);
+      const res = await axios.get(`${API_URL}/api/admin/user/${effectiveId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.data) {
+        setUser(res.data);
+      } else {
+        setUser(null);
       }
-
-      // If backend did not find user or errored, use companion fallback
-      if (companionMatch) {
-        setUser({
-          id: companionMatch.id || companionMatch._id,
-          userId: companionMatch.id || companionMatch._id,
-          username: companionMatch.username,
-          email: companionMatch.email || `${companionMatch.username}@prsnn.com`,
-          role: 'companion',
-          verification_status: 'verified',
-          is_verified: true,
-          created_at: new Date().toISOString(),
-          wantsToBeFellow: true,
-          fullName: companionMatch.fullName,
-          phoneNumber: companionMatch.phoneNumber || '+91 98765 43210',
-          profilePhotoUrl: companionMatch.profilePhoto || companionMatch.profilePhotoUrl,
-          idProofFrontUrl: companionMatch.profilePhoto || companionMatch.profilePhotoUrl,
-          idProofBackUrl: companionMatch.profilePhoto || companionMatch.profilePhotoUrl,
-          verifiedBy: 'system@prsnn.com',
-          profile: {
-            fullName: companionMatch.fullName,
-            phoneNumber: companionMatch.phoneNumber || '+91 98765 43210',
-            description: companionMatch.description,
-            pricePerHour: companionMatch.pricePerHour,
-            startTime: companionMatch.start_time || '09:00',
-            endTime: companionMatch.end_time || '20:00',
-            city: companionMatch.city,
-            area: companionMatch.area,
-            gender: companionMatch.gender,
-            createdAt: new Date().toISOString(),
-            idProofFrontUrl: companionMatch.profilePhoto || companionMatch.profilePhotoUrl,
-            idProofBackUrl: companionMatch.profilePhoto || companionMatch.profilePhotoUrl
-          }
-        });
-        return;
-      }
-
-      // If neither, set null
-      setUser(null);
     } catch (err) {
       console.error("Error fetching user details:", err);
+      setUser(null);
     } finally {
       setLoading(false);
     }

@@ -5,13 +5,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import cachedFetch from '../../utils/cache';
 
-import liveCompanions from '../../data/liveCompanions.json';
-
 const cities = ['All', 'Bangalore', 'Hyderabad', 'Mumbai', 'Chennai', 'Vadodara', 'Coimbatore'];
 
 export default function FeaturedCompanions() {
-  const [companions, setCompanions] = useState(liveCompanions);
-  const [loading, setLoading] = useState(false);
+  const [companions, setCompanions] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedCity, setSelectedCity] = useState('All');
   const [matchingFilter, setMatchingFilter] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -33,6 +31,7 @@ export default function FeaturedCompanions() {
     let cancelled = false;
     (async () => {
       try {
+        setLoading(true);
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
         const data = await cachedFetch(`${apiUrl}/api/companions`);
         const list = Array.isArray(data)
@@ -42,24 +41,13 @@ export default function FeaturedCompanions() {
           : Array.isArray(data?.data)
           ? data.data
           : [];
-        if (!cancelled && list.length > 0) {
-          const map = new Map();
-          for (const item of liveCompanions) {
-            map.set(String(item.id || item._id || item.username), { ...item });
-          }
-          for (const item of list) {
-            const key = String(item.id || item._id || item.username);
-            const existing = map.get(key);
-            if (existing) {
-              map.set(key, { ...existing, ...item, gender: item.gender || existing.gender || 'man' });
-            } else {
-              map.set(key, { ...item, gender: item.gender || 'man' });
-            }
-          }
-          setCompanions(Array.from(map.values()));
+        if (!cancelled) {
+          setCompanions(list);
         }
       } catch (err) {
-        if (!cancelled) setCompanions(liveCompanions);
+        console.error("Error fetching featured companions:", err);
+      } finally {
+        if (!cancelled) setLoading(false);
       }
     })();
     return () => {
