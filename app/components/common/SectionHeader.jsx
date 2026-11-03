@@ -20,7 +20,7 @@ export default function SectionHeader({
   return (
     <Reveal
       delay={delay}
-      className={`mb-12 md:mb-16 ${isCenter ? 'text-center mx-auto' : ''} ${className}`}
+      className={`mb-8 md:mb-10 ${isCenter ? 'text-center mx-auto' : ''} ${className}`}
     >
       {eyebrow && (
         <div

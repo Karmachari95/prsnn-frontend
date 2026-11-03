@@ -56,7 +56,7 @@ const categories = [
 
 export default function Modes() {
   return (
-    <section id="modes" className="py-24 md:py-[7.5rem] bg-paper">
+    <section id="modes" className="py-12 md:py-16 bg-paper">
       <div className="max-w-7xl mx-auto px-5 md:px-8">
         <SectionHeader
           eyebrow="Experiences"

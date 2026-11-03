@@ -59,7 +59,7 @@ const Hero = () => {
         <div className="noise absolute inset-0" aria-hidden />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-8 pt-28 md:pt-36 pb-16 md:pb-24 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center min-h-[100svh]">
+      <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-8 pt-28 md:pt-36 pb-12 md:pb-16 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-10 items-center min-h-[85svh] lg:min-h-[90svh]">
         <div className="lg:col-span-6 flex flex-col">
           <div className="inline-flex items-center gap-2.5 self-start px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-6 animate-hero-rise">
             <span className="relative flex h-2.5 w-2.5 shrink-0" aria-hidden>

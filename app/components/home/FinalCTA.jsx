@@ -9,7 +9,7 @@ export default function FinalCTA() {
   const { userData, token } = useAuth();
 
   return (
-    <section className="relative py-24 md:py-32 overflow-hidden bg-ink text-paper">
+    <section className="relative py-16 md:py-20 overflow-hidden bg-ink text-paper">
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
         <div className="absolute top-1/4 -left-20 w-[28rem] h-[28rem] rounded-full bg-moss/50 blur-[100px] animate-blob" />
         <div className="absolute bottom-0 right-0 w-[32rem] h-[32rem] rounded-full bg-signal/20 blur-[110px] animate-blob-delayed" />

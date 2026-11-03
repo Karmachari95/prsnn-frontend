@@ -68,7 +68,7 @@ const items = [
 
 export default function Safety() {
   return (
-    <section id="safety" className="py-24 md:py-[7.5rem] bg-ink text-paper relative overflow-hidden">
+    <section id="safety" className="py-14 md:py-18 bg-ink text-paper relative overflow-hidden">
       <div className="absolute inset-0 opacity-40 pointer-events-none" aria-hidden>
         <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-moss/40 blur-3xl" />
         <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full bg-signal/10 blur-3xl" />

@@ -98,7 +98,7 @@ export default function Testimonials() {
   const bottomRow = [...cardsData].reverse();
 
   return (
-    <section id="testimonials" className="py-24 md:py-[7.5rem] bg-paper overflow-hidden">
+    <section id="testimonials" className="py-12 md:py-16 bg-paper overflow-hidden">
       <div className="max-w-7xl mx-auto px-5 md:px-8 mb-12 md:mb-16">
         <SectionHeader
           eyebrow="Testimonials"

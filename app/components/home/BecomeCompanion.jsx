@@ -17,7 +17,7 @@ export default function BecomeCompanion() {
   const { token, userData } = useAuth();
 
   return (
-    <section id="become" className="py-24 md:py-[7.5rem] bg-mist">
+    <section id="become" className="py-12 md:py-16 bg-mist">
       <div className="max-w-7xl mx-auto px-5 md:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch overflow-hidden rounded-[1.75rem] bg-paper border border-line shadow-neoblack">
           <Reveal className="lg:col-span-6 relative min-h-[300px] lg:min-h-[520px]">

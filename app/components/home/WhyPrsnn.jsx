@@ -21,7 +21,7 @@ const cards = [
 
 export default function WhyPrsnn() {
   return (
-    <section id="why" className="py-24 md:py-[7.5rem] bg-paper">
+    <section id="why" className="py-12 md:py-16 bg-paper">
       <div className="max-w-7xl mx-auto px-5 md:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           <Reveal className="lg:col-span-5">

@@ -41,7 +41,7 @@ export default function FAQ() {
   const [open, setOpen] = useState(0);
 
   return (
-    <section id="faq" className="py-24 md:py-[7.5rem] bg-paper">
+    <section id="faq" className="py-12 md:py-16 bg-paper">
       <div className="max-w-3xl mx-auto px-5 md:px-8">
         <SectionHeader
           eyebrow="FAQ"

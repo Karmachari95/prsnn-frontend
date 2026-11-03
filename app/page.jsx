@@ -3,12 +3,10 @@ import { useAuth } from './context/AuthContext';
 import { useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Hero from './components/home/Hero';
-import RealMoments from './components/home/RealMoments';
 import Modes from './components/home/Modes';
 import HowItWorks from './components/home/HowItWorks';
 import WhyPrsnn from './components/home/WhyPrsnn';
 import Safety from './components/home/Safety';
-import WhatThisIsNot from './components/home/WhatThisIsNot';
 import Testimonials from './components/home/Testimonials';
 import BecomeCompanion from './components/home/BecomeCompanion';
 import FAQ from './components/home/FAQ';
@@ -38,12 +36,10 @@ export default function Home() {
   return (
     <main className="bg-mist min-h-screen">
       <Hero />
-      <RealMoments />
       <Modes />
       <HowItWorks />
       <WhyPrsnn />
       <Safety />
-      <WhatThisIsNot />
       <Testimonials />
       <BecomeCompanion />
       <FAQ />
