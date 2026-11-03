@@ -14,11 +14,12 @@ const UserDetailsPage = ({ params }) => {
   const [loading, setLoading] = useState(true);
   const [enlargedImage, setEnlargedImage] = useState(null);
 
-  // Extract effective ID even if served via default.html SPA fallback
+  // Extract effective ID even if served via default/index.html SPA fallback
   const getEffectiveId = () => {
     let id = rawId;
     if (typeof window !== 'undefined' && (!id || id === 'default')) {
-      const parts = window.location.pathname.split('/').filter(Boolean);
+      const cleanPath = window.location.pathname.replace(/\/$/, '');
+      const parts = cleanPath.split('/').filter(Boolean);
       const last = parts[parts.length - 1];
       if (last && last !== 'user' && last !== 'admin') {
         id = last.replace('.html', '');
@@ -31,20 +32,28 @@ const UserDetailsPage = ({ params }) => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
 
   useEffect(() => {
-    if (!token) return;
-    if (userData && !['admin', 'superadmin'].includes(userData.role)) {
+    const activeToken = token || (typeof window !== 'undefined' ? localStorage.getItem('token') : null);
+    if (!activeToken) return;
+
+    const storedUser = userData || (typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('userData') || 'null') : null);
+    if (storedUser && !['admin', 'superadmin'].includes(storedUser.role)) {
        router.push('/');
        return;
     }
-    fetchUserDetails();
+    if (effectiveId && effectiveId !== 'default') {
+      fetchUserDetails(activeToken);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, effectiveId]);
+  }, [token, effectiveId, userData]);
 
-  const fetchUserDetails = async () => {
+  const fetchUserDetails = async (activeToken) => {
+    const authToken = activeToken || token || (typeof window !== 'undefined' ? localStorage.getItem('token') : null);
+    if (!authToken || !effectiveId || effectiveId === 'default') return;
+
     try {
       setLoading(true);
       const res = await axios.get(`${API_URL}/api/admin/user/${effectiveId}`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${authToken}` }
       });
       if (res.data) {
         setUser(res.data);
@@ -53,6 +62,20 @@ const UserDetailsPage = ({ params }) => {
       }
     } catch (err) {
       console.error("Error fetching user details:", err);
+      // Fallback: search in all-users list if direct lookup returns 404
+      try {
+        const fallbackRes = await axios.get(`${API_URL}/api/admin/all-users`, {
+          headers: { Authorization: `Bearer ${authToken}` }
+        });
+        const usersList = fallbackRes.data?.users || (Array.isArray(fallbackRes.data) ? fallbackRes.data : []);
+        const found = usersList.find(u => String(u._id || u.id) === String(effectiveId));
+        if (found) {
+          setUser(found);
+          return;
+        }
+      } catch (fbErr) {
+        console.warn("Fallback all-users lookup error:", fbErr);
+      }
       setUser(null);
     } finally {
       setLoading(false);

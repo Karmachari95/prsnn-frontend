@@ -32,11 +32,11 @@ export default function FinalCTA() {
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center items-center">
             <div className="relative group">
-              <div className="absolute -inset-1 rounded-full bg-emerald-500/30 blur-lg group-hover:bg-emerald-400/50 transition-all opacity-80" />
+              <div className="absolute -inset-1 rounded-full bg-signal/30 blur-lg group-hover:bg-signal/50 transition-all opacity-80" />
               <button
                 type="button"
                 onClick={() => router.push('/companions')}
-                className="relative inline-flex items-center justify-center text-base font-bold px-8 py-4 rounded-full bg-[#2A4F40] text-white hover:bg-[#34604E] hover:scale-[1.03] active:scale-[0.98] transition-all border border-white/20 shadow-lg"
+                className="relative inline-flex items-center justify-center text-base font-bold px-8 py-4 rounded-full bg-signal text-ink hover:bg-signal-deep hover:scale-[1.03] active:scale-[0.98] transition-all shadow-lg"
               >
                 Find a Companion
               </button>

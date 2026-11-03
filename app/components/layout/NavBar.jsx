@@ -112,7 +112,7 @@ const NavBarInner = () => {
               <button
                 type="button"
                 onClick={() => router.push("/companions")}
-                className="bg-[#2A4F40] text-white px-4 md:px-6 py-2.5 md:py-3 rounded-full font-bold text-sm tracking-wide hover:bg-[#34604E] hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap shadow-sm border border-white/20"
+                className="bg-signal text-ink px-4 md:px-6 py-2.5 md:py-3 rounded-full font-bold text-sm tracking-wide hover:bg-signal-deep hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap shadow-sm"
               >
                 Find Companion
               </button>

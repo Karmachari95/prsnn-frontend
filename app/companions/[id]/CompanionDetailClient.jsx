@@ -9,11 +9,26 @@ import Loading from '../../components/common/Loading';
 
 const CompanionDetailClient = () => {
     const params = useParams();
-    const id = params?.id;
+    const rawId = params?.id;
     const router = useRouter();
     const { token, userData } = useAuth();
     const { showNotification } = useNotification();
     
+    // Extract effective ID even if served via default/index.html SPA fallback
+    const getEffectiveId = () => {
+        let compId = rawId;
+        if (typeof window !== 'undefined' && (!compId || compId === 'default')) {
+            const cleanPath = window.location.pathname.replace(/\/$/, '');
+            const parts = cleanPath.split('/').filter(Boolean);
+            const last = parts[parts.length - 1];
+            if (last && last !== 'companions') {
+                compId = last.replace('.html', '');
+            }
+        }
+        return compId || 'default';
+    };
+
+    const id = getEffectiveId();
     const [fellow, setFellow] = useState(null);
     const [loading, setLoading] = useState(true);
     const [step, setStep] = useState('review'); // review -> hesitation -> success
@@ -46,7 +61,7 @@ const CompanionDetailClient = () => {
 
     useEffect(() => {
         const fetchFellow = async () => {
-            if (!id) return;
+            if (!id || id === 'default') return;
             try {
                 try {
                     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';

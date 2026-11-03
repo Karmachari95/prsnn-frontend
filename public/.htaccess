@@ -84,19 +84,19 @@
   # Dynamic route SPA fallbacks for Next.js static exports
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^admin/user/(.+)$ /admin/user/default.html [L]
+  RewriteRule ^admin/user/(.+)$ /admin/user/default/index.html [L]
 
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^super-admin/admin/(.+)$ /super-admin/admin/default.html [L]
+  RewriteRule ^super-admin/admin/(.+)$ /super-admin/admin/default/index.html [L]
 
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^companions/(.+)$ /companions/default.html [L]
+  RewriteRule ^companions/(.+)$ /companions/default/index.html [L]
 
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^session/(.+)$ /session/default.html [L]
+  RewriteRule ^session/(.+)$ /session/default/index.html [L]
 
   ErrorDocument 404 /404.html
 </IfModule>

@@ -7,22 +7,39 @@ import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
 
 export default function SessionPage() {
-    const { id } = useParams();
+    const routeParams = useParams();
+    const rawId = routeParams?.id;
+
+    // Extract effective ID even if served via default/index.html SPA fallback
+    const getEffectiveId = () => {
+        let bookingId = rawId;
+        if (typeof window !== 'undefined' && (!bookingId || bookingId === 'default')) {
+            const cleanPath = window.location.pathname.replace(/\/$/, '');
+            const parts = cleanPath.split('/').filter(Boolean);
+            const last = parts[parts.length - 1];
+            if (last && last !== 'session') {
+                bookingId = last.replace('.html', '');
+            }
+        }
+        return bookingId || 'default';
+    };
+
+    const id = getEffectiveId();
     const router = useRouter();
     const { userData, token } = useAuth();
     const [booking, setBooking] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!token) {
-            // Wait for auth to initialize or redirect
+        const activeToken = token || (typeof window !== 'undefined' ? localStorage.getItem('token') : null);
+        if (!activeToken || !id || id === 'default') {
             return; 
         }
 
         const fetchBooking = async () => {
             try {
                  const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/bookings/${id}`, {
-                     headers: { Authorization: `Bearer ${token}` }
+                     headers: { Authorization: `Bearer ${activeToken}` }
                  });
                  setBooking(res.data);
             } catch (err) {
@@ -33,10 +50,8 @@ export default function SessionPage() {
             }
         };
         
-        if (userData) {
-            fetchBooking();
-        }
-    }, [id, token, userData, router]);
+        fetchBooking();
+    }, [id, token, router]);
 
     if (loading || !userData) {
         return (

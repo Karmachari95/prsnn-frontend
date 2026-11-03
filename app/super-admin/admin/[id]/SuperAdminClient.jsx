@@ -7,7 +7,23 @@ import Loading from "../../../components/common/Loading";
 
 const AdminDetailsPage = ({ params }) => {
   const routeParams = useParams();
-  const id = routeParams?.id || params?.id;
+  const rawId = routeParams?.id || params?.id;
+
+  // Extract effective ID even if served via default/index.html SPA fallback
+  const getEffectiveId = () => {
+    let adminId = rawId;
+    if (typeof window !== 'undefined' && (!adminId || adminId === 'default')) {
+      const cleanPath = window.location.pathname.replace(/\/$/, '');
+      const parts = cleanPath.split('/').filter(Boolean);
+      const last = parts[parts.length - 1];
+      if (last && last !== 'admin') {
+        adminId = last.replace('.html', '');
+      }
+    }
+    return adminId || 'default';
+  };
+
+  const id = getEffectiveId();
   const { token, userData } = useAuth();
   const router = useRouter();
   const [admin, setAdmin] = useState(null);
@@ -15,20 +31,26 @@ const AdminDetailsPage = ({ params }) => {
   const [enlargedImage, setEnlargedImage] = useState(null);
 
   useEffect(() => {
-    if (!token) return;
+    const activeToken = token || (typeof window !== 'undefined' ? localStorage.getItem('token') : null);
+    if (!activeToken) return;
     if (userData && userData.role !== 'superadmin') {
        router.push('/admin');
        return;
     }
-    fetchAdminDetails();
+    if (id && id !== 'default') {
+      fetchAdminDetails(activeToken);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, id, userData]);
 
-  const fetchAdminDetails = async () => {
+  const fetchAdminDetails = async (activeToken) => {
+    const authToken = activeToken || token || (typeof window !== 'undefined' ? localStorage.getItem('token') : null);
+    if (!authToken || !id || id === 'default') return;
+
     try {
       // Re-using the getUserDetails endpoint which now supports admins too
       const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/user/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${authToken}` }
       });
       setAdmin(res.data);
     } catch (err) {
