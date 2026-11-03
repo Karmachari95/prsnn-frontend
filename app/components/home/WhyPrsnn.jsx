@@ -27,7 +27,7 @@ export default function WhyPrsnn() {
           <Reveal className="lg:col-span-5">
             <div className="relative rounded-[1.75rem] overflow-hidden aspect-[4/5] border border-line shadow-neoblack">
               <Image
-                src="/companions-banner.png"
+                src="/companions-banner.webp"
                 alt="Calm shared presence"
                 fill
                 sizes="(max-width:1024px) 100vw, 40vw"

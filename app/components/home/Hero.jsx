@@ -3,7 +3,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useAuth } from '../../context/AuthContext';
-import axios from 'axios';
+import { cachedFetch } from '../../utils/cache';
 
 const floatingChips = [
   { label: 'Verified', pos: 'top-4 left-4 md:-left-4' },
@@ -28,7 +28,6 @@ const Hero = () => {
     let cancelled = false;
     const fetchStats = async () => {
       try {
-        const { cachedFetch } = await import('../../utils/cache');
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
         const data = await cachedFetch(`${apiUrl}/api/public/stats`);
         if (!cancelled && data) {
@@ -48,7 +47,7 @@ const Hero = () => {
     <section className="relative w-full overflow-hidden bg-[#162720] text-paper">
       <div className="absolute inset-0">
         <Image
-          src="/herobg.png"
+          src="/herobg.webp"
           alt=""
           fill
           priority
@@ -129,12 +128,11 @@ const Hero = () => {
           <div className="relative mx-auto max-w-md lg:max-w-none">
             <div className="relative rounded-[1.75rem] overflow-hidden border border-white/10 shadow-[0_32px_80px_-24px_rgba(0,0,0,0.55)] aspect-[4/5] md:aspect-[5/6]">
               <Image
-                src="/hero-right.png"
+                src="/hero-right.webp"
                 alt="Companions sharing easy company"
                 fill
                 sizes="(max-width:1024px) 90vw, 480px"
                 className="object-cover object-center"
-                priority
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent" />
             </div>

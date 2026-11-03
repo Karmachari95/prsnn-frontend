@@ -17,7 +17,7 @@ const modes = [
     desc: 'Attend weddings, events, cafés, hospital visits, and social gatherings with a trusted companion.',
     href: '/companions?mode=dont-go-alone',
     tags: ['Events', 'Cafés', 'Visits'],
-    image: '/mode-dont-go-alone.png',
+    image: '/mode-dont-go-alone.webp',
     Icon: IconAlone,
   },
   {
@@ -25,7 +25,7 @@ const modes = [
     desc: 'Stay focused with quiet company while studying, working, or reading.',
     href: '/companions?mode=sit-with-me',
     tags: ['Study', 'Work', 'Silence'],
-    image: '/mode-sit-with-me.png',
+    image: '/mode-sit-with-me.webp',
     Icon: IconSit,
   },
   {
@@ -33,7 +33,7 @@ const modes = [
     desc: 'Discover cafés, parks, food streets, museums, and neighborhoods with someone who shares your pace.',
     href: '/companions?mode=explore-together',
     tags: ['Walks', 'Food', 'City'],
-    image: '/mode-explore-together.png',
+    image: '/mode-explore-together.webp',
     Icon: IconExplore,
   },
   {
@@ -41,7 +41,7 @@ const modes = [
     desc: 'Sometimes sharing the same space is enough.',
     href: '/companions?mode=be-around',
     tags: ['Presence', 'Home', 'Calm'],
-    image: '/mode-be-around.png',
+    image: '/mode-be-around.webp',
     Icon: IconAround,
   },
 ];

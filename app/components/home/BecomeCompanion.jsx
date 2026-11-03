@@ -22,7 +22,7 @@ export default function BecomeCompanion() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch overflow-hidden rounded-[1.75rem] bg-paper border border-line shadow-neoblack">
           <Reveal className="lg:col-span-6 relative min-h-[300px] lg:min-h-[520px]">
             <Image
-              src="/mode-explore-together.png"
+              src="/mode-explore-together.webp"
               alt="Become a companion"
               fill
               sizes="(max-width:1024px) 100vw, 50vw"

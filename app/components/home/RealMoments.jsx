@@ -9,37 +9,37 @@ const moments = [
   {
     title: 'Events',
     desc: 'Never walk into gatherings alone — show up with calm company beside you.',
-    image: '/moment-events.png',
+    image: '/moment-events.webp',
     href: '/companions?mode=dont-go-alone',
   },
   {
     title: 'Hospital Visit',
     desc: 'Waiting rooms feel lighter when someone sits with you.',
-    image: '/moment-hospital.png',
+    image: '/moment-hospital.webp',
     href: '/companions?mode=dont-go-alone',
   },
   {
     title: 'Study Session',
     desc: 'Quiet focus with body-doubling that keeps you on track.',
-    image: '/mode-sit-with-me.png',
+    image: '/mode-sit-with-me.webp',
     href: '/companions?mode=sit-with-me',
   },
   {
     title: 'Weekend Café',
     desc: 'Coffee tastes better when the table isn’t empty.',
-    image: '/hero-right.png',
+    image: '/hero-right.webp',
     href: '/companions?mode=dont-go-alone',
   },
   {
     title: 'City Walk',
     desc: 'Explore parks and streets at a pace that feels right.',
-    image: '/mode-explore-together.png',
+    image: '/mode-explore-together.webp',
     href: '/companions?mode=explore-together',
   },
   {
     title: 'New in Town',
     desc: 'Settle into a new city with soft, pressure-free presence.',
-    image: '/mode-be-around.png',
+    image: '/mode-be-around.webp',
     href: '/companions?mode=be-around',
   },
 ];

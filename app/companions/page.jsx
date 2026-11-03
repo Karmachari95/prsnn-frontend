@@ -19,28 +19,28 @@ const modesMeta = [
     title: "Don't Go Alone",
     short: 'Events & cafés',
     Icon: IconAlone,
-    image: '/mode-dont-go-alone.png',
+    image: '/mode-dont-go-alone.webp',
   },
   {
     id: 'sit-with-me',
     title: 'Sit With Me',
     short: 'Quiet focus',
     Icon: IconSit,
-    image: '/mode-sit-with-me.png',
+    image: '/mode-sit-with-me.webp',
   },
   {
     id: 'explore-together',
     title: 'Explore Together',
     short: 'Walks & city',
     Icon: IconExplore,
-    image: '/mode-explore-together.png',
+    image: '/mode-explore-together.webp',
   },
   {
     id: 'be-around',
     title: 'Quiet Company',
     short: 'Soft presence',
     Icon: IconAround,
-    image: '/mode-be-around.png',
+    image: '/mode-be-around.webp',
   },
 ];
 
@@ -112,8 +112,36 @@ const CompanionsContent = () => {
   const searchParams = useSearchParams();
   const mode = searchParams.get('mode');
 
-  const [companions, setCompanions] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [companions, setCompanions] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
+        const raw = sessionStorage.getItem(`prsnn_cache_${apiUrl}/api/companions-{}`);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          const list = normalizeCompanions(parsed?.data);
+          if (list.length > 0) return list;
+        }
+      } catch {}
+    }
+    return [];
+  });
+
+  const [loading, setLoading] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
+        const raw = sessionStorage.getItem(`prsnn_cache_${apiUrl}/api/companions-{}`);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          const list = normalizeCompanions(parsed?.data);
+          if (list.length > 0) return false;
+        }
+      } catch {}
+    }
+    return true;
+  });
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedCity, setSelectedCity] = useState('');

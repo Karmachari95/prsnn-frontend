@@ -8,8 +8,42 @@ import cachedFetch from '../../utils/cache';
 const cities = ['All', 'Bangalore', 'Hyderabad', 'Mumbai', 'Chennai', 'Vadodara', 'Coimbatore'];
 
 export default function FeaturedCompanions() {
-  const [companions, setCompanions] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [companions, setCompanions] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
+        const raw = sessionStorage.getItem(`prsnn_cache_${apiUrl}/api/companions-{}`);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          const data = parsed?.data;
+          const list = Array.isArray(data)
+            ? data
+            : Array.isArray(data?.companions)
+            ? data.companions
+            : Array.isArray(data?.data)
+            ? data.data
+            : [];
+          if (list.length > 0) return list;
+        }
+      } catch {}
+    }
+    return [];
+  });
+
+  const [loading, setLoading] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
+        const raw = sessionStorage.getItem(`prsnn_cache_${apiUrl}/api/companions-{}`);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed?.data?.length > 0 || parsed?.data?.companions?.length > 0) return false;
+        }
+      } catch {}
+    }
+    return true;
+  });
+
   const [selectedCity, setSelectedCity] = useState('All');
   const [matchingFilter, setMatchingFilter] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -31,7 +65,6 @@ export default function FeaturedCompanions() {
     let cancelled = false;
     (async () => {
       try {
-        setLoading(true);
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
         const data = await cachedFetch(`${apiUrl}/api/companions`);
         const list = Array.isArray(data)
@@ -41,7 +74,7 @@ export default function FeaturedCompanions() {
           : Array.isArray(data?.data)
           ? data.data
           : [];
-        if (!cancelled) {
+        if (!cancelled && list.length > 0) {
           setCompanions(list);
         }
       } catch (err) {

@@ -9,19 +9,19 @@ const steps = [
     n: '01',
     title: 'Choose Your Experience',
     desc: 'Pick Don’t Go Alone, Sit With Me, Explore Together, or Quiet Company — so everyone knows the vibe before you meet.',
-    image: '/step1.png',
+    image: '/step1.webp',
   },
   {
     n: '02',
     title: 'Select Verified Companion',
     desc: 'Browse manually verified profiles, availability, and reviews. Book a public meetup that fits your day.',
-    image: '/step2.png',
+    image: '/step2.webp',
   },
   {
     n: '03',
     title: 'Meet Safely',
     desc: 'Meet in a public place. Leave whenever you like. Clear boundaries. No pressure. No expectations beyond presence.',
-    image: '/step3.png',
+    image: '/step3.webp',
   },
 ];
 
