@@ -70,7 +70,7 @@ export default function Modes() {
             <Link
               key={c.label}
               href={`/companions?tag=${encodeURIComponent(c.tag)}`}
-              className="group shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-line bg-mist hover:bg-[#1E3A2F] hover:text-white hover:border-[#1E3A2F] transition-all duration-200 text-sm font-semibold text-ink shadow-sm"
+              className="group shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-line bg-mist hover:bg-moss hover:text-paper hover:border-moss transition-all duration-200 text-sm font-semibold text-ink shadow-sm"
             >
               <span className="text-base">{c.icon}</span>
               <span>{c.label}</span>

@@ -55,7 +55,7 @@ const NavBarInner = () => {
         {/* Always the dark pill. The old transparent top-of-page state relied on
             sitting over the dark hero; on any pale page its white text vanished. */}
         <header
-          className="pointer-events-auto w-full max-w-6xl rounded-full border bg-[#1E3A2F] border-white/20 shadow-[0_12px_40px_-12px_rgba(30,58,47,0.7)] backdrop-blur-xl"
+          className="pointer-events-auto w-full max-w-6xl rounded-full border bg-ink/75 border-white/15 shadow-[0_12px_40px_-12px_rgba(14,17,13,0.55)] backdrop-blur-xl"
         >
           <div className="flex items-center justify-between gap-3 h-14 md:h-[3.75rem] px-3.5 md:px-5">
             <div className="flex items-center gap-2 min-w-0">
@@ -78,7 +78,7 @@ const NavBarInner = () => {
                 onClick={() => router.push("/")}
                 className="font-display text-xl md:text-2xl font-extrabold tracking-tight text-white lowercase leading-none px-1"
               >
-                prsnn<span className="text-[#A3E635]">.</span>
+                prsnn<span className="text-signal">.</span>
               </button>
             </div>
 

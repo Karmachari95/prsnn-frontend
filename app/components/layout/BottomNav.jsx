@@ -77,15 +77,15 @@ const BottomNav = () => {
                             key={item.label}
                             href={item.path}
                             className={`flex flex-col items-center justify-center flex-1 py-1.5 transition-colors relative ${
-                                isActive ? 'text-[#1E3A2F]' : 'text-gray-400 hover:text-gray-600'
+                                isActive ? 'text-ink' : 'text-gray-400 hover:text-gray-600'
                             }`}
                         >
                             {item.icon(isActive)}
-                            <span className={`text-[10px] mt-1 font-semibold tracking-tight truncate max-w-[64px] ${isActive ? 'text-[#1E3A2F] font-bold' : 'text-gray-500'}`}>
+                            <span className={`text-[10px] mt-1 font-semibold tracking-tight truncate max-w-[64px] ${isActive ? 'text-ink font-bold' : 'text-gray-500'}`}>
                                 {item.label}
                             </span>
                             {isActive && (
-                                <span className="absolute bottom-1 w-1 h-1 rounded-full bg-[#2F4A34]" />
+                                <span className="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-signal" />
                             )}
                         </Link>
                     );

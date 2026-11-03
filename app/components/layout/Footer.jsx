@@ -7,10 +7,10 @@ const Footer = () => {
   const { userData } = useAuth();
 
   return (
-    <footer className="relative w-full bg-[#14231C] text-white overflow-hidden mt-0 border-t border-[#1E3A2F]">
-      <div className="absolute inset-0 opacity-[0.08] pointer-events-none" aria-hidden>
-        <div className="absolute -top-24 -right-24 w-[28rem] h-[28rem] rounded-full bg-[#2F4A34] blur-3xl" />
-        <div className="absolute -bottom-32 -left-16 w-[24rem] h-[24rem] rounded-full bg-[#1E3A2F] blur-3xl" />
+    <footer className="relative w-full bg-ink text-paper overflow-hidden mt-0">
+      <div className="absolute inset-0 opacity-[0.05] pointer-events-none" aria-hidden>
+        <div className="absolute -top-24 -right-24 w-[28rem] h-[28rem] rounded-full bg-signal blur-3xl" />
+        <div className="absolute -bottom-32 -left-16 w-[24rem] h-[24rem] rounded-full bg-moss-mid blur-3xl" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-16 pb-10">
@@ -22,13 +22,10 @@ const Footer = () => {
             >
               prsnn<span className="text-signal">.</span>
             </Link>
-            <p className="mt-3 text-[#2F4A34] font-semibold text-xs tracking-wider uppercase">
-              Presence without pressure.
+            <p className="mt-5 text-paper/55 font-medium leading-relaxed max-w-sm text-base">
+              Verified companionship for moments that feel lighter with someone nearby.
             </p>
-            <p className="mt-3 text-paper/60 font-normal leading-relaxed max-w-sm text-sm">
-              Sometimes, you don't need advice or a big conversation. You just need someone beside you. PRSNN helps you find trusted, platonic companionship for everyday moments.
-            </p>
-            <div className="flex gap-3 mt-6">
+            <div className="flex gap-3 mt-8">
               {[
                 { href: 'https://x.com/prsnn_india', label: 'X' },
                 { href: 'https://www.linkedin.com/company/112081521', label: 'in' },
@@ -39,7 +36,7 @@ const Footer = () => {
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-xs font-semibold text-paper/70 hover:bg-[#2F4A34] hover:text-white hover:border-[#2F4A34] transition-colors duration-250"
+                  className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-xs font-semibold text-paper/70 hover:bg-signal hover:text-ink hover:border-signal transition-colors duration-250"
                 >
                   {s.label}
                 </a>
@@ -53,37 +50,37 @@ const Footer = () => {
             </h4>
             <ul className="space-y-3.5 text-[15px]">
               <li>
-                <Link href="/companions" className="text-paper/70 hover:text-white transition-colors">
+                <Link href="/companions" className="text-paper/70 hover:text-signal transition-colors">
                   Find Companion
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-paper/70 hover:text-white transition-colors">
+                <Link href="/about" className="text-paper/70 hover:text-signal transition-colors">
                   Our Story & Founder
                 </Link>
               </li>
               <li>
-                <Link href="/safety" className="text-paper/70 hover:text-white transition-colors">
+                <Link href="/safety" className="text-paper/70 hover:text-signal transition-colors">
                   Safety & Boundaries
                 </Link>
               </li>
               <li>
-                <Link href="/login?role=companion" className="text-paper/70 hover:text-white transition-colors">
+                <Link href="/login?role=companion" className="text-paper/70 hover:text-signal transition-colors">
                   Become Companion
                 </Link>
               </li>
               <li>
-                <Link href="/how-it-works" className="text-paper/70 hover:text-white transition-colors">
+                <Link href="/how-it-works" className="text-paper/70 hover:text-signal transition-colors">
                   How It Works
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="text-paper/70 hover:text-white transition-colors">
+                <Link href="/faq" className="text-paper/70 hover:text-signal transition-colors">
                   FAQ
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-paper/70 hover:text-white transition-colors">
+                <Link href="/contact" className="text-paper/70 hover:text-signal transition-colors">
                   Contact
                 </Link>
               </li>
@@ -104,7 +101,7 @@ const Footer = () => {
                 ['/dispute-policy', 'Disputes & Refunds'],
               ].map(([href, label]) => (
                 <li key={href + label}>
-                  <Link href={href} className="text-paper/70 hover:text-white transition-colors">
+                  <Link href={href} className="text-paper/70 hover:text-signal transition-colors">
                     {label}
                   </Link>
                 </li>

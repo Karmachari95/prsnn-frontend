@@ -32,9 +32,9 @@ export default function BecomeCompanion() {
             <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-white/90 backdrop-blur-md border border-line flex items-center justify-between shadow-sm">
               <div>
                 <p className="text-xs font-bold text-ink/50 uppercase tracking-wider">Average Earnings</p>
-                <p className="text-xl font-bold text-[#1E3A2F]">₹400 – ₹800 <span className="text-xs text-ink/50 font-medium">/ hour</span></p>
+                <p className="text-xl font-bold text-moss">₹400 – ₹800 <span className="text-xs text-ink/50 font-medium">/ hour</span></p>
               </div>
-              <span className="px-3 py-1.5 rounded-full bg-[#E8EFE9] text-[#1E3A2F] text-xs font-bold">
+              <span className="px-3 py-1.5 rounded-full bg-moss-soft text-moss text-xs font-bold">
                 ✓ 100% Verified
               </span>
             </div>
@@ -42,7 +42,7 @@ export default function BecomeCompanion() {
 
           <div className="lg:col-span-6 p-8 md:p-12 lg:p-14 flex flex-col justify-center">
             <Reveal>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#2F4A34] mb-3">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-moss mb-3">
                 Join the Network
               </p>
               <h2 className="font-display text-[clamp(2rem,4vw,3rem)] font-bold text-ink tracking-tight leading-[1.1]">

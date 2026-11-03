@@ -22,17 +22,17 @@ export default function Logo({
   };
 
   const textColors = {
-    dark: 'text-[#1E3A2F]', // Forest green
+    dark: 'text-ink',
     light: 'text-white',
     white: 'text-white',
-    ink: 'text-[#141A17]',
+    ink: 'text-ink',
   };
 
   const dotColors = {
-    dark: 'text-[#2F4A34]', // Warm terracotta
-    light: 'text-[#E5896B]',
-    white: 'text-[#2F4A34]',
-    ink: 'text-[#2F4A34]',
+    dark: 'text-signal',
+    light: 'text-signal',
+    white: 'text-signal',
+    ink: 'text-signal',
   };
 
   const content = (
