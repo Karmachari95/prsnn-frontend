@@ -10,11 +10,14 @@ const DeletedAccountsPage = () => {
     const router = useRouter();
     const [accounts, setAccounts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [selectedAccount, setSelectedAccount] = useState(null);
+
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://prssn-backend.onrender.com';
 
     useEffect(() => {
         if (!token) return;
-        if (userData && userData.role !== 'superadmin') {
+        if (userData && !['admin', 'superadmin'].includes(userData.role)) {
            router.push('/admin');
            return;
         }
@@ -25,12 +28,15 @@ const DeletedAccountsPage = () => {
     const fetchDeletedAccounts = async () => {
         try {
             setLoading(true);
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/deleted-accounts`, {
+            setError(null);
+            const res = await axios.get(`${API_URL}/api/admin/deleted-accounts`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            setAccounts(res.data.accounts);
+            const list = Array.isArray(res.data?.accounts) ? res.data.accounts : (Array.isArray(res.data) ? res.data : []);
+            setAccounts(list);
         } catch (err) {
             console.error("Error fetching deleted accounts", err);
+            setError(err.response?.data?.message || "Failed to load deleted accounts");
         } finally {
             setLoading(false);
         }
@@ -38,10 +44,12 @@ const DeletedAccountsPage = () => {
 
     if(!token) return <Loading message="Authenticating..." />;
 
+    const returnPath = userData?.role === 'superadmin' ? '/super-admin' : '/admin';
+
     return (
         <div className="min-h-screen bg-gray-50 p-6 md:p-12 font-sans relative">
             <div className="max-w-7xl mx-auto relative z-10">
-                <button onClick={() => router.push('/super-admin')} className="mb-8 text-gray-500 hover:text-black flex items-center gap-2 font-medium transition-colors">
+                <button onClick={() => router.push(returnPath)} className="mb-8 text-gray-500 hover:text-black flex items-center gap-2 font-medium transition-colors">
                      &larr; Back to Dashboard
                 </button>
 
@@ -102,8 +110,8 @@ const DeletedAccountsPage = () => {
                                         </div>
                                         
                                         <div className="text-sm font-medium text-gray-500 space-y-1 md:text-right">
-                                            <p>Created: <span className="text-gray-900">{new Date(account.created_at).toLocaleDateString()}</span></p>
-                                            <p>Deleted: <span className="text-red-600 font-bold">{new Date(account.deleted_at).toLocaleDateString()}</span></p>
+                                            <p>Created: <span className="text-gray-900">{account.created_at ? new Date(account.created_at).toLocaleDateString() : '—'}</span></p>
+                                            <p>Deleted: <span className="text-red-600 font-bold">{account.deleted_at ? new Date(account.deleted_at).toLocaleDateString() : '—'}</span></p>
                                         </div>
 
                                         <button 
@@ -200,16 +208,22 @@ const DeletedAccountsPage = () => {
                                     </div>
                                     <div>
                                         <p className="text-red-400 font-bold text-xs uppercase mb-1">Deleted At</p>
-                                        <p className="text-gray-900 font-medium">{new Date(selectedAccount.deleted_at).toLocaleString()}</p>
+                                        <p className="text-gray-900 font-medium">{selectedAccount.deleted_at ? new Date(selectedAccount.deleted_at).toLocaleString() : '—'}</p>
                                     </div>
                                     <div>
                                         <p className="text-red-400 font-bold text-xs uppercase mb-1">Account Created</p>
-                                        <p className="text-gray-900 font-medium">{new Date(selectedAccount.created_at).toLocaleString()}</p>
+                                        <p className="text-gray-900 font-medium">{selectedAccount.created_at ? new Date(selectedAccount.created_at).toLocaleString() : '—'}</p>
                                     </div>
                                     <div>
                                         <p className="text-red-400 font-bold text-xs uppercase mb-1">Account Lifespan</p>
                                         <p className="text-gray-900 font-medium">
-                                            {Math.floor((new Date(selectedAccount.deleted_at) - new Date(selectedAccount.created_at)) / (1000 * 60 * 60 * 24))} days
+                                            {(() => {
+                                                const d1 = selectedAccount.created_at ? new Date(selectedAccount.created_at).getTime() : null;
+                                                const d2 = selectedAccount.deleted_at ? new Date(selectedAccount.deleted_at).getTime() : Date.now();
+                                                if (!d1 || isNaN(d1) || isNaN(d2)) return '—';
+                                                const diffDays = Math.max(0, Math.floor((d2 - d1) / (1000 * 60 * 60 * 24)));
+                                                return `${diffDays} days`;
+                                            })()}
                                         </p>
                                     </div>
                                 </div>

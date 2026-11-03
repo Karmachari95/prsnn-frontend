@@ -286,6 +286,13 @@ const AdminPanel = () => {
               <span>{refreshing ? 'Syncing...' : 'Refresh'}</span>
             </button>
 
+            <Link
+              href="/super-admin/deleted-accounts"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs font-bold bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 transition-colors shadow-sm"
+            >
+              <span>🗑️ Deleted Accounts</span>
+            </Link>
+
             {userData?.role === 'superadmin' && (
               <Link
                 href="/super-admin"
@@ -483,6 +490,13 @@ const AdminPanel = () => {
                   {companionsList.length}
                 </span>
               </button>
+
+              <Link
+                href="/super-admin/deleted-accounts"
+                className="px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all flex items-center gap-2 bg-red-50 text-red-700 hover:bg-red-100 hover:border-red-300 border border-red-200"
+              >
+                <span>🗑️ Deleted Accounts</span>
+              </Link>
             </div>
 
             {/* View Mode Switcher */}
