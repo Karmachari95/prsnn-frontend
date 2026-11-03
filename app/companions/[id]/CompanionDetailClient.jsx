@@ -227,7 +227,7 @@ const CompanionDetailClient = () => {
                                 </p>
                                 <p className="leading-relaxed">
                                   Your current matching preference is set to <strong>Women companions only</strong>. To book companions of any gender, you can update your preference with consent anytime in{' '}
-                                  <Link href="/settings/preferences" className="underline font-bold text-[#1E3A2F]">
+                                  <Link href="/settings/preferences" className="underline font-bold text-moss">
                                     Matching Preferences →
                                   </Link>
                                 </p>

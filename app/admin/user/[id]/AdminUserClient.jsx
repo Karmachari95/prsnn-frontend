@@ -119,7 +119,7 @@ const UserDetailsPage = ({ params }) => {
 
         <div className="bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-gray-100">
             {/* Header */}
-            <div className="bg-[#1E3A2F] p-8 md:p-12 text-white flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+            <div className="bg-[#2f4a34] p-8 md:p-12 text-white flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight mb-1">{user.username}</h1>
                     <p className="text-gray-400 font-medium">{user.email}</p>

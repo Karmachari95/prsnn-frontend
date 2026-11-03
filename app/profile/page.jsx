@@ -322,18 +322,18 @@ const Profile = () => {
     const isCompanion = userData?.role === 'companion' || profileData?.role === 'companion' || profileData?.companionProfile;
 
     return (
-        <div className="w-full min-h-screen pt-28 md:pt-36 pb-20 px-4 md:px-8 bg-[#FAF8F5] text-[#181B18]">
+        <div className="w-full min-h-screen pt-28 md:pt-36 pb-20 px-4 md:px-8 bg-mist text-ink">
             <div className="max-w-5xl mx-auto">
                 <div className="mb-10 text-center md:text-left">
-                    <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#E8EFE9] text-[#1E3A2F] text-xs font-bold uppercase tracking-wider mb-3 border border-[#1E3A2F]/15">
-                        <span className="w-2 h-2 rounded-full bg-[#1E3A2F]" />
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-moss-soft text-moss text-xs font-bold uppercase tracking-wider mb-3 border border-moss/15">
+                        <span className="w-2 h-2 rounded-full bg-moss" />
                         <span>Member Portal</span>
                     </div>
-                    <h1 className="font-display text-3xl md:text-5xl font-black text-[#181B18] tracking-tight">
+                    <h1 className="font-display text-3xl md:text-5xl font-black text-ink tracking-tight">
                         My Dashboard
                     </h1>
-                    <p className="text-[#181B18]/60 font-medium text-sm md:text-base mt-1">
-                        Welcome back, <span className="font-bold text-[#1E3A2F]">{userData.username}</span>
+                    <p className="text-ink/60 font-medium text-sm md:text-base mt-1">
+                        Welcome back, <span className="font-bold text-moss">{userData.username}</span>
                     </p>
                 </div>
 
@@ -341,9 +341,9 @@ const Profile = () => {
                     
                     {/* Left Column: Profile Card */}
                     <div className="w-full md:w-1/3">
-                        <div className="bg-white border border-[#EAE6DF] rounded-[2rem] p-8 shadow-sm relative overflow-hidden">
+                        <div className="bg-white border border-line rounded-[2rem] p-8 shadow-sm relative overflow-hidden">
                              {/* Decorative Background */}
-                             <div className="absolute top-0 right-0 w-64 h-64 bg-[#E8EFE9] rounded-full blur-3xl opacity-70 transform translate-x-10 -translate-y-10"></div>
+                             <div className="absolute top-0 right-0 w-64 h-64 bg-moss-soft rounded-full blur-3xl opacity-70 transform translate-x-10 -translate-y-10"></div>
 
                              <div className="relative z-10 flex flex-col items-center text-center">
                                 <div className="w-32 h-32 rounded-full border-4 border-white shadow-md mb-6 overflow-hidden relative group/photo">
@@ -353,7 +353,7 @@ const Profile = () => {
                                         fill
                                         className="object-cover"
                                     />
-                                    <label className="absolute inset-0 bg-[#1E3A2F]/60 flex items-center justify-center opacity-0 group-hover/photo:opacity-100 transition-opacity cursor-pointer">
+                                    <label className="absolute inset-0 bg-moss/60 flex items-center justify-center opacity-0 group-hover/photo:opacity-100 transition-opacity cursor-pointer">
                                         <span className="text-white text-xs font-bold text-center px-2">
                                             {uploadingPhoto ? 'Uploading...' : 'Change Photo'}
                                         </span>
@@ -369,24 +369,24 @@ const Profile = () => {
                                 
                                 {!isEditing ? (
                                     <>
-                                        <h2 className="font-display text-2xl font-bold text-[#181B18] tracking-tight mb-1">
+                                        <h2 className="font-display text-2xl font-bold text-ink tracking-tight mb-1">
                                             {formData.displayName || formData.username}
                                         </h2>
-                                        <p className="text-xs font-semibold text-[#181B18]/60 bg-[#FAF8F5] border border-[#EAE6DF] px-3.5 py-1 rounded-full mb-4">
+                                        <p className="text-xs font-semibold text-ink/60 bg-mist border border-line px-3.5 py-1 rounded-full mb-4">
                                             {userData.email}
                                         </p>
                                         {isCompanion && (
-                                            <span className="text-[10px] bg-[#E8EFE9] text-[#1E3A2F] px-3.5 py-1 rounded-full font-bold uppercase tracking-widest mb-6 border border-[#1E3A2F]/15">
+                                            <span className="text-[10px] bg-moss-soft text-moss px-3.5 py-1 rounded-full font-bold uppercase tracking-widest mb-6 border border-moss/15">
                                                 VERIFIED COMPANION
                                             </span>
                                         )}
                                     </>
                                 ) : (
                                     <div className="w-full mb-6">
-                                        <h2 className="font-display text-2xl font-bold text-[#181B18] tracking-tight mb-1">
+                                        <h2 className="font-display text-2xl font-bold text-ink tracking-tight mb-1">
                                             {formData.username}
                                         </h2>
-                                        <p className="text-xs font-semibold text-[#181B18]/60 bg-[#FAF8F5] border border-[#EAE6DF] px-3.5 py-1 rounded-full">
+                                        <p className="text-xs font-semibold text-ink/60 bg-mist border border-line px-3.5 py-1 rounded-full">
                                             {userData.email}
                                         </p>
                                     </div>
@@ -399,14 +399,14 @@ const Profile = () => {
                                                 <button 
                                                     type="button"
                                                     onClick={() => router.push('/companion/dashboard')}
-                                                    className="w-full py-2.5 bg-[#E8EFE9] text-[#1E3A2F] font-bold rounded-full border border-[#1E3A2F]/20 hover:bg-[#1E3A2F] hover:text-white transition-all text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm"
+                                                    className="w-full py-2.5 bg-moss-soft text-moss font-bold rounded-full border border-moss/20 hover:bg-moss hover:text-white transition-all text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm"
                                                 >
                                                     <span>Companion Dashboard →</span>
                                                 </button>
                                             )}
                                             <button 
                                                 onClick={() => setIsEditing(true)}
-                                                className="w-full py-3 bg-[#1E3A2F] text-white font-bold rounded-full hover:bg-[#152a22] transition-all text-xs uppercase tracking-wider shadow-sm"
+                                                className="w-full py-3 bg-moss text-white font-bold rounded-full hover:bg-[#152a22] transition-all text-xs uppercase tracking-wider shadow-sm"
                                             >
                                                 Edit Profile
                                             </button>
@@ -422,7 +422,7 @@ const Profile = () => {
                                             <button 
                                                 onClick={handleSaveProfile}
                                                 disabled={saving}
-                                                className="w-full py-3 bg-[#1E3A2F] text-white font-bold rounded-full hover:bg-[#152a22] transition-all text-xs uppercase tracking-wider disabled:opacity-50 shadow-sm"
+                                                className="w-full py-3 bg-moss text-white font-bold rounded-full hover:bg-[#152a22] transition-all text-xs uppercase tracking-wider disabled:opacity-50 shadow-sm"
                                             >
                                                 {saving ? 'Saving...' : 'Save Changes'}
                                             </button>
@@ -431,7 +431,7 @@ const Profile = () => {
                                                     setIsEditing(false);
                                                     fetchProfile();
                                                 }}
-                                                className="w-full py-2.5 bg-white text-[#181B18]/60 font-bold rounded-full border border-[#EAE6DF] hover:bg-[#FAF8F5] transition-all text-xs uppercase tracking-wider"
+                                                className="w-full py-2.5 bg-white text-ink/60 font-bold rounded-full border border-line hover:bg-mist transition-all text-xs uppercase tracking-wider"
                                             >
                                                 Cancel
                                             </button>
@@ -444,13 +444,13 @@ const Profile = () => {
                         {/* Quick Stats */}
                         {isCompanion && (
                             <div className="mt-4 grid grid-cols-2 gap-3">
-                                <div className="bg-white border border-[#EAE6DF] rounded-2xl p-4 text-center shadow-sm">
-                                    <span className="block font-display text-2xl font-black text-[#1E3A2F] mb-0.5">0</span>
-                                    <span className="text-[10px] font-bold uppercase text-[#181B18]/45 tracking-wider">Bookings</span>
+                                <div className="bg-white border border-line rounded-2xl p-4 text-center shadow-sm">
+                                    <span className="block font-display text-2xl font-black text-moss mb-0.5">0</span>
+                                    <span className="text-[10px] font-bold uppercase text-ink/45 tracking-wider">Bookings</span>
                                 </div>
-                                <div className="bg-white border border-[#EAE6DF] rounded-2xl p-4 text-center shadow-sm">
-                                    <span className="block font-display text-2xl font-black text-[#1E3A2F] mb-0.5">5.0</span>
-                                    <span className="text-[10px] font-bold uppercase text-[#181B18]/45 tracking-wider">Rating</span>
+                                <div className="bg-white border border-line rounded-2xl p-4 text-center shadow-sm">
+                                    <span className="block font-display text-2xl font-black text-moss mb-0.5">5.0</span>
+                                    <span className="text-[10px] font-bold uppercase text-ink/45 tracking-wider">Rating</span>
                                 </div>
                             </div>
                         )}
@@ -460,9 +460,9 @@ const Profile = () => {
                     <div className="w-full md:w-2/3 space-y-6">
 
                         {/* Profile Details - Visible for ALL users */}
-                        <div className="bg-white border border-[#EAE6DF] rounded-[2rem] p-7 md:p-8 shadow-sm">
-                            <h3 className="font-bold text-xs uppercase tracking-widest text-[#1E3A2F] mb-6 flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-[#1E3A2F]"></span>
+                        <div className="bg-white border border-line rounded-[2rem] p-7 md:p-8 shadow-sm">
+                            <h3 className="font-bold text-xs uppercase tracking-widest text-moss mb-6 flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-moss"></span>
                                 {isCompanion ? 'Companion Details' : 'Profile Details'}
                             </h3>
                             
@@ -470,36 +470,36 @@ const Profile = () => {
                                 <div className="space-y-6">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
-                                            <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest mb-1 block">Display Name</label>
-                                            <p className="font-display font-bold text-base text-[#181B18] border-b border-[#EAE6DF] pb-2">{formData.displayName || formData.username || 'Not set'}</p>
+                                            <label className="text-[10px] font-bold text-ink/45 uppercase tracking-widest mb-1 block">Display Name</label>
+                                            <p className="font-display font-bold text-base text-ink border-b border-line pb-2">{formData.displayName || formData.username || 'Not set'}</p>
                                         </div>
                                         <div>
-                                            <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest mb-1 block">Full Name (Private)</label>
-                                            <p className="font-display font-bold text-base text-[#181B18] border-b border-[#EAE6DF] pb-2">{formData.fullName || 'Not set'}</p>
+                                            <label className="text-[10px] font-bold text-ink/45 uppercase tracking-widest mb-1 block">Full Name (Private)</label>
+                                            <p className="font-display font-bold text-base text-ink border-b border-line pb-2">{formData.fullName || 'Not set'}</p>
                                         </div>
                                          <div>
-                                            <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest mb-1 block">Email</label>
-                                            <p className="font-medium text-base text-[#181B18] border-b border-[#EAE6DF] pb-2">{formData.email}</p>
+                                            <label className="text-[10px] font-bold text-ink/45 uppercase tracking-widest mb-1 block">Email</label>
+                                            <p className="font-medium text-base text-ink border-b border-line pb-2">{formData.email}</p>
                                         </div>
                                         <div>
-                                            <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest mb-1 block">Phone</label>
-                                            <p className="font-medium text-base text-[#181B18] border-b border-[#EAE6DF] pb-2">{formData.phoneNumber || 'Not set'}</p>
+                                            <label className="text-[10px] font-bold text-ink/45 uppercase tracking-widest mb-1 block">Phone</label>
+                                            <p className="font-medium text-base text-ink border-b border-line pb-2">{formData.phoneNumber || 'Not set'}</p>
                                         </div>
                                         <div>
-                                            <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest mb-1 block">City</label>
-                                            <p className="font-medium text-base text-[#181B18] border-b border-[#EAE6DF] pb-2">{formData.city || 'Not set'}</p>
+                                            <label className="text-[10px] font-bold text-ink/45 uppercase tracking-widest mb-1 block">City</label>
+                                            <p className="font-medium text-base text-ink border-b border-line pb-2">{formData.city || 'Not set'}</p>
                                         </div>
                                         <div>
-                                            <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest mb-1 block">Area</label>
-                                            <p className="font-medium text-base text-[#181B18] border-b border-[#EAE6DF] pb-2">{formData.area || 'Not set'}</p>
+                                            <label className="text-[10px] font-bold text-ink/45 uppercase tracking-widest mb-1 block">Area</label>
+                                            <p className="font-medium text-base text-ink border-b border-line pb-2">{formData.area || 'Not set'}</p>
                                         </div>
                                     </div>
                                     
                                     {isCompanion && (
                                         <>
                                              <div className="pt-2">
-                                                 <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest mb-2 block">Description</label>
-                                                 <p className="text-sm text-[#181B18]/75 leading-relaxed bg-[#FAF8F5] border border-[#EAE6DF] p-4 rounded-2xl italic">{formData.description || 'No description'}</p>
+                                                 <label className="text-[10px] font-bold text-ink/45 uppercase tracking-widest mb-2 block">Description</label>
+                                                 <p className="text-sm text-ink/75 leading-relaxed bg-mist border border-line p-4 rounded-2xl italic">{formData.description || 'No description'}</p>
                                              </div>
                                         </>
                                     )}
@@ -602,26 +602,26 @@ const Profile = () => {
                         </div>
 
                         {/* Member Photo Gallery — 2-3 photos */}
-                        <div className="bg-white border border-[#EAE6DF] rounded-[2rem] p-7 md:p-8 shadow-sm">
+                        <div className="bg-white border border-line rounded-[2rem] p-7 md:p-8 shadow-sm">
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
                                 <div>
-                                    <h3 className="font-bold text-xs uppercase tracking-widest text-[#1E3A2F] flex items-center gap-2">
-                                        <span className="w-2 h-2 rounded-full bg-[#1E3A2F]" />
+                                    <h3 className="font-bold text-xs uppercase tracking-widest text-moss flex items-center gap-2">
+                                        <span className="w-2 h-2 rounded-full bg-moss" />
                                         Profile Photos & Gallery
                                     </h3>
-                                    <p className="text-xs text-[#181B18]/60 mt-1">
+                                    <p className="text-xs text-ink/60 mt-1">
                                         Upload 2 to 3 photos so companions and members can recognize you during meetups.
                                     </p>
                                 </div>
-                                <span className="self-start sm:self-auto text-[11px] font-bold px-3 py-1 bg-[#E8EFE9] text-[#1E3A2F] rounded-full border border-[#1E3A2F]/20">
+                                <span className="self-start sm:self-auto text-[11px] font-bold px-3 py-1 bg-moss-soft text-moss rounded-full border border-moss/20">
                                     2–3 Photos
                                 </span>
                             </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 {/* Slot 1: Primary Profile Photo */}
-                                <div className="border border-[#EAE6DF] rounded-2xl p-4 bg-[#FAF8F5] text-center flex flex-col items-center justify-between min-h-[220px]">
-                                    <p className="text-[11px] font-bold uppercase tracking-wider text-[#1E3A2F] mb-2">Photo 1 (Profile)</p>
+                                <div className="border border-line rounded-2xl p-4 bg-mist text-center flex flex-col items-center justify-between min-h-[220px]">
+                                    <p className="text-[11px] font-bold uppercase tracking-wider text-moss mb-2">Photo 1 (Profile)</p>
                                     <div className="relative w-28 h-28 rounded-2xl overflow-hidden border-2 border-white shadow-sm bg-white flex items-center justify-center">
                                         {profileData?.profilePhotoUrl ? (
                                             <img src={profileData.profilePhotoUrl} alt="Photo 1" className="w-full h-full object-cover" />
@@ -629,15 +629,15 @@ const Profile = () => {
                                             <span className="text-3xl text-gray-300">👤</span>
                                         )}
                                     </div>
-                                    <label className="mt-3 w-full py-2 bg-[#1E3A2F] text-white text-xs font-bold rounded-xl cursor-pointer hover:bg-[#2A4F40] transition-colors shadow-sm block text-center">
+                                    <label className="mt-3 w-full py-2 bg-moss text-white text-xs font-bold rounded-xl cursor-pointer hover:bg-moss-mid transition-colors shadow-sm block text-center">
                                         {uploadingPhoto ? 'Uploading...' : (profileData?.profilePhotoUrl ? 'Change Photo' : '+ Add Photo')}
                                         <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" disabled={uploadingPhoto} onChange={(e) => handleUploadSlot(e, 'profilePhoto')} />
                                     </label>
                                 </div>
 
                                 {/* Slot 2: Secondary / Backup Photo */}
-                                <div className="border border-[#EAE6DF] rounded-2xl p-4 bg-[#FAF8F5] text-center flex flex-col items-center justify-between min-h-[220px]">
-                                    <p className="text-[11px] font-bold uppercase tracking-wider text-[#1E3A2F] mb-2">Photo 2 (Full View)</p>
+                                <div className="border border-line rounded-2xl p-4 bg-mist text-center flex flex-col items-center justify-between min-h-[220px]">
+                                    <p className="text-[11px] font-bold uppercase tracking-wider text-moss mb-2">Photo 2 (Full View)</p>
                                     <div className="relative w-28 h-28 rounded-2xl overflow-hidden border-2 border-white shadow-sm bg-white flex items-center justify-center">
                                         {profileData?.backupPhotoUrl ? (
                                             <img src={profileData.backupPhotoUrl} alt="Photo 2" className="w-full h-full object-cover" />
@@ -645,15 +645,15 @@ const Profile = () => {
                                             <span className="text-3xl text-gray-300">📷</span>
                                         )}
                                     </div>
-                                    <label className="mt-3 w-full py-2 bg-[#1E3A2F] text-white text-xs font-bold rounded-xl cursor-pointer hover:bg-[#2A4F40] transition-colors shadow-sm block text-center">
+                                    <label className="mt-3 w-full py-2 bg-moss text-white text-xs font-bold rounded-xl cursor-pointer hover:bg-moss-mid transition-colors shadow-sm block text-center">
                                         {uploadingPhoto ? 'Uploading...' : (profileData?.backupPhotoUrl ? 'Change Photo' : '+ Add Photo')}
                                         <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" disabled={uploadingPhoto} onChange={(e) => handleUploadSlot(e, 'backupPhoto')} />
                                     </label>
                                 </div>
 
                                 {/* Slot 3: Additional Activity / Casual Photo */}
-                                <div className="border border-[#EAE6DF] rounded-2xl p-4 bg-[#FAF8F5] text-center flex flex-col items-center justify-between min-h-[220px]">
-                                    <p className="text-[11px] font-bold uppercase tracking-wider text-[#1E3A2F] mb-2">Photo 3 (Casual / Activity)</p>
+                                <div className="border border-line rounded-2xl p-4 bg-mist text-center flex flex-col items-center justify-between min-h-[220px]">
+                                    <p className="text-[11px] font-bold uppercase tracking-wider text-moss mb-2">Photo 3 (Casual / Activity)</p>
                                     <div className="relative w-28 h-28 rounded-2xl overflow-hidden border-2 border-white shadow-sm bg-white flex items-center justify-center">
                                         {profileData?.additionalPhotoUrl ? (
                                             <img src={profileData.additionalPhotoUrl} alt="Photo 3" className="w-full h-full object-cover" />
@@ -661,7 +661,7 @@ const Profile = () => {
                                             <span className="text-3xl text-gray-300">✨</span>
                                         )}
                                     </div>
-                                    <label className="mt-3 w-full py-2 bg-[#1E3A2F] text-white text-xs font-bold rounded-xl cursor-pointer hover:bg-[#2A4F40] transition-colors shadow-sm block text-center">
+                                    <label className="mt-3 w-full py-2 bg-moss text-white text-xs font-bold rounded-xl cursor-pointer hover:bg-moss-mid transition-colors shadow-sm block text-center">
                                         {uploadingPhoto ? 'Uploading...' : (profileData?.additionalPhotoUrl ? 'Change Photo' : '+ Add Photo')}
                                         <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" disabled={uploadingPhoto} onChange={(e) => handleUploadSlot(e, 'additionalPhoto')} />
                                     </label>
@@ -670,37 +670,37 @@ const Profile = () => {
                         </div>
 
                         {/* Safety & Matching Preferences (Clean Olive Theme) */}
-                        <div className="bg-white border border-[#EAE6DF] rounded-[2rem] p-7 md:p-8 shadow-sm">
+                        <div className="bg-white border border-line rounded-[2rem] p-7 md:p-8 shadow-sm">
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="font-bold text-xs uppercase tracking-widest text-[#1E3A2F] flex items-center gap-2">
-                                    <span className="w-2 h-2 bg-[#1E3A2F] rounded-full"></span>
+                                <h3 className="font-bold text-xs uppercase tracking-widest text-moss flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-moss rounded-full"></span>
                                     Safety & Matching Preferences
                                 </h3>
-                                <a href="/settings/preferences" className="text-xs font-bold text-[#1E3A2F] hover:underline">
+                                <a href="/settings/preferences" className="text-xs font-bold text-moss hover:underline">
                                     Settings →
                                 </a>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="bg-[#FAF8F5] p-4 rounded-2xl border border-[#EAE6DF]">
-                                    <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest block mb-1">Your Gender</label>
-                                    <p className="font-display font-bold text-base text-[#181B18] capitalize">
+                                <div className="bg-mist p-4 rounded-2xl border border-line">
+                                    <label className="text-[10px] font-bold text-ink/45 uppercase tracking-widest block mb-1">Your Gender</label>
+                                    <p className="font-display font-bold text-base text-ink capitalize">
                                         {formData.gender === 'woman' ? 'Woman' : formData.gender === 'man' ? 'Man' : formData.gender === 'non_binary' ? 'Non-binary' : 'Prefer not to say'}
                                     </p>
                                 </div>
-                                <div className="bg-[#FAF8F5] p-4 rounded-2xl border border-[#EAE6DF]">
-                                    <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest block mb-1">Matching Preference</label>
-                                    <p className="font-display font-bold text-base text-[#181B18]">
+                                <div className="bg-mist p-4 rounded-2xl border border-line">
+                                    <label className="text-[10px] font-bold text-ink/45 uppercase tracking-widest block mb-1">Matching Preference</label>
+                                    <p className="font-display font-bold text-base text-ink">
                                         {formData.genderPreference === 'women_only' ? 'Women companions only' : 'Companions of any gender'}
                                     </p>
                                 </div>
                             </div>
-                            <div className="mt-4 pt-4 border-t border-[#EAE6DF]/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                                <span className="text-xs text-[#181B18]/60 font-medium">✨ You have a free hand to update this anytime.</span>
+                            <div className="mt-4 pt-4 border-t border-line/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <span className="text-xs text-ink/60 font-medium">✨ You have a free hand to update this anytime.</span>
                                 <button
                                     type="button"
                                     onClick={() => router.push('/settings/preferences')}
-                                    className="px-4 py-2 rounded-full bg-[#1E3A2F] text-white font-bold text-xs hover:bg-[#2A4F40] transition-all shadow-sm text-center"
+                                    className="px-4 py-2 rounded-full bg-moss text-white font-bold text-xs hover:bg-moss-mid transition-all shadow-sm text-center"
                                 >
                                     Change Matching Preferences →
                                 </button>
@@ -709,7 +709,7 @@ const Profile = () => {
 
                         {/* Notification Banner - Restrict to regular users who aren't companions yet */}
                         {(!isCompanion && userData.role === 'user' && !userData.is_verified) && (
-                            <div className="bg-gradient-to-r from-[#1E3A2F] to-[#2A4F40] text-white p-8 rounded-[2rem] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-md border border-[#1E3A2F]">
+                            <div className="bg-gradient-to-r from-moss to-moss-mid text-white p-8 rounded-[2rem] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-md border border-moss">
                                 <div>
                                     <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-white/20 text-white text-[10px] font-bold uppercase tracking-wider mb-2">
                                         Join PRSNN
@@ -723,7 +723,7 @@ const Profile = () => {
                                 </div>
                                 <button 
                                     onClick={() => router.push('/onboarding')}
-                                    className="px-6 py-3 bg-white text-[#1E3A2F] font-bold rounded-full hover:bg-[#FAF8F5] shadow-md transition-all text-xs uppercase tracking-wider shrink-0"
+                                    className="px-6 py-3 bg-white text-moss font-bold rounded-full hover:bg-mist shadow-md transition-all text-xs uppercase tracking-wider shrink-0"
                                 >
                                     Become a Companion →
                                 </button>
@@ -732,11 +732,11 @@ const Profile = () => {
                         
                         {/* If they ARE a companion, show helpful status card */}
                         {isCompanion && (
-                             <div className="bg-[#E8EFE9] border border-[#1E3A2F]/15 p-6 rounded-[2rem] flex items-start gap-4">
+                             <div className="bg-moss-soft border border-moss/15 p-6 rounded-[2rem] flex items-start gap-4">
                                 <span className="text-2xl">🌿</span>
                                 <div>
-                                    <h3 className="font-display font-bold text-base text-[#1E3A2F] mb-1">Presence without pressure</h3>
-                                    <p className="text-xs text-[#1E3A2F]/80 leading-relaxed font-medium">
+                                    <h3 className="font-display font-bold text-base text-moss mb-1">Presence without pressure</h3>
+                                    <p className="text-xs text-moss/80 leading-relaxed font-medium">
                                         Keep your city, hourly rate, and active daytime hours accurate. All bookings follow PRSNN&apos;s 7 AM – 10 PM daylight window and Boundaries Charter.
                                     </p>
                                 </div>
@@ -745,35 +745,35 @@ const Profile = () => {
 
                         {/* Availability & Settings (Companion Only) */}
                         {isCompanion && (
-                            <div className="bg-white border border-[#EAE6DF] rounded-[2rem] p-7 md:p-8 shadow-sm">
-                                <h3 className="font-bold text-xs uppercase tracking-widest text-[#1E3A2F] mb-6 flex items-center gap-2">
-                                    <span className="w-2 h-2 bg-[#1E3A2F] rounded-full"></span>
+                            <div className="bg-white border border-line rounded-[2rem] p-7 md:p-8 shadow-sm">
+                                <h3 className="font-bold text-xs uppercase tracking-widest text-moss mb-6 flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-moss rounded-full"></span>
                                     Rate & Availability
                                 </h3>
 
                                 {!isEditing ? (
                                     <div className="space-y-6">
                                         <div className="grid grid-cols-2 gap-4">
-                                            <div className="bg-[#FAF8F5] p-5 rounded-2xl border border-[#EAE6DF]">
-                                                <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest block mb-1">Hourly Rate</label>
-                                                <p className="font-display font-black text-3xl text-[#1E3A2F]">₹{formData.pricePerHour || '0'}<span className="text-xs font-normal text-[#181B18]/50">/hr</span></p>
+                                            <div className="bg-mist p-5 rounded-2xl border border-line">
+                                                <label className="text-[10px] font-bold text-ink/45 uppercase tracking-widest block mb-1">Hourly Rate</label>
+                                                <p className="font-display font-black text-3xl text-moss">₹{formData.pricePerHour || '0'}<span className="text-xs font-normal text-ink/50">/hr</span></p>
                                             </div>
-                                            <div className="bg-[#FAF8F5] p-5 rounded-2xl border border-[#EAE6DF]">
-                                                <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest block mb-1">Active Hours</label>
-                                                <p className="font-display font-bold text-lg text-[#181B18] mt-1">{formData.startTime || '07:00'} - {formData.endTime || '22:00'}</p>
+                                            <div className="bg-mist p-5 rounded-2xl border border-line">
+                                                <label className="text-[10px] font-bold text-ink/45 uppercase tracking-widest block mb-1">Active Hours</label>
+                                                <p className="font-display font-bold text-lg text-ink mt-1">{formData.startTime || '07:00'} - {formData.endTime || '22:00'}</p>
                                             </div>
                                         </div>
 
                                         <div>
-                                            <label className="text-[10px] font-bold text-[#181B18]/45 uppercase tracking-widest block mb-3">Weekly Schedule</label>
+                                            <label className="text-[10px] font-bold text-ink/45 uppercase tracking-widest block mb-3">Weekly Schedule</label>
                                             <div className="flex flex-wrap gap-2">
                                                 {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(day => (
                                                     <span 
                                                         key={day}
                                                         className={`text-xs font-bold px-4 py-2 rounded-full border transition-all ${
                                                             formData[`${day.toLowerCase()}_availability`] 
-                                                            ? 'bg-[#1E3A2F] text-white border-[#1E3A2F]' 
-                                                            : 'bg-[#FAF8F5] text-[#181B18]/30 border-[#EAE6DF]'
+                                                            ? 'bg-moss text-white border-moss' 
+                                                            : 'bg-mist text-ink/30 border-line'
                                                         }`}
                                                     >
                                                         {day.slice(0,3)}

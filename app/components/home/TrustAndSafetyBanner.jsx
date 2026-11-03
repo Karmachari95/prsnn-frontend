@@ -23,16 +23,16 @@ export default function TrustAndSafetyBanner() {
   ];
 
   return (
-    <section className="py-20 md:py-24 bg-white border-y border-[#EAE6DF]">
+    <section className="py-20 md:py-24 bg-white border-y border-line">
       <div className="max-w-7xl mx-auto px-5 md:px-8">
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#1E3A2F] mb-3">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-moss mb-3">
             Safety by Design
           </p>
-          <h2 className="font-display text-3xl md:text-4xl font-black text-[#181B18] tracking-tight">
+          <h2 className="font-display text-3xl md:text-4xl font-black text-ink tracking-tight">
             Built on trust, consent and boundaries.
           </h2>
-          <p className="mt-3 text-base text-[#181B18]/60 font-medium">
+          <p className="mt-3 text-base text-ink/60 font-medium">
             PRSNN is designed from the ground up for peace of mind. No surprises, no pressure.
           </p>
         </div>
@@ -41,15 +41,15 @@ export default function TrustAndSafetyBanner() {
           {pillars.map((p) => (
             <div
               key={p.title}
-              className="p-8 rounded-3xl bg-[#FAF8F5] border border-[#EAE6DF] hover:-translate-y-1 hover:shadow-sm transition-all"
+              className="p-8 rounded-3xl bg-mist border border-line hover:-translate-y-1 hover:shadow-sm transition-all"
             >
-              <div className="w-12 h-12 rounded-2xl bg-white border border-[#EAE6DF] flex items-center justify-center text-2xl shadow-sm mb-5">
+              <div className="w-12 h-12 rounded-2xl bg-white border border-line flex items-center justify-center text-2xl shadow-sm mb-5">
                 {p.icon}
               </div>
-              <h3 className="font-display font-bold text-xl text-[#181B18] mb-2">
+              <h3 className="font-display font-bold text-xl text-ink mb-2">
                 {p.title}
               </h3>
-              <p className="text-sm text-[#181B18]/65 font-medium leading-relaxed">
+              <p className="text-sm text-ink/65 font-medium leading-relaxed">
                 {p.desc}
               </p>
             </div>
@@ -59,13 +59,13 @@ export default function TrustAndSafetyBanner() {
         <div className="mt-12 text-center flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href="/safety"
-            className="px-8 py-3.5 rounded-full bg-[#1E3A2F] text-white font-bold text-sm hover:bg-[#152A22] transition-colors"
+            className="px-8 py-3.5 rounded-full bg-moss text-white font-bold text-sm hover:bg-moss-mid transition-colors"
           >
             Read Our 8 Core Safety Standards →
           </Link>
           <Link
             href="/agreement"
-            className="px-8 py-3.5 rounded-full bg-white border border-[#EAE6DF] text-[#181B18] font-bold text-sm hover:bg-[#FAF8F5] transition-colors"
+            className="px-8 py-3.5 rounded-full bg-white border border-line text-ink font-bold text-sm hover:bg-mist transition-colors"
           >
             Review Boundaries Agreement
           </Link>

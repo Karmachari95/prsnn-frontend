@@ -115,17 +115,17 @@ const MyBookings = () => {
             case 'pending': 
                 return { text: 'Awaiting Acceptance', color: 'bg-[#FEF3C7] text-[#92400E] border-[#FDE68A]' };
             case 'paid_awaiting_companion':
-                return { text: 'Prepaid · Matching Companion', color: 'bg-[#E8EFE9] text-[#2F4A34] border-[#2F4A34]/30 font-bold' };
+                return { text: 'Prepaid · Matching Companion', color: 'bg-moss-soft text-moss border-moss/30 font-bold' };
             case 'accepted': 
-                return { text: 'Confirmed Session', color: 'bg-[#E8EFE9] text-[#1E3A2F] border-[#1E3A2F]/20 font-bold' };
+                return { text: 'Confirmed Session', color: 'bg-moss-soft text-moss border-moss/20 font-bold' };
             case 'rejected': 
                 return { text: 'Declined', color: 'bg-[#FEE2E2] text-[#991B1B] border-[#FECACA]' };
             case 'refund_pending':
-                return { text: 'Refund Pending', color: 'bg-[#E8EFE9] text-[#2F4A34] border-[#2F4A34]/30' };
+                return { text: 'Refund Pending', color: 'bg-moss-soft text-moss border-moss/30' };
             case 'cancelled':
-                return { text: 'Cancelled', color: 'bg-[#FAF8F5] text-[#181B18]/60 border-[#EAE6DF]' };
+                return { text: 'Cancelled', color: 'bg-[var(--color-mist)] text-ink/60 border-line' };
             default: 
-                return { text: status, color: 'bg-[#FAF8F5] text-[#181B18]/60 border-[#EAE6DF]' };
+                return { text: status, color: 'bg-[var(--color-mist)] text-ink/60 border-line' };
         }
     };
 
@@ -136,21 +136,21 @@ const MyBookings = () => {
     }
 
     return (
-       <div className="min-h-screen pt-28 md:pt-36 pb-24 px-4 md:px-8 max-w-5xl mx-auto font-sans bg-[#FAF8F5] text-[#181B18]">
+       <div className="min-h-screen pt-28 md:pt-36 pb-24 px-4 md:px-8 max-w-5xl mx-auto font-sans bg-[var(--color-mist)] text-ink">
            {/* Header Section */}
            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
                 <div>
-                     <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#E8EFE9] text-[#1E3A2F] text-xs font-bold uppercase tracking-wider mb-3 border border-[#1E3A2F]/15">
-                        <span className="w-2 h-2 rounded-full bg-[#2F4A34]" />
+                     <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-moss-soft text-moss text-xs font-bold uppercase tracking-wider mb-3 border border-moss/15">
+                        <span className="w-2 h-2 rounded-full bg-moss" />
                         <span>{userData.role === 'companion' ? 'Companion Sessions' : 'Presence without pressure'}</span>
                      </div>
-                     <h1 className="font-display text-3xl md:text-5xl font-black tracking-tight text-[#181B18]">
+                     <h1 className="font-display text-3xl md:text-5xl font-black tracking-tight text-ink">
                         {userData.role === 'companion' ? 'Companion Sessions' : 'My Bookings'}
                      </h1>
                 </div>
                 {userData.role !== 'companion' && (
                     <Link href="/companions">
-                        <button className="px-6 py-3 bg-[#2F4A34] text-white font-bold hover:bg-[#1E3A2F] transition-all rounded-full shadow-sm text-xs uppercase tracking-wider">
+                        <button className="px-6 py-3 bg-moss text-white font-bold hover:bg-moss transition-all rounded-full shadow-sm text-xs uppercase tracking-wider">
                             + Find Companion
                         </button>
                     </Link>
@@ -171,12 +171,12 @@ const MyBookings = () => {
                        onClick={() => setFilter(f.key)}
                        className={`px-4 py-2 rounded-full font-bold text-xs transition-all border ${
                            filter === f.key 
-                           ? 'bg-[#1E3A2F] text-white border-[#1E3A2F] shadow-sm' 
-                           : 'bg-white text-[#181B18]/65 border-[#EAE6DF] hover:bg-[#FAF8F5]'
+                           ? 'bg-moss text-white border-moss shadow-sm' 
+                           : 'bg-white text-ink/65 border-line hover:bg-[var(--color-mist)]'
                        }`}
                    >
                        {f.label}
-                       <span className={`ml-2 text-[10px] py-0.5 px-1.5 rounded-full ${filter === f.key ? 'bg-white/20 text-white' : 'bg-[#FAF8F5] text-[#181B18]/50'}`}>
+                       <span className={`ml-2 text-[10px] py-0.5 px-1.5 rounded-full ${filter === f.key ? 'bg-white/20 text-white' : 'bg-[var(--color-mist)] text-ink/50'}`}>
                            {f.key === 'all' ? bookings.length : bookings.filter(b => b.status === f.key).length}
                        </span>
                    </button>
@@ -185,10 +185,10 @@ const MyBookings = () => {
 
            {/* Bookings List */}
            {filteredBookings.length === 0 ? (
-               <div className="bg-white rounded-[2rem] p-12 md:p-20 text-center shadow-sm border border-[#EAE6DF]">
+               <div className="bg-white rounded-[2rem] p-12 md:p-20 text-center shadow-sm border border-line">
                     <div className="text-5xl mb-5 opacity-40">🌿</div>
-                    <h3 className="font-display text-2xl font-black text-[#181B18] mb-2">No bookings found</h3>
-                    <p className="text-[#181B18]/60 mb-8 max-w-md mx-auto text-sm leading-relaxed">
+                    <h3 className="font-display text-2xl font-black text-ink mb-2">No bookings found</h3>
+                    <p className="text-ink/60 mb-8 max-w-md mx-auto text-sm leading-relaxed">
                         {filter === 'all' 
                             ? "Presence without pressure. Ready to find someone to sit, walk, or explore with?" 
                             : `You don't have any requests matching this filter.`}
@@ -196,7 +196,7 @@ const MyBookings = () => {
                     {userData.role !== 'companion' && filter === 'all' && (
                         <button 
                             onClick={() => router.push('/companions')}
-                            className="px-8 py-3 bg-[#1E3A2F] text-white font-bold rounded-full hover:bg-[#152a22] shadow-sm transition-all text-xs uppercase tracking-wider"
+                            className="px-8 py-3 bg-moss text-white font-bold rounded-full hover:bg-moss-mid shadow-sm transition-all text-xs uppercase tracking-wider"
                         >
                             Explore Companions
                         </button>
@@ -210,7 +210,7 @@ const MyBookings = () => {
                        const partnerName = partner?.displayName || partner?.fullName || partner?.username || 'Companion';
 
                        return (
-                           <div key={booking._id} className="group relative bg-white border border-[#EAE6DF] rounded-[2rem] p-6 md:p-8 flex flex-col md:flex-row gap-6 shadow-sm hover:shadow-md transition-all duration-300">
+                           <div key={booking._id} className="group relative bg-white border border-line rounded-[2rem] p-6 md:p-8 flex flex-col md:flex-row gap-6 shadow-sm hover:shadow-md transition-all duration-300">
                                
                                {/* Status Badge */}
                                <div className={`self-start md:absolute md:top-6 md:right-6 px-3.5 py-1.5 rounded-full font-bold text-[10px] uppercase tracking-wider border ${badge.color}`}>
@@ -219,7 +219,7 @@ const MyBookings = () => {
 
                                {/* Avatar Section */}
                                <div className="flex-shrink-0">
-                                   <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl overflow-hidden bg-[#FAF8F5] border border-[#EAE6DF]">
+                                   <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl overflow-hidden bg-[var(--color-mist)] border border-line">
                                        {/* eslint-disable-next-line @next/next/no-img-element */}
                                        <img 
                                             src={partner?.profilePhotoUrl || "/profile_pic.png"} 
@@ -236,7 +236,7 @@ const MyBookings = () => {
                                        <span className="text-[10px] uppercase tracking-widest text-gray-400 font-bold">
                                            {userData.role === 'companion' ? 'Booked by' : 'Companion'}
                                        </span>
-                                       <h3 className="font-display text-xl md:text-2xl font-bold text-[#181B18]">
+                                       <h3 className="font-display text-xl md:text-2xl font-bold text-ink">
                                            {partnerName}
                                        </h3>
                                    </div>
@@ -244,22 +244,22 @@ const MyBookings = () => {
                                    {/* Details grid */}
                                    <div className="flex flex-wrap gap-2 text-xs font-medium text-gray-600">
                                        {booking.activity && (
-                                           <span className="bg-[#FAF8F5] px-3.5 py-1 rounded-full border border-[#EAE6DF] font-semibold text-gray-800">
+                                           <span className="bg-[var(--color-mist)] px-3.5 py-1 rounded-full border border-line font-semibold text-gray-800">
                                                🎯 {booking.activity}
                                            </span>
                                        )}
                                        {booking.scheduledDate && (
-                                           <span className="bg-[#FAF8F5] px-3.5 py-1 rounded-full border border-[#EAE6DF]">
+                                           <span className="bg-[var(--color-mist)] px-3.5 py-1 rounded-full border border-line">
                                                📅 {booking.scheduledDate} {booking.startTime ? `@ ${booking.startTime}` : ''}
                                            </span>
                                        )}
-                                       <span className="bg-[#FAF8F5] px-3.5 py-1 rounded-full border border-[#EAE6DF]">
+                                       <span className="bg-[var(--color-mist)] px-3.5 py-1 rounded-full border border-line">
                                            ⏳ {(() => {
                                                const m = parseInt(booking.duration, 10) || 60;
                                                return m >= 60 ? `${m / 60} hr${m / 60 > 1 ? 's' : ''}` : `${m} mins`;
                                            })()}
                                        </span>
-                                       <span className="bg-[#FAF8F5] px-3.5 py-1 rounded-full border border-[#EAE6DF] font-bold text-gray-900">
+                                       <span className="bg-[var(--color-mist)] px-3.5 py-1 rounded-full border border-line font-bold text-gray-900">
                                            💳 ₹{booking.totalAmount || (booking.pricePerHour * ((parseInt(booking.duration, 10) || 60) / 60) + (booking.platformFee ?? 50))}
                                        </span>
                                    </div>
@@ -311,7 +311,7 @@ const MyBookings = () => {
                                                <>
                                                    {booking.status === 'accepted' && (
                                                        <Link href={`/session/${booking._id}`}>
-                                                           <button className="px-5 py-2.5 bg-[#1E3A2F] text-white font-bold rounded-full shadow hover:bg-black transition-all text-xs flex items-center gap-1.5">
+                                                           <button className="px-5 py-2.5 bg-moss text-white font-bold rounded-full shadow hover:bg-black transition-all text-xs flex items-center gap-1.5">
                                                                <span>🟢</span> Enter Session Room
                                                            </button>
                                                        </Link>

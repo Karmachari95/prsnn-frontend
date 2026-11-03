@@ -122,7 +122,7 @@ const NotificationsPage = () => {
 
         if (type.includes('confirmed') || text.includes('confirmed') || text.includes('accepted')) {
             return (
-                <div className="w-10 h-10 rounded-full bg-[#E8EFE9] text-[#1E3A2F] flex items-center justify-center font-bold text-sm shrink-0">
+                <div className="w-10 h-10 rounded-full bg-moss-soft text-moss flex items-center justify-center font-bold text-sm shrink-0">
                     ✓
                 </div>
             );
@@ -136,7 +136,7 @@ const NotificationsPage = () => {
         }
         if (type.includes('refund') || text.includes('refund')) {
             return (
-                <div className="w-10 h-10 rounded-full bg-[#E8EFE9] text-[#2F4A34] flex items-center justify-center text-sm shrink-0">
+                <div className="w-10 h-10 rounded-full bg-moss-soft text-moss flex items-center justify-center text-sm shrink-0">
                     💳
                 </div>
             );
@@ -153,7 +153,7 @@ const NotificationsPage = () => {
     }
 
     return (
-        <div className="w-full min-h-screen pt-28 md:pt-32 pb-24 px-4 bg-[#FAF8F5] text-ink font-sans">
+        <div className="w-full min-h-screen pt-28 md:pt-32 pb-24 px-4 bg-mist text-ink font-sans">
             <div className="max-w-2xl mx-auto space-y-6">
                 {/* Header matching Screen 16 */}
                 <div className="flex items-center justify-between">
@@ -169,7 +169,7 @@ const NotificationsPage = () => {
                         <button 
                             onClick={handleClearAll}
                             disabled={clearing}
-                            className="px-3.5 py-1.5 bg-white border border-[#EAE6DF] text-gray-600 font-semibold text-xs rounded-full hover:bg-gray-50 transition-colors disabled:opacity-50"
+                            className="px-3.5 py-1.5 bg-white border border-line text-gray-600 font-semibold text-xs rounded-full hover:bg-gray-50 transition-colors disabled:opacity-50"
                         >
                             {clearing ? 'Clearing...' : 'Clear All'}
                         </button>
@@ -177,7 +177,7 @@ const NotificationsPage = () => {
                 </div>
 
                 {/* Filter Tabs matching Screen 16 */}
-                <div className="flex gap-2 border-b border-[#EAE6DF] pb-2">
+                <div className="flex gap-2 border-b border-line pb-2">
                     {[
                         { key: 'all', label: 'All' },
                         { key: 'bookings', label: 'Bookings' },
@@ -189,8 +189,8 @@ const NotificationsPage = () => {
                             onClick={() => setActiveTab(tab.key)}
                             className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
                                 activeTab === tab.key
-                                    ? 'bg-[#1E3A2F] text-white shadow-sm'
-                                    : 'bg-white border border-[#EAE6DF] text-gray-600 hover:text-black'
+                                    ? 'bg-moss text-white shadow-sm'
+                                    : 'bg-white border border-line text-gray-600 hover:text-black'
                             }`}
                         >
                             {tab.label}
@@ -201,8 +201,8 @@ const NotificationsPage = () => {
                 {/* Notifications List */}
                 <div className="space-y-3">
                     {filteredNotifications.length === 0 ? (
-                        <div className="bg-white rounded-3xl border border-[#EAE6DF] p-12 text-center shadow-sm">
-                            <div className="w-16 h-16 mb-4 bg-[#FAF8F5] rounded-full flex items-center justify-center text-2xl mx-auto">
+                        <div className="bg-white rounded-3xl border border-line p-12 text-center shadow-sm">
+                            <div className="w-16 h-16 mb-4 bg-mist rounded-full flex items-center justify-center text-2xl mx-auto">
                                 🔔
                             </div>
                             <h3 className="text-lg font-bold text-gray-900 mb-1">No notifications</h3>
@@ -216,8 +216,8 @@ const NotificationsPage = () => {
                                 key={notification._id} 
                                 className={`p-4 md:p-5 rounded-2xl border transition-all bg-white shadow-sm hover:shadow-md flex items-start gap-4 ${
                                     !notification.isRead 
-                                        ? 'border-[#1E3A2F]/30 bg-emerald-50/20' 
-                                        : 'border-[#EAE6DF]'
+                                        ? 'border-moss/30 bg-emerald-50/20' 
+                                        : 'border-line'
                                 }`}
                             >
                                 {getIconForNotification(notification)}
@@ -233,7 +233,7 @@ const NotificationsPage = () => {
                                     {notification.bookingId && (
                                         <Link 
                                             href="/my-bookings" 
-                                            className="inline-block mt-2 text-xs font-bold text-[#1E3A2F] hover:underline"
+                                            className="inline-block mt-2 text-xs font-bold text-moss hover:underline"
                                         >
                                             View booking details →
                                         </Link>

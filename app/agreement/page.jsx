@@ -72,7 +72,7 @@ export default function AgreementPage() {
         
         {/* Breadcrumb */}
         <div className="mb-6 flex items-center justify-between text-xs text-[#5A635B]">
-          <Link href="/safety" className="hover:text-[#1E3A2F] font-semibold flex items-center gap-1">
+          <Link href="/safety" className="hover:text-moss font-semibold flex items-center gap-1">
             ← Safety & Standards
           </Link>
           <span className="font-mono">Version 1.0 (Auditable)</span>
@@ -80,10 +80,10 @@ export default function AgreementPage() {
 
         {/* Title Card */}
         <div className="bg-white p-8 md:p-12 rounded-[2rem] border border-[#E8E2D8] shadow-sm mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#1E3A2F]/10 text-[#1E3A2F] text-xs font-bold uppercase tracking-wider mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-moss/10 text-moss text-xs font-bold uppercase tracking-wider mb-4">
             Official Platform Agreement
           </div>
-          <h1 className="font-display text-3xl md:text-5xl font-black text-[#1E3A2F] leading-tight mb-4">
+          <h1 className="font-display text-3xl md:text-5xl font-black text-moss leading-tight mb-4">
             PRSNN Participation, Privacy and Boundaries Agreement
           </h1>
           <p className="text-sm md:text-base text-[#4A534B] leading-relaxed">
@@ -94,7 +94,7 @@ export default function AgreementPage() {
             <span>Effective date: October 2026</span>
             <button
               onClick={handleShare}
-              className="px-4 py-2 rounded-full border border-[#D5CDC0] text-[#1E3A2F] font-semibold hover:bg-[#FAF7F2] transition-colors"
+              className="px-4 py-2 rounded-full border border-[#D5CDC0] text-moss font-semibold hover:bg-mist transition-colors"
             >
               {copied ? '✓ Copied link' : 'Share agreement link'}
             </button>
@@ -109,11 +109,11 @@ export default function AgreementPage() {
               className="p-6 md:p-8 rounded-2xl bg-white border border-[#E8E2D8] shadow-[0_2px_12px_rgba(30,58,47,0.03)]"
             >
               <div className="flex items-start gap-4">
-                <span className="shrink-0 w-8 h-8 rounded-full bg-[#1E3A2F] text-white font-bold text-sm flex items-center justify-center mt-0.5">
+                <span className="shrink-0 w-8 h-8 rounded-full bg-moss text-white font-bold text-sm flex items-center justify-center mt-0.5">
                   {s.num}
                 </span>
                 <div>
-                  <h2 className="font-display text-xl font-bold text-[#1E3A2F] mb-2">
+                  <h2 className="font-display text-xl font-bold text-moss mb-2">
                     {s.title}
                   </h2>
                   <p className="text-[#3A423C] text-[15px] leading-relaxed">
@@ -126,20 +126,20 @@ export default function AgreementPage() {
         </div>
 
         {/* Footer Actions */}
-        <div className="text-center p-8 rounded-2xl bg-[#E8EFE9] border border-[#CCDCD0]">
-          <p className="font-display text-lg font-bold text-[#1E3A2F]">
+        <div className="text-center p-8 rounded-2xl bg-moss-soft border border-[#CCDCD0]">
+          <p className="font-display text-lg font-bold text-moss">
             Presence without pressure. Every interaction voluntary, clear, and safe.
           </p>
           <div className="mt-4 flex flex-wrap justify-center gap-3">
             <Link 
               href="/login" 
-              className="px-6 py-2.5 rounded-full bg-[#1E3A2F] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#152a22] transition-colors"
+              className="px-6 py-2.5 rounded-full bg-moss text-white text-xs font-bold uppercase tracking-wider hover:bg-moss-mid transition-colors"
             >
               Join PRSNN
             </Link>
             <Link 
               href="/safety" 
-              className="px-6 py-2.5 rounded-full bg-white text-[#1E3A2F] border border-[#CCDCD0] text-xs font-bold uppercase tracking-wider hover:bg-[#FAF7F2] transition-colors"
+              className="px-6 py-2.5 rounded-full bg-white text-moss border border-[#CCDCD0] text-xs font-bold uppercase tracking-wider hover:bg-mist transition-colors"
             >
               Safety Guidelines
             </Link>

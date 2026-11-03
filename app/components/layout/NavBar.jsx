@@ -5,12 +5,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
 
 const marketingLinks = [
-  { name: "Find Companions", path: "/companions" },
-  { name: "How it Works", path: "/how-it-works" },
-  { name: "Safety", path: "/safety" },
-  { name: "Our Story", path: "/about" },
-  { name: "FAQ", path: "/faq" },
-  { name: "Become Companion", path: "/login?role=companion" },
+  { name: "How it Works", path: "/#how-it-works" },
+  { name: "Safety", path: "/#safety" },
+  { name: "Become Companion", path: "/#become" },
+  { name: "FAQ", path: "/#faq" },
 ];
 
 const NavBarInner = () => {
@@ -179,10 +177,10 @@ const NavBarInner = () => {
                           {userData?.role === "companion" && (
                             <p
                               onClick={() => router.push("/companion/dashboard")}
-                              className="px-4 py-2.5 text-sm font-bold text-[#1E3A2F] bg-[#E8EFE9] hover:bg-[#D5E3D8] transition-colors cursor-pointer flex items-center justify-between mx-2 rounded-xl my-1"
+                              className="px-4 py-2.5 text-sm font-bold text-moss bg-moss-soft hover:bg-moss-soft/80 transition-colors cursor-pointer flex items-center justify-between mx-2 rounded-xl my-1"
                             >
                               <span>Companion Dashboard</span>
-                              <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-[#1E3A2F] text-white">Hub</span>
+                              <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-moss text-paper">Hub</span>
                             </p>
                           )}
                           {(userData?.role === "admin" || userData?.role === "superadmin") && (
@@ -323,7 +321,7 @@ const NavBarInner = () => {
                               <Link
                                 href="/companion/dashboard"
                                 onClick={() => setIsMenuOpen(false)}
-                                className="block px-4 py-3 rounded-xl bg-[#E8EFE9] text-[#1E3A2F] font-bold hover:bg-[#D5E3D8]"
+                                className="block px-4 py-3 rounded-xl bg-moss-soft text-moss font-bold hover:bg-moss-soft/80"
                               >
                                 Companion Dashboard ⭐️
                               </Link>

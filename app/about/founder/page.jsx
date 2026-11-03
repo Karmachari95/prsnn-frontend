@@ -9,7 +9,7 @@ export default function FounderPage() {
       <div className="max-w-6xl mx-auto px-6 mb-6">
         <Link 
           href="/about" 
-          className="text-xs font-semibold text-[#1E3A2F]/70 hover:text-[#1E3A2F] inline-flex items-center gap-1.5 transition-colors"
+          className="text-xs font-semibold text-moss/70 hover:text-moss inline-flex items-center gap-1.5 transition-colors"
         >
           ← Back to About Us
         </Link>

@@ -152,7 +152,7 @@ export default function SettingsPreferencesPage() {
           <div
             className={`mb-6 p-4 rounded-2xl border text-sm font-medium flex items-start gap-3 transition-all ${
               alert.type === "success"
-                ? "bg-[#E8EFE9] border-[#1E3A2F]/20 text-[#1E3A2F]"
+                ? "bg-moss-soft border-moss/20 text-moss"
                 : alert.type === "warning"
                 ? "bg-amber-50 border-amber-200 text-amber-900"
                 : "bg-red-50 border-red-200 text-red-900"
@@ -221,7 +221,7 @@ export default function SettingsPreferencesPage() {
                 <label
                   className={`p-5 rounded-2xl border cursor-pointer transition-all flex flex-col justify-between ${
                     genderPreference === "women_only"
-                      ? "bg-[#E8EFE9] border-[#1E3A2F] shadow-sm ring-2 ring-[#1E3A2F]/10"
+                      ? "bg-moss-soft border-moss shadow-sm ring-2 ring-moss/10"
                       : "bg-paper border-line hover:border-ink/20 hover:bg-mist/40"
                   }`}
                 >
@@ -230,7 +230,7 @@ export default function SettingsPreferencesPage() {
                       <span className="text-sm font-bold text-ink block">
                         Women companions only
                       </span>
-                      <span className="inline-block text-[11px] font-bold text-[#1E3A2F] bg-white/80 px-2 py-0.5 rounded-md border border-[#1E3A2F]/15">
+                      <span className="inline-block text-[11px] font-bold text-moss bg-white/80 px-2 py-0.5 rounded-md border border-moss/15">
                         Selected by default · Highest Safety
                       </span>
                     </div>
@@ -310,15 +310,15 @@ export default function SettingsPreferencesPage() {
             </div>
 
             {/* Women's Safety First Banner */}
-            <div className="p-4 rounded-2xl bg-[#E8EFE9] border border-[#1E3A2F]/15 space-y-2">
-              <div className="flex items-center gap-2 font-bold text-xs text-[#1E3A2F]">
-                <span className="w-2 h-2 rounded-full bg-[#2F4A34]" />
+            <div className="p-4 rounded-2xl bg-moss-soft border border-moss/15 space-y-2">
+              <div className="flex items-center gap-2 font-bold text-xs text-moss">
+                <span className="w-2 h-2 rounded-full bg-moss" />
                 <span>Women&apos;s Safety First — Complete User Freedom</span>
               </div>
-              <p className="text-xs leading-relaxed text-[#181B18]/80 font-medium">
+              <p className="text-xs leading-relaxed text-ink/80 font-medium">
                 We put women&apos;s safety on top priority. By default, you will receive bookings from women companions only. You can optionally choose to accept bookings from people of any gender with your clear consent.
               </p>
-              <div className="text-xs leading-relaxed text-[#1E3A2F] font-semibold bg-white/80 p-2.5 rounded-xl border border-[#1E3A2F]/10">
+              <div className="text-xs leading-relaxed text-moss font-semibold bg-white/80 p-2.5 rounded-xl border border-moss/10">
                 ✨ <strong>Total Free Hand:</strong> You have complete freedom to change or update this preference whenever you want. Your selection applies immediately to all future matches.
               </div>
             </div>

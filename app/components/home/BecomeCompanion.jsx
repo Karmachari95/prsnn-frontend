@@ -64,20 +64,16 @@ export default function BecomeCompanion() {
               ))}
             </div>
 
-            <Reveal delay={2} className="mt-9 flex flex-col sm:flex-row items-center gap-4">
+            <Reveal delay={2} className="mt-9">
               <button
                 type="button"
                 onClick={() =>
                   router.push(userData ? '/onboarding?role=companion' : token ? '/onboarding?role=companion' : '/login?role=companion')
                 }
-                className="w-full sm:w-auto bg-[#1E3A2F] text-white font-bold text-base px-8 py-4 rounded-full hover:bg-[#152A22] hover:scale-[1.02] active:scale-[0.98] transition-all shadow-sm flex items-center justify-center gap-2"
+                className="btn-primary text-base px-8 py-4 hover:scale-[1.02] active:scale-[0.98]"
               >
-                <span>Apply as Companion</span>
-                <span>→</span>
+                Become Companion
               </button>
-              <p className="text-xs text-ink/45 font-medium">
-                No upfront fees · Instant onboarding
-              </p>
             </Reveal>
           </div>
         </div>

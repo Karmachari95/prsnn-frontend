@@ -128,25 +128,25 @@ export default function FeaturedCompanions() {
   }).slice(0, 6);
 
   return (
-    <section className="py-20 md:py-28 bg-[#FAF8F5]">
+    <section className="py-20 md:py-28 bg-mist">
       <div className="max-w-7xl mx-auto px-5 md:px-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E8EFE9] text-[#1E3A2F] text-xs font-bold uppercase tracking-wider mb-3">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-moss-soft text-moss text-xs font-bold uppercase tracking-wider mb-3">
               <span>●</span> Verified Companions
             </div>
-            <h2 className="font-display text-3xl md:text-5xl font-black text-[#181B18] tracking-tight">
+            <h2 className="font-display text-3xl md:text-5xl font-black text-ink tracking-tight">
               Ready to meet today.
             </h2>
-            <p className="mt-2 text-base md:text-lg text-[#181B18]/60 font-medium">
+            <p className="mt-2 text-base md:text-lg text-ink/60 font-medium">
               Platonic, background-checked companions in your city.
             </p>
           </div>
 
           <Link
             href="/companions"
-            className="inline-flex items-center gap-2 text-sm font-bold text-[#2F4A34] hover:text-[#1E3A2F] transition-colors self-start md:self-end"
+            className="inline-flex items-center gap-2 text-sm font-bold text-moss hover:text-moss transition-colors self-start md:self-end"
           >
             <span>Explore all companions</span>
             <span>→</span>
@@ -154,21 +154,21 @@ export default function FeaturedCompanions() {
         </div>
 
         {/* Matching Safety Preference Controls */}
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-6 bg-white border border-[#EAE6DF] rounded-2xl p-4 shadow-sm">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-6 bg-white border border-line rounded-2xl p-4 shadow-sm">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-bold text-[#181B18] mr-1">Matching View:</span>
+            <span className="text-xs font-bold text-ink mr-1">Matching View:</span>
             <button
               type="button"
               onClick={() => handleMatchingChange('women_only')}
               className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
                 matchingFilter === 'women_only'
-                  ? 'bg-[#1E3A2F] text-white shadow-sm'
-                  : 'bg-[#FAF8F5] text-[#181B18]/70 border border-[#EAE6DF] hover:border-[#1E3A2F]/30 hover:text-[#1E3A2F]'
+                  ? 'bg-moss text-white shadow-sm'
+                  : 'bg-mist text-ink/70 border border-line hover:border-moss/30 hover:text-moss'
               }`}
             >
               <span>Women Companions Only</span>
               <span className={`text-[9px] uppercase px-1.5 py-0.2 rounded-full ${
-                matchingFilter === 'women_only' ? 'bg-white/20 text-white' : 'bg-[#E8EFE9] text-[#1E3A2F]'
+                matchingFilter === 'women_only' ? 'bg-white/20 text-white' : 'bg-moss-soft text-moss'
               }`}>Default</span>
             </button>
             <button
@@ -176,8 +176,8 @@ export default function FeaturedCompanions() {
               onClick={() => handleMatchingChange('all')}
               className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all ${
                 matchingFilter === 'all'
-                  ? 'bg-[#1E3A2F] text-white shadow-sm'
-                  : 'bg-[#FAF8F5] text-[#181B18]/70 border border-[#EAE6DF] hover:border-[#181B18]/20'
+                  ? 'bg-moss text-white shadow-sm'
+                  : 'bg-mist text-ink/70 border border-line hover:border-ink/20'
               }`}
             >
               All Companions
@@ -187,7 +187,7 @@ export default function FeaturedCompanions() {
           <div className="flex items-center gap-2">
             <Link
               href="/settings/preferences"
-              className="text-xs font-bold text-[#1E3A2F] hover:underline inline-flex items-center gap-1"
+              className="text-xs font-bold text-moss hover:underline inline-flex items-center gap-1"
             >
               <span>Settings</span>
               <span>→</span>
@@ -206,8 +206,8 @@ export default function FeaturedCompanions() {
                 onClick={() => setSelectedCity(city)}
                 className={`shrink-0 px-4 py-2 rounded-full text-xs md:text-sm font-semibold transition-all duration-200 ${
                   active
-                    ? 'bg-[#1E3A2F] text-white shadow-sm'
-                    : 'bg-white text-[#181B18]/70 border border-[#EAE6DF] hover:border-[#1E3A2F]/30 hover:text-[#181B18]'
+                    ? 'bg-moss text-white shadow-sm'
+                    : 'bg-white text-ink/70 border border-line hover:border-moss/30 hover:text-ink'
                 }`}
               >
                 {city}
@@ -222,18 +222,18 @@ export default function FeaturedCompanions() {
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="h-[460px] rounded-3xl bg-white border border-[#EAE6DF] animate-pulse"
+                className="h-[460px] rounded-3xl bg-white border border-line animate-pulse"
               />
             ))}
           </div>
         ) : filtered.length === 0 ? (
-          <div className="p-12 text-center rounded-3xl bg-white border border-[#EAE6DF]">
-            <p className="text-lg font-bold text-[#181B18]">No companions found in {selectedCity}</p>
-            <p className="mt-1 text-sm text-[#181B18]/50">Browse all cities or check back soon.</p>
+          <div className="p-12 text-center rounded-3xl bg-white border border-line">
+            <p className="text-lg font-bold text-ink">No companions found in {selectedCity}</p>
+            <p className="mt-1 text-sm text-ink/50">Browse all cities or check back soon.</p>
             <button
               type="button"
               onClick={() => setSelectedCity('All')}
-              className="mt-4 px-6 py-2.5 rounded-full bg-[#1E3A2F] text-white font-bold text-sm"
+              className="mt-4 px-6 py-2.5 rounded-full bg-moss text-white font-bold text-sm"
             >
               Show all cities
             </button>
@@ -255,7 +255,7 @@ export default function FeaturedCompanions() {
                   href={`/companions/${id}`}
                   className="group block h-full"
                 >
-                  <article className="h-full flex flex-col bg-white rounded-3xl border border-[#EAE6DF] overflow-hidden hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-16px_rgba(0,0,0,0.12)] transition-all duration-300">
+                  <article className="h-full flex flex-col bg-white rounded-3xl border border-line overflow-hidden hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-16px_rgba(0,0,0,0.12)] transition-all duration-300">
                     {/* Photo Container */}
                     <div className="relative aspect-[4/5] bg-[#F0EDE6] overflow-hidden">
                       {photo ? (
@@ -267,7 +267,7 @@ export default function FeaturedCompanions() {
                           loading="lazy"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#1E3A2F] to-[#152A22] text-white text-4xl font-bold font-display">
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-moss to-moss-mid text-white text-4xl font-bold font-display">
                           {name[0]?.toUpperCase()}
                         </div>
                       )}
@@ -276,7 +276,7 @@ export default function FeaturedCompanions() {
 
                       {/* Top Badges */}
                       <div className="absolute top-3.5 left-3.5 flex items-center gap-1.5 z-10">
-                        <span className="px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md text-[#1E3A2F] text-[11px] font-bold shadow-sm border border-[#EAE6DF]">
+                        <span className="px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md text-moss text-[11px] font-bold shadow-sm border border-line">
                           ✓ Verified
                         </span>
                       </div>
@@ -288,7 +288,7 @@ export default function FeaturedCompanions() {
                         aria-label="Save companion"
                         className={`absolute top-3.5 right-3.5 z-10 w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md transition-all shadow-sm ${
                           isSaved
-                            ? 'bg-[#2F4A34] text-white scale-105'
+                            ? 'bg-moss text-white scale-105'
                             : 'bg-white/90 text-gray-700 hover:bg-white hover:text-black'
                         }`}
                       >
@@ -298,8 +298,8 @@ export default function FeaturedCompanions() {
                       </button>
 
                       {/* Price Pill */}
-                      <div className="absolute bottom-3.5 right-3.5 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-bold text-[#181B18] shadow-sm border border-[#EAE6DF]">
-                        ₹{price} <span className="text-[#181B18]/50 font-normal">/ hr</span>
+                      <div className="absolute bottom-3.5 right-3.5 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-bold text-ink shadow-sm border border-line">
+                        ₹{price} <span className="text-ink/50 font-normal">/ hr</span>
                       </div>
                     </div>
 
@@ -307,14 +307,14 @@ export default function FeaturedCompanions() {
                     <div className="p-5 flex flex-col flex-1">
                       <div className="flex items-start justify-between gap-2">
                         <div>
-                          <h3 className="font-display font-bold text-xl text-[#181B18] group-hover:text-[#1E3A2F] transition-colors truncate">
+                          <h3 className="font-display font-bold text-xl text-ink group-hover:text-moss transition-colors truncate">
                             {name}
                           </h3>
-                          <p className="mt-0.5 text-xs font-medium text-[#181B18]/50 flex items-center gap-1">
+                          <p className="mt-0.5 text-xs font-medium text-ink/50 flex items-center gap-1">
                             <span>📍</span> {companion.city || 'Available Citywide'}
                           </p>
                         </div>
-                        <div className="flex items-center gap-1 text-xs font-bold text-[#181B18] bg-[#FAF8F5] px-2 py-1 rounded-full border border-[#EAE6DF]">
+                        <div className="flex items-center gap-1 text-xs font-bold text-ink bg-mist px-2 py-1 rounded-full border border-line">
                           <span className="text-amber-500">★</span>
                           <span>{Number(rating).toFixed(1)}</span>
                         </div>
@@ -325,19 +325,19 @@ export default function FeaturedCompanions() {
                         {tags.map((tag) => (
                           <span
                             key={tag}
-                            className="px-2.5 py-1 rounded-full bg-[#FAF8F5] border border-[#EAE6DF] text-[11px] font-semibold text-[#181B18]/60"
+                            className="px-2.5 py-1 rounded-full bg-mist border border-line text-[11px] font-semibold text-ink/60"
                           >
                             {tag}
                           </span>
                         ))}
                       </div>
 
-                      <p className="mt-3 text-xs text-[#181B18]/60 line-clamp-2 leading-relaxed">
+                      <p className="mt-3 text-xs text-ink/60 line-clamp-2 leading-relaxed">
                         {companion.description || companion.bio || 'Available for quiet company, coffee, city walks, or event visits.'}
                       </p>
 
                       <div className="mt-auto pt-4">
-                        <span className="w-full py-3 rounded-full bg-[#1E3A2F] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 group-hover:bg-[#152A22] transition-colors">
+                        <span className="w-full py-3 rounded-full bg-moss text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 group-hover:bg-moss-mid transition-colors">
                           <span>View Profile & Book</span>
                           <span>→</span>
                         </span>
@@ -354,14 +354,14 @@ export default function FeaturedCompanions() {
         <div className="mt-16">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="font-display text-2xl font-black text-[#181B18] tracking-tight">
+              <h3 className="font-display text-2xl font-black text-ink tracking-tight">
                 Plan something special
               </h3>
-              <p className="text-xs text-[#181B18]/50 mt-0.5">Explore popular activities</p>
+              <p className="text-xs text-ink/50 mt-0.5">Explore popular activities</p>
             </div>
             <Link
               href="/companions"
-              className="text-xs font-bold text-[#2F4A34] hover:underline"
+              className="text-xs font-bold text-moss hover:underline"
             >
               See all activities →
             </Link>
@@ -391,7 +391,7 @@ export default function FeaturedCompanions() {
               <Link
                 key={exp.title}
                 href={`/companions?tag=${encodeURIComponent(exp.tag)}`}
-                className="group relative h-56 rounded-3xl overflow-hidden border border-[#EAE6DF] shadow-sm hover:-translate-y-1 hover:shadow-md transition-all"
+                className="group relative h-56 rounded-3xl overflow-hidden border border-line shadow-sm hover:-translate-y-1 hover:shadow-md transition-all"
               >
                 <Image
                   src={exp.image}
@@ -418,7 +418,7 @@ export default function FeaturedCompanions() {
         <div className="mt-14 text-center">
           <Link
             href="/companions"
-            className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-[#1E3A2F] text-white font-bold text-sm shadow-sm hover:bg-[#152A22] hover:scale-105 transition-all"
+            className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-moss text-white font-bold text-sm shadow-sm hover:bg-moss-mid hover:scale-105 transition-all"
           >
             Browse all verified companions in your area →
           </Link>

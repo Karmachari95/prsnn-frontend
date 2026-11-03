@@ -170,19 +170,19 @@ export default function CompanionDashboardPage() {
         </div>
 
         {/* Women's Safety Status Banner */}
-        <div className="p-4 rounded-2xl bg-[#E8EFE9] border border-[#1E3A2F]/15 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="p-4 rounded-2xl bg-moss-soft border border-moss/15 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="space-y-1">
-            <div className="flex items-center gap-1.5 font-bold text-xs text-[#1E3A2F]">
-              <span className="w-2 h-2 rounded-full bg-[#2F4A34]" />
+            <div className="flex items-center gap-1.5 font-bold text-xs text-moss">
+              <span className="w-2 h-2 rounded-full bg-moss" />
               <span>Women&apos;s Safety First Protected</span>
             </div>
-            <p className="text-xs text-[#181B18]/75 font-medium leading-relaxed">
+            <p className="text-xs text-ink/75 font-medium leading-relaxed">
               Default filter: receiving bookings from women companions only. You have a free hand to update this anytime.
             </p>
           </div>
           <Link
             href="/settings/preferences"
-            className="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-white border border-[#1E3A2F]/20 text-xs font-bold text-[#1E3A2F] hover:bg-[#1E3A2F] hover:text-white transition-colors shrink-0"
+            className="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-white border border-moss/20 text-xs font-bold text-moss hover:bg-moss hover:text-white transition-colors shrink-0"
           >
             Preferences →
           </Link>

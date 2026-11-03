@@ -440,7 +440,7 @@ const OnboardingContent = () => {
     // Choice Screen - First screen user sees (Matches Screen 3)
     if (!userChoice) {
         return (
-            <div className="min-h-screen bg-[#FAF8F5] pt-28 pb-16 px-4 md:px-8 font-sans flex items-center justify-center">
+            <div className="min-h-screen bg-mist pt-28 pb-16 px-4 md:px-8 font-sans flex items-center justify-center">
                  <div className="max-w-md w-full mx-auto animate-fadeIn space-y-6">
                     <button 
                         onClick={() => router.push('/')}
@@ -450,7 +450,7 @@ const OnboardingContent = () => {
                     </button>
 
                     <div>
-                        <span className="text-[11px] font-bold uppercase tracking-widest text-[#1E3A2F]">
+                        <span className="text-[11px] font-bold uppercase tracking-widest text-moss">
                             Step 1 · Choose Your Role
                         </span>
                         <h1 className="text-3xl md:text-4xl font-display font-black text-gray-900 tracking-tight mt-1">
@@ -465,14 +465,14 @@ const OnboardingContent = () => {
                         {/* Option 1: Find a companion */}
                         <div 
                             onClick={() => setUserChoice('basic')}
-                            className="bg-white p-6 rounded-3xl border border-[#EAE6DF] hover:border-[#1E3A2F] shadow-sm hover:shadow-md transition-all cursor-pointer group flex items-center justify-between gap-4"
+                            className="bg-white p-6 rounded-3xl border border-line hover:border-moss shadow-sm hover:shadow-md transition-all cursor-pointer group flex items-center justify-between gap-4"
                         >
                             <div className="flex items-center gap-4">
-                                <div className="w-14 h-14 rounded-2xl bg-[#E8EFE9] text-[#1E3A2F] flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">
+                                <div className="w-14 h-14 rounded-2xl bg-moss-soft text-moss flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">
                                     🚶
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-lg text-gray-900 group-hover:text-[#1E3A2F] transition-colors">
+                                    <h3 className="font-bold text-lg text-gray-900 group-hover:text-moss transition-colors">
                                         Find a companion
                                     </h3>
                                     <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">
@@ -480,7 +480,7 @@ const OnboardingContent = () => {
                                     </p>
                                 </div>
                             </div>
-                            <div className="w-9 h-9 rounded-full bg-[#FAF8F5] border border-[#EAE6DF] flex items-center justify-center text-gray-400 group-hover:bg-[#1E3A2F] group-hover:text-white transition-all shrink-0 font-bold text-sm">
+                            <div className="w-9 h-9 rounded-full bg-mist border border-line flex items-center justify-center text-gray-400 group-hover:bg-moss group-hover:text-white transition-all shrink-0 font-bold text-sm">
                                 ›
                             </div>
                         </div>
@@ -488,14 +488,14 @@ const OnboardingContent = () => {
                         {/* Option 2: Become a companion */}
                         <div 
                             onClick={() => setUserChoice('companion')}
-                            className="bg-white p-6 rounded-3xl border border-[#EAE6DF] hover:border-[#2F4A34] shadow-sm hover:shadow-md transition-all cursor-pointer group flex items-center justify-between gap-4"
+                            className="bg-white p-6 rounded-3xl border border-line hover:border-moss shadow-sm hover:shadow-md transition-all cursor-pointer group flex items-center justify-between gap-4"
                         >
                             <div className="flex items-center gap-4">
-                                <div className="w-14 h-14 rounded-2xl bg-[#E8EFE9] text-[#2F4A34] flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">
+                                <div className="w-14 h-14 rounded-2xl bg-moss-soft text-moss flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">
                                     🤝
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-lg text-gray-900 group-hover:text-[#2F4A34] transition-colors">
+                                    <h3 className="font-bold text-lg text-gray-900 group-hover:text-moss transition-colors">
                                         Become a companion
                                     </h3>
                                     <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">
@@ -503,7 +503,7 @@ const OnboardingContent = () => {
                                     </p>
                                 </div>
                             </div>
-                            <div className="w-9 h-9 rounded-full bg-[#FAF8F5] border border-[#EAE6DF] flex items-center justify-center text-gray-400 group-hover:bg-[#2F4A34] group-hover:text-white transition-all shrink-0 font-bold text-sm">
+                            <div className="w-9 h-9 rounded-full bg-mist border border-line flex items-center justify-center text-gray-400 group-hover:bg-moss group-hover:text-white transition-all shrink-0 font-bold text-sm">
                                 ›
                             </div>
                         </div>

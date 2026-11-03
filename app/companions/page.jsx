@@ -534,13 +534,13 @@ const CompanionsContent = () => {
                   onClick={() => handleMatchingFilterChange('women_only')}
                   className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
                     matchingFilter === 'women_only'
-                      ? 'bg-[#1E3A2F] text-white shadow-sm'
-                      : 'bg-paper text-ink/70 border border-line hover:border-[#1E3A2F]/30 hover:text-[#1E3A2F]'
+                      ? 'bg-moss text-paper shadow-sm'
+                      : 'bg-paper text-ink/70 border border-line hover:border-moss/30 hover:text-moss'
                   }`}
                 >
                   <span>Women Only ({companions.filter(c => (c.gender || '').toLowerCase() === 'woman' || (c.gender || '').toLowerCase() === 'female').length})</span>
                   <span className={`text-[9px] uppercase px-1.5 py-0.2 rounded-full ${
-                    matchingFilter === 'women_only' ? 'bg-white/20 text-white' : 'bg-[#E8EFE9] text-[#1E3A2F]'
+                    matchingFilter === 'women_only' ? 'bg-white/20 text-white' : 'bg-moss-soft text-moss'
                   }`}>Default</span>
                 </button>
                 <button
@@ -548,7 +548,7 @@ const CompanionsContent = () => {
                   onClick={() => handleMatchingFilterChange('all')}
                   className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all ${
                     matchingFilter === 'all'
-                      ? 'bg-[#1E3A2F] text-white shadow-sm'
+                      ? 'bg-moss text-paper shadow-sm'
                       : 'bg-paper text-ink/70 border border-line hover:border-ink/20'
                   }`}
                 >
@@ -559,7 +559,7 @@ const CompanionsContent = () => {
                   onClick={() => handleMatchingFilterChange('men_only')}
                   className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all ${
                     matchingFilter === 'men_only'
-                      ? 'bg-[#1E3A2F] text-white shadow-sm'
+                      ? 'bg-moss text-paper shadow-sm'
                       : 'bg-paper text-ink/70 border border-line hover:border-ink/20'
                   }`}
                 >
@@ -570,7 +570,7 @@ const CompanionsContent = () => {
               <div className="flex items-center gap-2">
                 <Link
                   href="/settings/preferences"
-                  className="text-xs font-bold text-[#1E3A2F] hover:underline inline-flex items-center gap-1"
+                  className="text-xs font-bold text-moss hover:underline inline-flex items-center gap-1"
                 >
                   <span>Change default in Settings</span>
                   <span>→</span>
@@ -662,7 +662,7 @@ const CompanionsContent = () => {
                           onChange={(e) => setSelectedArea(e.target.value)}
                           className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
                             selectedArea
-                              ? 'bg-[#1E3A2F] text-white border-[#1E3A2F]'
+                              ? 'bg-moss text-paper border-moss'
                               : 'bg-paper text-ink/70 border-line hover:border-ink/20'
                           }`}
                           aria-label={`Filter by locality in ${selectedCity}`}
@@ -762,17 +762,17 @@ const CompanionsContent = () => {
 
         {/* Active Filter Notice */}
         {matchingFilter === 'women_only' && (
-          <div className="mb-6 p-4 rounded-2xl bg-[#E8EFE9] border border-[#1E3A2F]/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="mb-6 p-4 rounded-2xl bg-moss-soft border border-moss/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#1E3A2F] shrink-0" />
-              <p className="text-xs font-bold text-[#1E3A2F]">
+              <span className="w-2.5 h-2.5 rounded-full bg-moss shrink-0" />
+              <p className="text-xs font-bold text-moss">
                 Matching Filter Active: Showing strictly verified Women Companions ({filteredCompanions.length}) only.
               </p>
             </div>
             <button
               type="button"
               onClick={() => handleMatchingFilterChange('all')}
-              className="text-xs font-bold text-[#1E3A2F] hover:underline text-left sm:text-right"
+              className="text-xs font-bold text-moss hover:underline text-left sm:text-right"
             >
               Show companions of any gender ({companions.length}) →
             </button>

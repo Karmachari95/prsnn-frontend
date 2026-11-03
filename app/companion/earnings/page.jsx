@@ -145,7 +145,7 @@ export default function CompanionEarningsPage() {
                   <p className="font-display font-bold text-base text-moss">
                     +₹{p.amount.toLocaleString("en-IN")}
                   </p>
-                  <span className="inline-block text-[10px] font-bold text-[#1E3A2F] bg-[#E8EFE9] px-2 py-0.5 rounded-full mt-0.5">
+                  <span className="inline-block text-[10px] font-bold text-moss bg-moss-soft px-2 py-0.5 rounded-full mt-0.5">
                     ✓ {p.status}
                   </span>
                 </div>

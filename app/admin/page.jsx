@@ -212,12 +212,12 @@ const AdminPanel = () => {
   if (!token) return <Loading message="Authenticating administrator..." />;
 
   return (
-    <div className="min-h-screen bg-[#FBFBFA] text-gray-900 font-sans pb-20 selection:bg-[#1E3A2F]/20 selection:text-[#1E3A2F]">
+    <div className="min-h-screen bg-[#FBFBFA] text-gray-900 font-sans pb-20 selection:bg-[#2f4a34]/20 selection:text-[#2f4a34]">
       {/* Toast Notification */}
       {toast && (
         <div className="fixed top-6 right-6 z-50 animate-bounce duration-300">
           <div className={`px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 text-sm font-semibold border ${
-            toast.type === 'success' ? 'bg-[#1E3A2F] text-white border-[#2A4F40]' :
+            toast.type === 'success' ? 'bg-[#2f4a34] text-white border-[#3d5f42]' :
             toast.type === 'warning' ? 'bg-amber-700 text-white border-amber-800' :
             'bg-gray-900 text-white border-gray-800'
           }`}>
@@ -253,12 +253,12 @@ const AdminPanel = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center gap-2 group">
-              <span className="font-serif text-2xl font-black tracking-tight text-[#1E3A2F] group-hover:opacity-90 transition-opacity">
+              <span className="font-serif text-2xl font-black tracking-tight text-[#2f4a34] group-hover:opacity-90 transition-opacity">
                 prsnn<span className="text-emerald-500">.</span>
               </span>
             </Link>
             <div className="hidden sm:flex items-center gap-2 pl-4 border-l border-gray-200">
-              <span className="px-2.5 py-1 rounded-full bg-[#1E3A2F]/10 text-[#1E3A2F] text-[11px] font-bold uppercase tracking-wider">
+              <span className="px-2.5 py-1 rounded-full bg-[#2f4a34]/10 text-[#2f4a34] text-[11px] font-bold uppercase tracking-wider">
                 Admin Console
               </span>
               <span className="text-xs text-gray-400">·</span>
@@ -279,7 +279,7 @@ const AdminPanel = () => {
                 viewBox="0 0 24 24"
                 strokeWidth={2}
                 stroke="currentColor"
-                className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin text-[#1E3A2F]' : ''}`}
+                className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin text-[#2f4a34]' : ''}`}
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
               </svg>
@@ -305,7 +305,7 @@ const AdminPanel = () => {
 
             <Link
               href="/"
-              className="px-4 py-2.5 rounded-xl text-xs font-bold bg-[#1E3A2F] text-white hover:bg-[#2A4F40] transition-colors shadow-sm"
+              className="px-4 py-2.5 rounded-xl text-xs font-bold bg-[#2f4a34] text-white hover:bg-[#3d5f42] transition-colors shadow-sm"
             >
               Public Site ↗
             </Link>
@@ -401,10 +401,10 @@ const AdminPanel = () => {
             }`}
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#1E3A2F]">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#2f4a34]">
                 Active Platform
               </span>
-              <div className="w-10 h-10 rounded-xl bg-emerald-100/80 text-[#1E3A2F] flex items-center justify-center group-hover:scale-110 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-emerald-100/80 text-[#2f4a34] flex items-center justify-center group-hover:scale-110 transition-transform">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
                 </svg>
@@ -445,7 +445,7 @@ const AdminPanel = () => {
                 onClick={() => { setActiveTab('pending'); setSearchTerm(''); }}
                 className={`px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all flex items-center gap-2 ${
                   activeTab === 'pending'
-                    ? 'bg-[#1E3A2F] text-white shadow-md'
+                    ? 'bg-[#2f4a34] text-white shadow-md'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200/70 hover:text-gray-900'
                 }`}
               >
@@ -462,7 +462,7 @@ const AdminPanel = () => {
                 onClick={() => { setActiveTab('all-users'); setSearchTerm(''); }}
                 className={`px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all flex items-center gap-2 ${
                   activeTab === 'all-users'
-                    ? 'bg-[#1E3A2F] text-white shadow-md'
+                    ? 'bg-[#2f4a34] text-white shadow-md'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200/70 hover:text-gray-900'
                 }`}
               >
@@ -479,7 +479,7 @@ const AdminPanel = () => {
                 onClick={() => { setActiveTab('companions'); setSearchTerm(''); }}
                 className={`px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all flex items-center gap-2 ${
                   activeTab === 'companions'
-                    ? 'bg-[#1E3A2F] text-white shadow-md'
+                    ? 'bg-[#2f4a34] text-white shadow-md'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200/70 hover:text-gray-900'
                 }`}
               >
@@ -554,7 +554,7 @@ const AdminPanel = () => {
                 placeholder="Search by name, @username, email, phone, city..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-9 py-2.5 bg-gray-50 hover:bg-gray-100/60 focus:bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#1E3A2F]/20 focus:border-[#1E3A2F] transition-all"
+                className="w-full pl-9 pr-9 py-2.5 bg-gray-50 hover:bg-gray-100/60 focus:bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#2f4a34]/20 focus:border-[#2f4a34] transition-all"
               />
               {searchTerm && (
                 <button
@@ -575,7 +575,7 @@ const AdminPanel = () => {
                 <select
                   value={roleFilter}
                   onChange={(e) => setRoleFilter(e.target.value)}
-                  className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-700 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1E3A2F]/20"
+                  className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-700 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#2f4a34]/20"
                 >
                   <option value="all">All Roles</option>
                   <option value="companion">Companions</option>
@@ -590,7 +590,7 @@ const AdminPanel = () => {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-700 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1E3A2F]/20"
+                  className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-700 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#2f4a34]/20"
                 >
                   <option value="all">All Status</option>
                   <option value="verified">Verified</option>
@@ -605,7 +605,7 @@ const AdminPanel = () => {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-700 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1E3A2F]/20"
+                  className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-700 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#2f4a34]/20"
                 >
                   <option value="newest">Newest First</option>
                   <option value="oldest">Oldest First</option>
@@ -637,7 +637,7 @@ const AdminPanel = () => {
         ) : currentDisplayList.length === 0 ? (
           /* Empty State */
           <div className="bg-white rounded-3xl p-12 md:p-16 text-center border border-gray-200/80 shadow-sm max-w-2xl mx-auto">
-            <div className="mx-auto h-20 w-20 bg-emerald-50 text-[#1E3A2F] rounded-full flex items-center justify-center mb-5 text-3xl shadow-inner">
+            <div className="mx-auto h-20 w-20 bg-emerald-50 text-[#2f4a34] rounded-full flex items-center justify-center mb-5 text-3xl shadow-inner">
               {activeTab === 'pending' ? '✨' : '🔍'}
             </div>
             <h3 className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">
@@ -662,7 +662,7 @@ const AdminPanel = () => {
                   <button
                     type="button"
                     onClick={() => setActiveTab('all-users')}
-                    className="px-5 py-2.5 bg-[#1E3A2F] text-white font-bold rounded-full text-xs uppercase tracking-wider hover:bg-[#2A4F40] transition-all shadow-md"
+                    className="px-5 py-2.5 bg-[#2f4a34] text-white font-bold rounded-full text-xs uppercase tracking-wider hover:bg-[#3d5f42] transition-all shadow-md"
                   >
                     Browse All {allUsers.length} Users →
                   </button>
@@ -770,7 +770,7 @@ const AdminPanel = () => {
                         <div className="min-w-0">
                           <h3
                             onClick={() => router.push(`/admin/user/${itemId}`)}
-                            className="text-lg font-bold text-gray-950 hover:text-[#1E3A2F] transition-colors truncate cursor-pointer leading-snug"
+                            className="text-lg font-bold text-gray-950 hover:text-[#2f4a34] transition-colors truncate cursor-pointer leading-snug"
                           >
                             {item.fullName || item.username || 'Unnamed Member'}
                           </h3>
@@ -778,7 +778,7 @@ const AdminPanel = () => {
                         </div>
 
                         {item.pricePerHour && (
-                          <span className="shrink-0 text-xs font-extrabold text-[#1E3A2F] bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-100">
+                          <span className="shrink-0 text-xs font-extrabold text-[#2f4a34] bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-100">
                             ₹{item.pricePerHour}/hr
                           </span>
                         )}
@@ -864,7 +864,7 @@ const AdminPanel = () => {
                               <Link
                                 href={`/companions/${itemId}`}
                                 target="_blank"
-                                className="px-2.5 py-1.5 text-xs font-bold text-[#1E3A2F] hover:bg-emerald-50 rounded-lg transition-colors"
+                                className="px-2.5 py-1.5 text-xs font-bold text-[#2f4a34] hover:bg-emerald-50 rounded-lg transition-colors"
                                 title="Open public companion profile"
                               >
                                 Live ↗
@@ -931,7 +931,7 @@ const AdminPanel = () => {
                             <div className="min-w-0">
                               <p
                                 onClick={() => router.push(`/admin/user/${itemId}`)}
-                                className="font-bold text-gray-900 hover:text-[#1E3A2F] transition-colors cursor-pointer truncate"
+                                className="font-bold text-gray-900 hover:text-[#2f4a34] transition-colors cursor-pointer truncate"
                               >
                                 {item.fullName || item.username || 'Unnamed'}
                               </p>
@@ -1012,7 +1012,7 @@ const AdminPanel = () => {
                               <Link
                                 href={`/companions/${itemId}`}
                                 target="_blank"
-                                className="px-2 py-1 text-xs font-bold text-[#1E3A2F] hover:underline"
+                                className="px-2 py-1 text-xs font-bold text-[#2f4a34] hover:underline"
                                 title="View Live"
                               >
                                 ↗

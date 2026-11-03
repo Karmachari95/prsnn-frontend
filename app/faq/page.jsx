@@ -81,20 +81,20 @@ export default function FAQPage() {
     : faqData.filter(item => item.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#181B18] pt-28 md:pt-36 pb-24">
+    <div className="min-h-screen bg-mist text-ink pt-28 md:pt-36 pb-24">
       <div className="max-w-4xl mx-auto px-5 md:px-8">
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E8EFE9] text-[#1E3A2F] text-xs font-bold uppercase tracking-wider mb-4 border border-[#1E3A2F]/15">
-            <span className="w-2 h-2 rounded-full bg-[#2F4A34]" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-moss-soft text-moss text-xs font-bold uppercase tracking-wider mb-4 border border-moss/15">
+            <span className="w-2 h-2 rounded-full bg-moss" />
             <span>Help & FAQ</span>
           </div>
 
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-[#181B18]">
+          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-ink">
             Frequently Asked Questions
           </h1>
-          <p className="mt-4 text-base md:text-lg text-[#181B18]/70 font-medium">
+          <p className="mt-4 text-base md:text-lg text-ink/70 font-medium">
             Everything you need to know about bookings, women’s safety, verification, and boundaries.
           </p>
         </div>
@@ -110,8 +110,8 @@ export default function FAQPage() {
               }}
               className={`px-4 py-2 rounded-full text-xs md:text-sm font-semibold transition-all ${
                 activeCategory === cat
-                  ? 'bg-[#1E3A2F] text-white shadow-sm'
-                  : 'bg-white text-[#181B18]/70 border border-[#EAE6DF] hover:border-[#1E3A2F]/30 hover:text-[#181B18]'
+                  ? 'bg-moss text-white shadow-sm'
+                  : 'bg-white text-ink/70 border border-line hover:border-moss/30 hover:text-ink'
               }`}
             >
               {cat}
@@ -126,26 +126,26 @@ export default function FAQPage() {
             return (
               <div
                 key={faq.q}
-                className="rounded-2xl border border-[#EAE6DF] bg-white transition-all overflow-hidden shadow-2xs"
+                className="rounded-2xl border border-line bg-white transition-all overflow-hidden shadow-2xs"
               >
                 <button
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? -1 : idx)}
-                  className="w-full p-6 text-left flex items-center justify-between gap-4 font-display font-bold text-lg md:text-xl text-[#181B18]"
+                  className="w-full p-6 text-left flex items-center justify-between gap-4 font-display font-bold text-lg md:text-xl text-ink"
                 >
                   <span>{faq.q}</span>
-                  <span className={`w-8 h-8 rounded-full border border-[#EAE6DF] flex items-center justify-center shrink-0 text-sm transition-transform duration-250 ${isOpen ? 'rotate-180 bg-[#1E3A2F] text-white border-transparent' : 'bg-[#FAF8F5] text-[#181B18]/60'}`}>
+                  <span className={`w-8 h-8 rounded-full border border-line flex items-center justify-center shrink-0 text-sm transition-transform duration-250 ${isOpen ? 'rotate-180 bg-moss text-white border-transparent' : 'bg-mist text-ink/60'}`}>
                     ↓
                   </span>
                 </button>
 
                 {isOpen && (
-                  <div className="px-6 pb-6 pt-1 text-[#181B18]/75 leading-relaxed font-medium text-sm md:text-base border-t border-[#EAE6DF]/60">
+                  <div className="px-6 pb-6 pt-1 text-ink/75 leading-relaxed font-medium text-sm md:text-base border-t border-line/60">
                     <p className="mt-3">{faq.a}</p>
                     {faq.link && (
                       <Link
                         href={faq.link}
-                        className="inline-block mt-4 text-xs font-bold text-[#2F4A34] hover:underline"
+                        className="inline-block mt-4 text-xs font-bold text-moss hover:underline"
                       >
                         {faq.linkText}
                       </Link>
@@ -158,18 +158,18 @@ export default function FAQPage() {
         </div>
 
         {/* Support Banner */}
-        <div className="p-8 md:p-10 rounded-3xl bg-[#E8EFE9] border border-[#1E3A2F]/15 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="p-8 md:p-10 rounded-3xl bg-moss-soft border border-moss/15 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
-            <h3 className="font-display font-bold text-xl text-[#1E3A2F]">
+            <h3 className="font-display font-bold text-xl text-moss">
               Have a specific question not listed here?
             </h3>
-            <p className="text-sm text-[#1E3A2F]/75 mt-1 font-medium">
+            <p className="text-sm text-moss/75 mt-1 font-medium">
               Our safety and support team is always ready to assist.
             </p>
           </div>
           <Link
             href="/contact"
-            className="shrink-0 px-6 py-3 rounded-full bg-[#1E3A2F] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#152A22] transition-colors shadow-sm"
+            className="shrink-0 px-6 py-3 rounded-full bg-moss text-white text-xs font-bold uppercase tracking-wider hover:bg-moss-mid transition-colors shadow-sm"
           >
             Contact Support →
           </Link>

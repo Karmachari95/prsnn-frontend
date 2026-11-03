@@ -1,136 +1,112 @@
+'use client';
 import React from 'react';
 import Link from 'next/link';
-
-export const metadata = {
-  title: 'How It Works — prsnn.',
-  description: 'Learn how PRSNN works: book verified companions for platonic presence in daylight public spaces.',
-};
+import Reveal from '../components/common/Reveal';
 
 const steps = [
   {
     n: '01',
-    title: 'Choose your activity & vibe',
-    body: 'Whether you want a companion for casual café hopping, attending an event, a quiet reading session, or walking through the city, pick the activity that suits your mood.',
-    points: ['Clear expectations upfront', '100% Platonic only', 'No awkward small talk required'],
+    title: 'Join the club',
+    body: 'Create a profile in minutes. Share what you like — walks, silence, cafés, study. Every user is verified so you can focus on being yourself.',
+    points: ['Fast sign-up', 'Manual ID review', 'Privacy protected'],
   },
   {
     n: '02',
-    title: 'Find your verified companion',
-    body: 'Browse companion profiles with verified IDs, comfort zones, real ratings, and transparent hourly rates. Every companion has completed government ID inspection and phone verification.',
-    points: ['100% ID verified', 'Ratings & reviews', 'Direct upfront pricing (₹400–₹800/hr)'],
+    title: 'Find your companion',
+    body: 'Browse verified companions. Filter by city, day, and comfort zones. Read the vibe before you book.',
+    points: ['Smart filters', 'Real reviews', 'Clear pricing'],
   },
   {
     n: '03',
-    title: 'Meet in public — leave anytime',
-    body: 'Sessions happen exclusively in daylight hours (7:00 AM – 10:00 PM) in open public spaces (cafés, parks, libraries, museums). No pressure, no obligations. End the session whenever you want.',
-    points: ['Daylight hours (7 AM–10 PM)', 'Public venues only', 'Leave anytime with zero explanation'],
+    title: 'Meet — then leave anytime',
+    body: 'Book securely. Meet in public. Shared presence, no forced conversation. End the session whenever you want.',
+    points: ['Secure payments', 'Public meetups', 'No explanation needed'],
   },
 ];
 
-const safetyRules = [
-  { title: 'Public Spaces Only', desc: 'All sessions occur in open, public venues such as coffee shops, parks, and cultural centers. Private spaces and home visits are strictly prohibited.' },
-  { title: 'Strictly Platonic', desc: 'PRSNN is solely for non-romantic companionship and shared presence. Romantic, physical, or sexual requests are strictly prohibited and result in permanent ban.' },
-  { title: 'Daylight Hours', desc: 'Bookings only take place between 7:00 AM and 10:00 PM for the safety, comfort, and peace of mind of both companions and guests.' },
-  { title: 'Voluntary & Safe', desc: 'Either party can end the session at any moment. Zero pressure, zero explanation required. Full refund policy applies.' },
-];
-
-export default function HowItWorksPage() {
+const HowItWorksPage = () => {
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#181B18] pb-24">
-      {/* Header */}
-      <section className="pt-28 md:pt-36 pb-14 px-6 md:px-8 border-b border-[#EAE6DF] bg-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#E8EFE9] text-[#1E3A2F] text-xs font-bold uppercase tracking-wider mb-4">
-            Simple & Transparent
-          </div>
-          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#181B18] leading-tight">
-            How PRSNN Works
-          </h1>
-          <p className="mt-4 text-base sm:text-lg text-[#181B18]/70 font-medium max-w-xl mx-auto leading-relaxed">
-            The simplest, safest way to book platonic companionship for public activities. Presence without pressure.
-          </p>
+    <div className="min-h-screen bg-mist text-ink">
+      <section className="pt-28 md:pt-36 pb-16 px-6 md:px-8 relative overflow-hidden">
+        <div className="absolute top-10 right-0 w-72 h-72 bg-signal/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="max-w-4xl mx-auto relative text-center">
+          <Reveal>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-moss mb-5">
+              The process
+            </p>
+            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05] text-ink">
+              No awkwardness.
+              <span className="block text-moss">Just presence.</span>
+            </h1>
+            <p className="mt-6 text-base md:text-lg text-ink/70 font-medium max-w-xl mx-auto leading-relaxed">
+              prsnn. is the lightest way to book platonic companionship — designed
+              to feel safe from the first tap.
+            </p>
+          </Reveal>
         </div>
       </section>
 
-      {/* 3 Simple Steps */}
-      <section className="py-14 md:py-20 px-6 md:px-8">
-        <div className="max-w-4xl mx-auto space-y-6">
-          {steps.map((step) => (
-            <div
-              key={step.n}
-              className="p-6 sm:p-8 md:p-10 rounded-2xl bg-white border border-[#EAE6DF]"
-            >
-              <div className="flex flex-col sm:flex-row sm:items-start gap-5 sm:gap-8">
-                <div className="w-14 h-14 rounded-xl bg-[#1E3A2F] text-white flex items-center justify-center font-display text-xl font-bold shrink-0">
-                  {step.n}
+      <section className="pb-20 md:pb-28 px-6 md:px-8">
+        <div className="max-w-5xl mx-auto space-y-6">
+          {steps.map((step, i) => (
+            <Reveal key={step.n} delay={Math.min(i + 1, 4)}>
+              <article className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 p-8 md:p-10 rounded-[1.75rem] bg-paper border border-line">
+                <div className="md:col-span-2">
+                  <span className="font-display text-4xl font-bold text-moss/25">
+                    {step.n}
+                  </span>
                 </div>
-                <div className="flex-1">
-                  <h2 className="font-display text-xl sm:text-2xl font-bold text-[#181B18] mb-2">
+                <div className="md:col-span-10">
+                  <h2 className="font-display text-2xl md:text-3xl font-bold tracking-tight mb-3">
                     {step.title}
                   </h2>
-                  <p className="text-sm sm:text-base text-[#181B18]/75 font-medium leading-relaxed mb-4">
+                  <p className="text-ink/55 font-medium leading-relaxed text-[15px] md:text-base max-w-2xl mb-6">
                     {step.body}
                   </p>
-                  <div className="flex flex-wrap gap-2">
+                  <ul className="flex flex-wrap gap-x-6 gap-y-2">
                     {step.points.map((p) => (
-                      <span
+                      <li
                         key={p}
-                        className="px-3 py-1 rounded-full bg-[#FAF8F5] border border-[#EAE6DF] text-xs font-semibold text-[#181B18]/80 flex items-center gap-1.5"
+                        className="text-sm font-semibold text-ink/80 flex items-center gap-2"
                       >
-                        <span className="text-[#1E3A2F] font-bold">✓</span>
-                        <span>{p}</span>
-                      </span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-signal" />
+                        {p}
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
-              </div>
-            </div>
+              </article>
+            </Reveal>
           ))}
         </div>
       </section>
 
-      {/* Safety & Ground Rules */}
-      <section className="px-6 md:px-8 max-w-4xl mx-auto mb-16">
-        <div className="p-8 sm:p-10 rounded-2xl bg-[#E8EFE9] border border-[#1E3A2F]/20">
-          <h2 className="font-display text-xl sm:text-2xl font-bold text-[#1E3A2F] mb-6 text-center">
-            Our Core Safety Rules
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {safetyRules.map((rule) => (
-              <div key={rule.title} className="p-4 rounded-xl bg-white border border-[#1E3A2F]/15">
-                <h3 className="font-bold text-sm text-[#1E3A2F] mb-1">{rule.title}</h3>
-                <p className="text-xs text-[#181B18]/75 leading-relaxed font-medium">{rule.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Bottom CTA */}
-      <section className="px-6 md:px-8 max-w-4xl mx-auto text-center">
-        <div className="p-8 sm:p-10 rounded-2xl bg-[#1E3A2F] text-white">
-          <h2 className="font-display text-2xl sm:text-3xl font-bold mb-3">
-            Ready to book your companion?
-          </h2>
-          <p className="text-white/80 text-sm sm:text-base max-w-lg mx-auto mb-6">
-            Find trusted companions in your city for quiet company, events, or café visits.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              href="/companions"
-              className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-[#2F4A34] text-white font-bold text-sm"
-            >
-              Browse Companions
-            </Link>
-            <Link
-              href="/safety"
-              className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-white/10 border border-white/20 text-white font-bold text-sm"
-            >
-              Read Safety Charter
-            </Link>
-          </div>
+      <section className="py-20 md:py-24 px-6 bg-ink text-paper relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-moss/40 to-transparent pointer-events-none" />
+        <div className="max-w-3xl mx-auto text-center relative">
+          <Reveal variant="scale">
+            <h2 className="font-display text-3xl md:text-5xl font-bold tracking-tight mb-5">
+              Ready when you are.
+            </h2>
+            <p className="text-paper/55 font-medium mb-10 max-w-md mx-auto leading-relaxed">
+              Browse companions or join as one. Either way — presence without pressure.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link href="/companions" className="btn-signal">
+                Browse companions
+              </Link>
+              <Link
+                href="/login"
+                className="inline-flex items-center justify-center px-7 py-3.5 rounded-full font-semibold border border-white/20 text-paper hover:bg-white/10 transition-colors"
+              >
+                Join prsnn.
+              </Link>
+            </div>
+          </Reveal>
         </div>
       </section>
     </div>
   );
-}
+};
+
+export default HowItWorksPage;
